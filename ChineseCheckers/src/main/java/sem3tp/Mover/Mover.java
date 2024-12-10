@@ -1,6 +1,7 @@
 package sem3tp.Mover;
 
 import sem3tp.Creator.Creator;
+import sem3tp.Exceptions.WrongDirectionInput;
 import sem3tp.Poles.Pole;
 import sem3tp.Poles.StandardPole;
 
@@ -19,6 +20,18 @@ public class Mover {
             }
         }
         return instance;
+    }
+
+    public Directions setDirection(String direction){
+        return switch (direction) {
+            case "E" -> Directions.East;
+            case "W" -> Directions.West;
+            case "NE" -> Directions.NorthEast;
+            case "NW" -> Directions.NorthWest;
+            case "SW" -> Directions.SouthWest;
+            case "SE" -> Directions.SouthEast;
+            default -> throw new WrongDirectionInput("U must type: E W SW SE NW NE");
+        };
     }
 
     private Mover(int layers){

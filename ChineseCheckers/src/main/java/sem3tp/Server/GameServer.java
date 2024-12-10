@@ -3,6 +3,8 @@ package sem3tp.Server;
 import sem3tp.Creator.Creator;
 import sem3tp.Game;
 import sem3tp.GameState;
+import sem3tp.Mover.Directions;
+import sem3tp.Mover.Mover;
 import sem3tp.Player;
 
 import java.io.IOException;
@@ -66,6 +68,7 @@ public class GameServer {
         private Scanner in;
         private PrintWriter out;
         private Player player;
+        private Game currentGamePlayed;
 //        private int next_id;
         Creator creator = Creator.getInstance();
 
@@ -87,7 +90,9 @@ public class GameServer {
                 out.println("NAMEACCEPTED " + username);
                 broadcast("MESSAGE " + username + " dołączył");
 
-                gameCreateOptions();
+                currentGamePlayed=gameCreateOptions();
+                waitForGameToStart();
+                gameLogic();
 
 
 //                while (true) {
@@ -125,6 +130,48 @@ public class GameServer {
             }
         }
 
+        private void gameLogic(){
+            while(!currentGamePlayed.hasEnded()){
+                if(player!=currentGamePlayed.getCurrentPlayer()){
+                    out.println("To nie jest twoja tura");
+                    try{
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        Thread.currentThread().interrupt();
+                    }
+                    continue;
+                }
+
+                out.println("Twoja tura");
+                out.println("Mozesz ruszyc sie w nastepujacych kierunkach: 1. E 2. W 3. NE 4. NW 5. SE 6. SW");
+                String input = in.nextLine();
+                Mover mover = Creator.getInstance().createMover(5);
+                Directions direction;
+                try {
+                    direction = mover.setDirection(input);
+                    currentGamePlayed.processMoves(direction);
+                    broadcast("Gracz o kolorze x wykonal ruch:" +input);//tutaj bedzie tez kolor
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        private void waitForGameToStart(){
+            while (!currentGamePlayed.isOn()){
+                out.println("Twoj status to: "+player.getReady());
+                out.print("Czy jestes gotowy? odpowiedz: Tak lub Nie");
+                String input = in.nextLine();
+                if(input.equals("Tak")){
+                    this.player.setReady(true);
+                    currentGamePlayed.checkReadiness();
+                } else if (input.equals("Nie")) {
+                    this.player.setReady(false);
+                }
+            }
+            out.println("Gra sie zaczyna");
+        }
+
         private void loginAsUser(){
             while (true) {
                 out.println("SUBMITNAME");
@@ -144,31 +191,29 @@ public class GameServer {
         }
 
 
-        private void gameCreateOptions(){
+        private synchronized Game gameCreateOptions(){
             while(true){
                 out.println("Wybierz co chcesz zrobic: 1. Utworz nowa gre 2. Wczytaj gre 3. Dolacz do gry");
                 String input = in.nextLine();
                 if(input.equals("1")){
-                    createNewGame();
-                    break;
+                    return createNewGame();
                 } else if (input.equals("2")) {
-                    loadGame();
-                    break;
+                    return loadGame();
                 } else if (input.equals("3")) {
-                    joinGame();
-                    break;
+                    return joinGame();
                 }
                 out.println("Podaj liczbe w zakresie 1-3");//albo throw excpetion
             }
         }
 
-        private synchronized void createNewGame(){
+        private synchronized Game createNewGame(){
                 Game game = creator.createGame(next_id);
                 gamesOn.put(next_id, game);
                 next_id++;
                 setNumberOfPlayers(game);
-                game.turnOn();
-                gamePool.execute(game);
+//                game.turnOn();
+//                gamePool.execute(game);
+            return game;
         }
 
         private synchronized void setNumberOfPlayers(Game game){
@@ -191,17 +236,18 @@ public class GameServer {
             });
         }
 
-        private void joinGame(){//wypisac wszystkie ktore sa w hashmapie
+        private synchronized Game joinGame(){//wypisac wszystkie ktore sa w hashmapie
             printAvailableGames();
             String input = in.nextLine();
             int selectedId = Integer.parseInt(input);
             Game game = gamesOn.get(selectedId);
             game.addNewPlayer(player);
-            //polaczyc tak
+            return game;
         }
 
-        private void loadGame(){
+        private synchronized Game loadGame(){
 //pobieramy boarda z bazy danych i tworzymy z nim nowa gre
+            return new Game(next_id);
         }
 
         private void sendReadyRequest(){//logika wysylania ready

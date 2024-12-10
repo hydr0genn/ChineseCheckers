@@ -9,6 +9,8 @@ Aim is to allow the editor to modify the storages easily
 public interface Storagable<T> {
     void insert(T t);
 
+    int indexOf(T t);
+
     void delete(T t);
 
     void update(T t);

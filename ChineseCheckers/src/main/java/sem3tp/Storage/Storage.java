@@ -8,6 +8,11 @@ public abstract class Storage<T> implements Storagable<T> {
     ArrayList<T> list;
 
     @Override
+    public int indexOf(T t) {
+        return this.list.indexOf(t);
+    }
+
+    @Override
     public T get(T t) {
         return list.get(list.indexOf(t));
     }
