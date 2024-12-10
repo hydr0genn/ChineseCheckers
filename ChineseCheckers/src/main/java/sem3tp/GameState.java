@@ -1,3 +1,7 @@
+package sem3tp;
+
+import sem3tp.Server.GameServer;
+
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
