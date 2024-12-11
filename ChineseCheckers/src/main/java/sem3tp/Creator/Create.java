@@ -6,6 +6,7 @@ import sem3tp.Mover.Mover;
 import sem3tp.Player;
 import sem3tp.Poles.InitPole;
 import sem3tp.Poles.StandardPole;
+import sem3tp.Storage.PlayerStorage;
 import sem3tp.Storage.PoleStorage;
 import sem3tp.Storage.UserStorage;
 import sem3tp.User;
@@ -20,4 +21,5 @@ public interface Create {
     public User createUser(String username, String pwd);
     public Game createGame(int id);
     public Player createPlayer(String username);
+    public PlayerStorage createPlayerStorage();
 }

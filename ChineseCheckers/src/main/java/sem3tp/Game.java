@@ -12,6 +12,7 @@ public class Game {
     PlayerStorage playersList;
     Player currentPlayer;
 
+
     /*We start the game when all players have joined and are ready */
     public void checkReadiness(){
         for(int i = 0 ;i <playersList.getSize();i++){
@@ -21,6 +22,7 @@ public class Game {
             }
         }
         if(playersList.getSize()==players_num){
+            currentPlayer=playersList.getByIndex(0);
             turnOn();
         }
     }
@@ -48,6 +50,7 @@ public class Game {
 
     public Game(int id){
         this.id=id;
+        this.playersList= Creator.getInstance().createPlayerStorage();
     }
 
     public void turnOn(){
@@ -71,6 +74,14 @@ public class Game {
         if (this.players_num==2){
             //tworzy odpowedni rodzaj boarda
         }
+    }
+
+    public PlayerStorage getPlayersList() {
+        return playersList;
+    }
+
+    public int getPlayersNumber() {
+        return this.players_num;
     }
 
     /*In the furture proper move logic will be added here containing Pole that is to be affected*/

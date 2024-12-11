@@ -24,23 +24,13 @@ public class GameClient {
             while (in.hasNextLine()) {
                 String serverMessage = in.nextLine();
 
-                if (serverMessage.startsWith("SUBMITNAME")) {
-                    System.out.print("Podaj nazwe: ");
-                    String username = consoleInput.nextLine();
-                    out.println(username);
-                } else if (serverMessage.startsWith("NAMEINUSE")) {
-                    System.out.println("Nazwa w urzyciu");
-                } else if (serverMessage.startsWith("NAMEACCEPTED")) {
-                    System.out.println("Nazwa zaakceptowana");
-                    System.out.println("Wyczekiwanie na rozpoczęcie rozgrywki");
-                } else if (serverMessage.startsWith("MENU")) {
-                    System.out.println(serverMessage.substring(5));
-                    String choice = consoleInput.nextLine();
-                    out.println(choice);
-                } else if (serverMessage.startsWith("MESSAGE")) {
-                    System.out.println(serverMessage.substring(8));
-                } else if (serverMessage.startsWith("GAMESTART")) {
-                    System.out.println("GRA SIĘ ZACZĘŁA");
+                if (serverMessage.startsWith("INPUT")) {
+                    System.out.println(serverMessage.substring(6));
+                    String input = consoleInput.nextLine();
+                    out.println(input);
+                }
+                else {
+                    System.out.println(serverMessage);
                 }
             }
         } finally {

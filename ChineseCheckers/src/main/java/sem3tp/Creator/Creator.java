@@ -6,6 +6,7 @@ import sem3tp.Mover.Mover;
 import sem3tp.Player;
 import sem3tp.Poles.InitPole;
 import sem3tp.Poles.StandardPole;
+import sem3tp.Storage.PlayerStorage;
 import sem3tp.Storage.PoleStorage;
 import sem3tp.Storage.UserStorage;
 import sem3tp.User;
@@ -25,6 +26,11 @@ public class Creator implements Create{
             }
         }
         return instance;
+    }
+
+    @Override
+    public PlayerStorage createPlayerStorage() {
+        return new PlayerStorage();
     }
 
     @Override
