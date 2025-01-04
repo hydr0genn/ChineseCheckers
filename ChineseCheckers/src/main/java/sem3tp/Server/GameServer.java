@@ -12,14 +12,34 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 public class GameServer {
     private static final List<PrintWriter> writers = new ArrayList<>();
     private static Map<Integer, Game> gamesOn = new HashMap<>();
     private static int next_id = 1;
     private static ExecutorService gamePool;
+
+    public static final Map<Player, PrintWriter> playerWriterMap = new ConcurrentHashMap<>();
+    public static synchronized void registerPlayerWriter(Player player, PrintWriter writer) {
+        playerWriterMap.put(player, writer);
+    }
+    public static synchronized void unregisterPlayerWriter(Player player, PrintWriter writer) {
+        playerWriterMap.remove(player, writer);
+    }
+
+    public static synchronized void broadcastToGame(Game game, String message) {
+
+        for (Player player : game.getPlayersList().getAll()) {
+            PrintWriter playerWriter = playerWriterMap.get(player);
+            if (playerWriter != null) {
+                playerWriter.println(message);
+                playerWriter.flush();
+            }
+        }
+    }
+
 
     public GameServer(int maxGamesSimultaneously){
         gamePool=Executors.newFixedThreadPool(maxGamesSimultaneously);
@@ -72,6 +92,8 @@ public class GameServer {
                 }
                 loginAsUser();
 
+                registerPlayerWriter(player, out);
+
                 out.println("Nazwa zaakceptowana " + username);
                 broadcast(username + " dołączył");
 
@@ -82,6 +104,7 @@ public class GameServer {
             } catch (Exception e) {
                 System.out.println(e);
             } finally {
+                unregisterPlayerWriter(player, out);
                 quit();
             }
         }
@@ -91,7 +114,7 @@ public class GameServer {
                 if(player!=currentGamePlayed.getCurrentPlayer()){
                     out.println("To nie jest twoja tura");
                     try{
-                        Thread.sleep(10000);
+                        Thread.sleep(1000);
                     } catch (Exception e) {
                         Thread.currentThread().interrupt();
                     }
@@ -106,13 +129,13 @@ public class GameServer {
                 try {
                     direction = mover.setDirection(input);
                     currentGamePlayed.processMoves(direction);
-                    broadcast("Gracz o kolorze x wykonal ruch:" +input);//tutaj bedzie tez kolor
+                    broadcastToGame(currentGamePlayed,"Gracz o kolorze x wykonal ruch:" +input);//tutaj bedzie tez kolor
                 } catch (Exception e) {
-                    out.println("Podaj dobry argument");
+                    throw new RuntimeException(e);
                 }
             }
         }
-        private void waitForGameToStart(){
+        private void waitForGameToStart() throws InterruptedException {
             while (!currentGamePlayed.isOn()){
                 out.println("Twoj status to: "+player.getReady());
                 out.println("INPUT Czy jestes gotowy? odpowiedz: Tak lub Nie");
@@ -120,6 +143,9 @@ public class GameServer {
                 if(input.equals("Tak")){
                     this.player.setReady(true);
                     currentGamePlayed.checkReadiness();
+                    while(!currentGamePlayed.isOn()){
+                        Thread.sleep(10);
+                    }
                 } else if (input.equals("Nie")) {
                     this.player.setReady(false);
                 }
@@ -188,13 +214,11 @@ public class GameServer {
         private void printAvailableGames(){
             out.println("Oto lista dostepnych rozgrywek");
             gamesOn.forEach((key,value)->{
-                out.println("bbbbb");
                 out.println("Gra o id: "+key);
             });
         }
 
         private Game joinGame(){//wypisac wszystkie ktore sa w hashmapie
-            out.println("test");
             printAvailableGames();
             out.println("INPUT Wpisz id gry");
             String input = in.nextLine();

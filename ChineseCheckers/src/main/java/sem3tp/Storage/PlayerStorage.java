@@ -3,6 +3,7 @@ package sem3tp.Storage;
 import sem3tp.Player;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PlayerStorage extends Storage<Player> {
     public PlayerStorage(){
@@ -32,6 +33,11 @@ public class PlayerStorage extends Storage<Player> {
     @Override
     public void delete(Player player) {
         super.delete(player);
+    }
+
+    @Override
+    public List<Player> getAll() {
+        return this.list;
     }
 
     @Override

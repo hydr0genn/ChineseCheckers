@@ -3,6 +3,7 @@ package sem3tp.Storage;
 import sem3tp.User;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Storage<T> implements Storagable<T> {
     ArrayList<T> list;
@@ -15,6 +16,11 @@ public abstract class Storage<T> implements Storagable<T> {
     @Override
     public T get(T t) {
         return list.get(list.indexOf(t));
+    }
+
+    @Override
+    public List getAll() {
+        return new ArrayList<T>();
     }
 
     @Override

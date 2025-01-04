@@ -29,7 +29,7 @@ public class Game {
 
     public void nextTurn(){
         int currentindex = playersList.indexOf(currentPlayer);
-        currentPlayer = playersList.getByIndex(currentindex+1);
+        currentPlayer = playersList.getByIndex((currentindex+1)%players_num);
     }
 
     public Player getCurrentPlayer() {

@@ -3,11 +3,17 @@ package sem3tp.Storage;
 import sem3tp.User;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class UserStorage extends Storage<User>{
 
     public UserStorage(){
         this.list=new ArrayList<User>();
+    }
+
+    @Override
+    public List<User> getAll() {
+        return List.of();
     }
 
     @Override

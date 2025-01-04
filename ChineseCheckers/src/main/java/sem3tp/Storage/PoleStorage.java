@@ -3,6 +3,7 @@ package sem3tp.Storage;
 import sem3tp.Poles.Pole;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PoleStorage extends  Storage<Pole>{
     public PoleStorage(){
@@ -32,6 +33,11 @@ public class PoleStorage extends  Storage<Pole>{
     @Override
     public void delete(Pole pole) {
         super.delete(pole);
+    }
+
+    @Override
+    public List<Pole> getAll() {
+        return List.of();
     }
 
     @Override
