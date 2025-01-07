@@ -1,61 +1,63 @@
 package sem3tp.Builder;
 
-import sem3tp.Board.Board;
-import sem3tp.Board.BoardBase;
+import sem3tp.Board.*;
 import sem3tp.Creator.Creator;
 import sem3tp.Mover.Directions;
-import sem3tp.Mover.Mover;
-import sem3tp.Poles.InitPole;
 import sem3tp.Poles.Pole;
 import sem3tp.Poles.StandardPole;
-import sem3tp.Storage.PoleStorage;
+import sem3tp.Storage.TriangleStorage;
 
-public class BoardBuilder implements Builder{
-    Creator creator;
-    Mover mover;
-    int maxPoles;
-    Directions[] possibleMoves = {Directions.East,Directions.West,Directions.NorthEast, Directions.NorthWest, Directions.SouthEast, Directions.SouthWest};
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-    public BoardBuilder(int layers){
-    creator=Creator.getInstance();
-    mover=Mover.getInstance(layers);
+public class BoardBuilder {
+
+    HashMap<Colors, Pole> crucialPoints;
+    private int playersNumber;
+    private int layers;
+    private Creator creator=Creator.getInstance();
+    private BoardBase base;
+
+    public BoardBuilder(int layers, int playersNumber){
+        this.layers=layers;
+        this.playersNumber=playersNumber;
     }
 
-    public void findMaxPoles(int layers_num){
-        int suma=1;
-        for(int i=2;i<=layers_num;i++){
-            suma+=6*(i-1);
+    public void playerLimitor(int number){
+        this.crucialPoints=new HashMap<>();
+        crucialPoints.put(Colors.Black,this.base.getStorage().get(new StandardPole(0,-(layers-1),layers-1)));
+        crucialPoints.put(Colors.White,this.base.getStorage().get(new StandardPole(0,(layers-1),-(layers-1))));
+        if(number>=4){
+            crucialPoints.put(Colors.Yellow,this.base.getStorage().get(new StandardPole((layers-1),-(layers-1),0)));
+            crucialPoints.put(Colors.Yellow.getOppositeColor(),this.base.getStorage().get(new StandardPole(0,(layers-1),-(layers-1))));
         }
-        this.maxPoles=suma;
+        if(number==6){
+            crucialPoints.put(Colors.Blue,this.base.getStorage().get(new StandardPole((layers-1),0,-(layers-1))));
+            crucialPoints.put(Colors.Blue.getOppositeColor(),this.base.getStorage().get(new StandardPole(-(layers-1),0,(layers-1))));
+        }
     }
 
-    @Override
-    public BoardBase build(int layers_num) {
-        BoardBase boardBase = new BoardBase();
-        PoleStorage poleList = new PoleStorage();
-        findMaxPoles(layers_num);
-        Pole current;
-        poleList.insert(creator.createInitPole());
-        for(int i=0;i< maxPoles;i++){
-            current=poleList.getByIndex(i);
-            addNeighbours(current, poleList);//kwestia iteratora potencjalnego
+    TriangleStorage getTriangles(){
+        TriangleStorage triangleStorage = creator.createTriangleStorage();
+        playerLimitor(this.playersNumber);
+        for (Map.Entry<Colors, Pole> entry : crucialPoints.entrySet()) {
+            Colors color = entry.getKey();
+            Pole specialPole = entry.getValue();
+            Triangle triangle = creator.createTriangleBuilder(layers,color,specialPole,base).build();
+            triangleStorage.insert(triangle);
         }
-        boardBase.setStorage(poleList);
-        return boardBase;
+        return triangleStorage;
     }
 
-    public void addNeighbours(Pole currentPole, PoleStorage poleStorage){
-        for (Directions direction : possibleMoves) {
-            Pole temp = mover.move(currentPole, direction);
-            if(temp==null){
-                continue;}
-            if (poleStorage.contains(temp)) {
-                Pole existingPole = poleStorage.get(temp);
-                currentPole.addNeighbour(existingPole);
-            } else {
-                poleStorage.insert(temp);
-                currentPole.addNeighbour(temp);
-            }
-        }
+    public Board build() {
+        Board board = new Board();
+        BaseBuilder baseBuilder = creator.createBaseBuilder(layers);
+        board.setBase(baseBuilder.build());
+        this.base= board.getBase();
+        board.setTriangles(getTriangles());
+
+        return board;
     }
 }

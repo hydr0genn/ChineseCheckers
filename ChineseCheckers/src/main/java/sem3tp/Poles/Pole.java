@@ -55,17 +55,4 @@ public abstract class Pole implements Comparable<Pole>{
         return false;
     }
 
-    //
-//    public void setWarstwa(int warstwa) {
-//        this.warstwa = warstwa;
-//        this.max=6*(warstwa-1);
-//    }
-
-//    public int getId() {
-//        return id;
-//    }
-
-//    public int getWarstwa() {
-//        return warstwa;
-//    }
 }

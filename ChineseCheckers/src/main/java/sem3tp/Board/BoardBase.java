@@ -1,4 +1,4 @@
 package sem3tp.Board;
 
-public class BoardBase extends Board{
+public class BoardBase extends Components{
 }

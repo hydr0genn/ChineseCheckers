@@ -1,0 +1,106 @@
+package sem3tp.Builder;
+
+import sem3tp.Board.BoardBase;
+import sem3tp.Board.Colors;
+import sem3tp.Board.Triangle;
+import sem3tp.Creator.Creator;
+import sem3tp.Mover.Directions;
+import sem3tp.Mover.Mover;
+import sem3tp.Poles.Pole;
+import sem3tp.Poles.TrianglePole;
+import sem3tp.Storage.PoleStorage;
+import sem3tp.Storage.TriangleStorage;
+
+import java.text.StringCharacterIterator;
+import java.util.ArrayList;
+
+public class TriangleBuilder implements Builder{
+
+    private Colors color;
+    private Creator creator;
+    private int layers;
+    private Pole pole;
+    private BoardBase base;
+
+    public TriangleBuilder(int layers, Colors color, Pole pole, BoardBase base){
+        creator= Creator.getInstance();
+        this.layers=layers;
+        this.color=color;
+        this.pole=pole;
+        this.base=base;
+    }
+
+    /*Adding a neighbour logic - it is responsible for creating a triangle pole
+    * it does not verify whether one should be created*/
+    private TrianglePole findNeighbour(Pole current, Directions direction){
+        int newX = current.getxCord()+direction.addXCord();
+        int newY = current.getyCord()+direction.addYCord();
+        int newZ = current.getzCord()+direction.addZCord();
+        return creator.createTrianglePole(newX,newY,newZ);
+    }
+
+    /*Loop responsible for creating poles inside the triangle, return a storage of triangle poles
+    it receives a source and for each pole it
+    Color's got property direction - existing solely for the purpose of creating a board -
+    for example for Black in order to create a traingle of such color - githublink tu bedzie xd mozna potestowac bez ifow bo sie wydaje dojebany
+     */
+    public PoleStorage createTrianglePoleStorage(Pole source, int layers){
+        PoleStorage temp = new PoleStorage();
+        temp.insert(source);
+        int maxw = layers-1;
+        int maxh = maxw;
+        TrianglePole current = (TrianglePole) source;
+        current.i=1;
+        current.j=1;
+        int limit = (layers-1)*layers/2;
+
+        while(temp.getSize()<limit){
+            maxw=layers-current.i;
+            TrianglePole potential;
+            potential =findNeighbour(current,color.getDirectionCreate().nextDirection);
+            potential.i=current.i;
+            potential.j=current.j+1;
+            if(potential.j<=maxw){
+                if(!temp.contains(potential))temp.insert(potential);
+            }
+            potential = findNeighbour(current, color.getDirectionCreate());
+            potential.i= current.i+1;
+            potential.j=current.j;
+            if(potential.i<=maxh){
+                if(!temp.contains(potential))temp.insert(potential);
+            }
+            current = (TrianglePole) temp.getByIndex(temp.indexOf(current)+1);
+        }
+        return temp;
+    }
+
+    void connectPoles(PoleStorage polesInTriangle, PoleStorage polesInBase){
+        for (int i=0; i<polesInTriangle.getSize();i++){
+            Pole current = polesInTriangle.getByIndex(i);
+            Directions currentDirection = color.getDirectionCreate();
+            for(int j=0;j<4;j++){
+                TrianglePole potential = findNeighbour(current,currentDirection);
+                if(polesInTriangle.contains(potential)){
+                    current.addNeighbour(polesInTriangle.get(potential));
+                }
+                else if(j>1 && polesInBase.contains(potential)){
+                    current.addNeighbour(polesInBase.get(potential));
+                }
+                currentDirection = currentDirection.nextDirection;
+            }
+        }
+    }
+
+    @Override
+    public Triangle build() {
+
+        PoleStorage listOfPoles = createTrianglePoleStorage(findNeighbour(pole,color.getDirectionCreate()), layers);
+        connectPoles(listOfPoles,base.getStorage());
+
+        Triangle triangle = creator.createTriangle();
+        triangle.setStorage(listOfPoles);
+        triangle.setColor(color);
+
+        return triangle;
+    }
+}

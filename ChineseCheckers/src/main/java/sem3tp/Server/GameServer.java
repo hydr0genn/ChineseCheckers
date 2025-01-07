@@ -124,7 +124,7 @@ public class GameServer {
                 out.println("Twoja tura");
                 out.println("INPUT Mozesz ruszyc sie w nastepujacych kierunkach: 1. E 2. W 3. NE 4. NW 5. SE 6. SW");
                 String input = in.nextLine();
-                Mover mover = Creator.getInstance().createMover(5);
+                Mover mover = Creator.getInstance().createMover();
                 Directions direction;
                 try {
                     direction = mover.setDirection(input);

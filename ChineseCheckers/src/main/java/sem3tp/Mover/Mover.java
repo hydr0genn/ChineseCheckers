@@ -6,16 +6,15 @@ import sem3tp.Poles.Pole;
 import sem3tp.Poles.StandardPole;
 
 public class Mover {
-    int layers;
     Creator create = Creator.getInstance();
 
     private static Mover instance;
 
-    public static Mover getInstance(int x) {
+    public static Mover getInstance() {
         if(instance==null){
             synchronized (Creator.class) {
                 if(instance==null){
-                    instance= new Mover(x);
+                    instance= new Mover();
                 }
             }
         }
@@ -34,19 +33,22 @@ public class Mover {
         };
     }
 
-    private Mover(int layers){
-        this.layers=layers;
-    }
+//    private Mover(int layers){
+//        this.layers=layers;
+//    }
 
-    private boolean isWithinBoundary(int x, int y, int z){
+    private boolean isWithinBoundary(int x, int y, int z, int layers){
         return Math.abs(x)<layers && Math.abs(y)<layers && Math.abs(z)<layers;
     }
 
-    public Pole move(Pole pole, Directions direction){
+    public Pole move(Pole pole, Directions direction, int layers){
         int newX = pole.getxCord()+ direction.addXCord();
         int newY = pole.getyCord() + direction.addYCord();
         int newZ = pole.getzCord()+ direction.addZCord();
-        if(isWithinBoundary(newX,newY,newZ)) {return create.createSTDPole(newX, newY, newZ);}
+        if(isWithinBoundary(newX,newY,newZ, layers)) {return create.createSTDPole(newX, newY, newZ);}
+        else {
+
+        }
         return null;
     }
 }

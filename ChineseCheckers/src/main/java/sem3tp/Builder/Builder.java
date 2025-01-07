@@ -2,7 +2,8 @@ package sem3tp.Builder;
 
 import sem3tp.Board.Board;
 import sem3tp.Board.BoardBase;
+import sem3tp.Board.Components;
 
 public interface Builder {
-    public BoardBase build(int layers_num);
+    public Components build();
 }

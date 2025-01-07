@@ -1,17 +1,26 @@
 package sem3tp.Board;
 
-import sem3tp.Poles.Pole;
 import sem3tp.Storage.PoleStorage;
+import sem3tp.Storage.TriangleStorage;
 
-import java.util.ArrayList;
+public class Board {
+    private BoardBase base;
+    private TriangleStorage triangles;
 
-public abstract class Board implements BoardInterface {
-    PoleStorage poleList;
-
-    public void setStorage(PoleStorage poleList){
-        this.poleList=poleList;
+    public void setBase(BoardBase base) {
+        this.base = base;
     }
 
+    public BoardBase getBase() {
+        return base;
+    }
 
+    public TriangleStorage getTriangles() {
+        return triangles;
+    }
+
+    public void setTriangles(TriangleStorage triangles) {
+        this.triangles = triangles;
+    }
 
 }
