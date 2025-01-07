@@ -12,8 +12,8 @@ public class UserStorage extends Storage<User>{
     }
 
     @Override
-    public List<User> getAll() {
-        return List.of();
+    public ArrayList<User> getAll() {
+        return list;
     }
 
     @Override

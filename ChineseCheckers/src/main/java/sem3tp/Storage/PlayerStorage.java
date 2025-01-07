@@ -36,7 +36,7 @@ public class PlayerStorage extends Storage<Player> {
     }
 
     @Override
-    public List<Player> getAll() {
+    public ArrayList<Player> getAll() {
         return this.list;
     }
 

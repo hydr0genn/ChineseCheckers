@@ -6,6 +6,15 @@ import sem3tp.Storage.TriangleStorage;
 public class Board {
     private BoardBase base;
     private TriangleStorage triangles;
+    private PoleStorage allPoles;
+
+    public void setAllPoles(PoleStorage allPoles) {
+        this.allPoles = allPoles;
+    }
+
+    public PoleStorage getAllPoles() {
+        return allPoles;
+    }
 
     public void setBase(BoardBase base) {
         this.base = base;

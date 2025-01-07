@@ -7,6 +7,7 @@ import sem3tp.Builder.BaseBuilder;
 import sem3tp.Builder.BoardBuilder;
 import sem3tp.Builder.TriangleBuilder;
 import sem3tp.Game;
+import sem3tp.Mover.Directions;
 import sem3tp.Mover.Mover;
 import sem3tp.Player;
 import sem3tp.Poles.InitPole;
@@ -116,5 +117,25 @@ public class Creator implements Create{
         return new User(username,pwd);
     }
 
+    private boolean isWithinBoundary(int x, int y, int z, int layers){
+        return Math.abs(x)<layers && Math.abs(y)<layers && Math.abs(z)<layers;
+    }
 
+    public Pole createBasePole(Pole pole, Directions direction, int layers){
+        int newX = pole.getxCord()+ direction.addXCord();
+        int newY = pole.getyCord() + direction.addYCord();
+        int newZ = pole.getzCord()+ direction.addZCord();
+        if(isWithinBoundary(newX,newY,newZ, layers)) {return createSTDPole(newX, newY, newZ);}
+
+        return null;
+    }
+
+    /*Adding a neighbour logic - it is responsible for creating a triangle pole
+     * it does not verify whether one should be created*/
+    public TrianglePole createNeighbour(Pole current, Directions direction){
+        int newX = current.getxCord()+direction.addXCord();
+        int newY = current.getyCord()+direction.addYCord();
+        int newZ = current.getzCord()+direction.addZCord();
+        return createTrianglePole(newX,newY,newZ);
+    }
 }

@@ -45,7 +45,7 @@ public class BaseBuilder implements Builder{
 
     public void addNeighbours(Pole currentPole, PoleStorage poleStorage){
         for (Directions direction : possibleMoves) {
-            Pole temp = mover.move(currentPole, direction, this.layers);
+            Pole temp = creator.createBasePole(currentPole, direction, this.layers);
             if(temp==null){
                 continue;}
             if (poleStorage.contains(temp)) {

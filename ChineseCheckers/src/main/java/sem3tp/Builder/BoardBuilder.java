@@ -58,6 +58,14 @@ public class BoardBuilder {
         this.base= board.getBase();
         board.setTriangles(getTriangles());
 
+        /*we create a storage combining base storage and triangle storages*/
+        board.setAllPoles(base.getStorage());
+        for(Triangle triangle: board.getTriangles().getAll()){
+            for(Pole pole:triangle.getStorage().getAll()){
+                board.getAllPoles().insert(pole);
+            }
+        }
+
         return board;
     }
 }

@@ -36,8 +36,8 @@ public class PoleStorage extends  Storage<Pole>{
     }
 
     @Override
-    public List<Pole> getAll() {
-        return List.of();
+    public ArrayList<Pole> getAll() {
+        return list;
     }
 
     @Override

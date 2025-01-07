@@ -2,6 +2,7 @@ package sem3tp.Storage;
 
 import sem3tp.Poles.Pole;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -15,7 +16,7 @@ public interface Storagable<T> {
 
     void delete(T t);
 
-    List<T> getAll();
+    ArrayList<T> getAll();
 
     void update(T t);
 
@@ -26,4 +27,6 @@ public interface Storagable<T> {
     boolean contains(T o);
 
     T get(T t);
+
+    boolean isEmpty();
 }

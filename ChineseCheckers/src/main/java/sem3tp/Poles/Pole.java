@@ -1,14 +1,25 @@
 package sem3tp.Poles;
 
+import sem3tp.Board.Colors;
 import sem3tp.Storage.PoleStorage;
 
 import java.util.ArrayList;
 
 public abstract class Pole implements Comparable<Pole>{
     private int xCord, yCord, zCord;
+    private Colors color = null;
 //    private int warstwa;
 //    private int max;
     PoleStorage neighbours = new PoleStorage();
+
+
+    public void setColor(Colors color) {
+        this.color = color;
+    }
+
+    public Colors getColor() {
+        return color;
+    }
 
     public void setzCord(int zCord) {
         this.zCord = zCord;

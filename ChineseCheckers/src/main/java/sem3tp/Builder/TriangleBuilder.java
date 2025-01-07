@@ -21,6 +21,7 @@ public class TriangleBuilder implements Builder{
     private int layers;
     private Pole pole;
     private BoardBase base;
+    Mover mover = new Mover();
 
     public TriangleBuilder(int layers, Colors color, Pole pole, BoardBase base){
         creator= Creator.getInstance();
@@ -30,14 +31,14 @@ public class TriangleBuilder implements Builder{
         this.base=base;
     }
 
-    /*Adding a neighbour logic - it is responsible for creating a triangle pole
-    * it does not verify whether one should be created*/
-    private TrianglePole findNeighbour(Pole current, Directions direction){
-        int newX = current.getxCord()+direction.addXCord();
-        int newY = current.getyCord()+direction.addYCord();
-        int newZ = current.getzCord()+direction.addZCord();
-        return creator.createTrianglePole(newX,newY,newZ);
-    }
+//    /*Adding a neighbour logic - it is responsible for creating a triangle pole
+//    * it does not verify whether one should be created*/
+//    private TrianglePole findNeighbour(Pole current, Directions direction){
+//        int newX = current.getxCord()+direction.addXCord();
+//        int newY = current.getyCord()+direction.addYCord();
+//        int newZ = current.getzCord()+direction.addZCord();
+//        return creator.createTrianglePole(newX,newY,newZ);
+//    }
 
     /*Loop responsible for creating poles inside the triangle, return a storage of triangle poles
     it receives a source and for each pole it
@@ -57,13 +58,13 @@ public class TriangleBuilder implements Builder{
         while(temp.getSize()<limit){
             maxw=layers-current.i;
             TrianglePole potential;
-            potential =findNeighbour(current,color.getDirectionCreate().nextDirection);
+            potential =creator.createNeighbour(current,color.getDirectionCreate().nextDirection);
             potential.i=current.i;
             potential.j=current.j+1;
             if(potential.j<=maxw){
                 if(!temp.contains(potential))temp.insert(potential);
             }
-            potential = findNeighbour(current, color.getDirectionCreate());
+            potential = creator.createNeighbour(current, color.getDirectionCreate());
             potential.i= current.i+1;
             potential.j=current.j;
             if(potential.i<=maxh){
@@ -79,7 +80,7 @@ public class TriangleBuilder implements Builder{
             Pole current = polesInTriangle.getByIndex(i);
             Directions currentDirection = color.getDirectionCreate();
             for(int j=0;j<4;j++){
-                TrianglePole potential = findNeighbour(current,currentDirection);
+                TrianglePole potential = creator.createNeighbour(current,currentDirection);
                 if(polesInTriangle.contains(potential)){
                     current.addNeighbour(polesInTriangle.get(potential));
                 }
@@ -94,7 +95,7 @@ public class TriangleBuilder implements Builder{
     @Override
     public Triangle build() {
 
-        PoleStorage listOfPoles = createTrianglePoleStorage(findNeighbour(pole,color.getDirectionCreate()), layers);
+        PoleStorage listOfPoles = createTrianglePoleStorage(creator.createNeighbour(pole,color.getDirectionCreate()), layers);
         connectPoles(listOfPoles,base.getStorage());
 
         Triangle triangle = creator.createTriangle();

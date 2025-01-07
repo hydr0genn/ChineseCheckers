@@ -9,6 +9,10 @@ public abstract class Storage<T> implements Storagable<T> {
     ArrayList<T> list;
 
     @Override
+    public boolean isEmpty(){
+        return list.isEmpty();
+    }
+    @Override
     public int indexOf(T t) {
         return this.list.indexOf(t);
     }
@@ -19,7 +23,7 @@ public abstract class Storage<T> implements Storagable<T> {
     }
 
     @Override
-    public List getAll() {
+    public ArrayList<T> getAll() {
         return new ArrayList<T>();
     }
 
