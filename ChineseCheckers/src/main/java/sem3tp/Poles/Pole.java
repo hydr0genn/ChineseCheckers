@@ -1,6 +1,8 @@
 package sem3tp.Poles;
 
 import sem3tp.Board.Colors;
+import sem3tp.Creator.Creator;
+import sem3tp.Mover.Directions;
 import sem3tp.Storage.PoleStorage;
 
 import java.util.ArrayList;
@@ -42,6 +44,23 @@ public abstract class Pole implements Comparable<Pole>{
 
     public int getyCord() {
         return yCord;
+    }
+
+    public Pole getNeighbourByDirection(Directions direction){
+        Creator creator = Creator.getInstance();
+        return creator.createNeighbour(this,direction);
+    }
+
+    public Directions getDirectionOfNeighbour(Pole pole){
+        Creator creator = Creator.getInstance();
+        Directions tempDirection = Directions.West;
+        for (int i=0;i<5;i++){
+            if(pole.equals(getNeighbourByDirection(tempDirection))){
+                return tempDirection;
+            }
+            tempDirection = tempDirection.nextDirection;
+        }
+        return null;
     }
 
     public PoleStorage getNeighbours() {

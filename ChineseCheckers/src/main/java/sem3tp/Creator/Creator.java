@@ -6,6 +6,7 @@ import sem3tp.Board.Triangle;
 import sem3tp.Builder.BaseBuilder;
 import sem3tp.Builder.BoardBuilder;
 import sem3tp.Builder.TriangleBuilder;
+import sem3tp.GUI.FXPole;
 import sem3tp.Game;
 import sem3tp.Mover.Directions;
 import sem3tp.Mover.Mover;
@@ -137,5 +138,10 @@ public class Creator implements Create{
         int newY = current.getyCord()+direction.addYCord();
         int newZ = current.getzCord()+direction.addZCord();
         return createTrianglePole(newX,newY,newZ);
+    }
+
+    /*GUI LOGIC GUI LOGIC GUI LOGIC GUI LOGIC GUI LOGIC GUI LOGIC GUI LOGIC GUI LOGIC*/
+    public FXPole createFXPole(Pole pole){
+        return new FXPole(pole);
     }
 }
