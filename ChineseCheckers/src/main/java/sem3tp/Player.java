@@ -1,7 +1,9 @@
 package sem3tp;
 
-public class Player {
-    String username;
+import java.io.Serializable;
+
+public class Player implements Comparable<Player>, Serializable {
+    private String username;
     boolean isReady = false;
     public Player(String username){
         this.username=username;
@@ -29,5 +31,18 @@ public class Player {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof  Player player){
+            return getUsername().equals(player.getUsername());
+        }
+        return false;
+    }
+
+    @Override
+    public int compareTo(Player o) {
+        return 0;
     }
 }

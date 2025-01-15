@@ -3,6 +3,9 @@ package sem3tp.GUI;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import sem3tp.Creator.Creator;
+import sem3tp.Game;
 import sem3tp.Mover.Directions;
 import sem3tp.Player;
 import sem3tp.Poles.Pole;
@@ -10,7 +13,10 @@ import sem3tp.Poles.StandardPole;
 import sem3tp.Poles.TrianglePole;
 import sem3tp.Storage.FXPoleStorage;
 
+import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 /*Class responsible for initialising polygons, buttons etc*/
@@ -24,12 +30,15 @@ public class ViewModeler {
         return pole.getColor() == null;
     }
 
-    private Pole checkForJump(Pole pole, Pole source){
+    private Pole checkForJump(Pole pole, Pole source){//potential variant
         if(isAvailable(pole)){
             return pole;
         }
         Directions direction = source.getDirectionOfNeighbour(pole);
-        return jump(pole,direction);
+        if(isAvailable(jump(pole,direction))){
+            return jump(pole, direction);
+        }
+        return null;
     }
 
     private FXPoleStorage findPossibleMoves(FXPole fxpole, FXPoleStorage allFXPoles){
@@ -65,13 +74,15 @@ public class ViewModeler {
      * from a triangle to the baseboard
      * inside a triangle
      * */
-    public void initializePoleHandler(FXPole fxpole, FXPoleStorage allFXPoles){
+    public void initializePoleHandler(FXPole fxpole, FXPoleStorage allFXPoles, Game game, Player currentPlayer){
         fxpole.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
             @Override
             public void handle(javafx.scene.input.MouseEvent mouseEvent) {
-                FXPoleStorage possibleMoves = findPossibleMoves(fxpole, allFXPoles);
-                for (FXPole pole : possibleMoves.getAll()){
-                    //TODO jak chcemy to zrobic? czy zmieniamy jakis background czy moze robimy nowy typ obiektu
+                if(game.getCurrentPlayer().equals(currentPlayer)) {
+                    FXPoleStorage possibleMoves = findPossibleMoves(fxpole, allFXPoles);
+                    for (FXPole pole : possibleMoves.getAll()) {
+                        //TODO jak chcemy to zrobic? czy zmieniamy jakis background czy moze robimy nowy typ obiektu
+                    }
                 }
             }
         });
@@ -95,11 +106,50 @@ public class ViewModeler {
         });
     }
 
-    public void initializeJoinGameButton(Button button){
-        
+    public void initializeChooseJoinGameButton(Button button){
+        //TODO SCENE WHERE usER can choose which game to join
     }
 
-    public void initializeCreateGameButton(Button button){
+    public void initializeChooseCreateGameButton(ObjectOutputStream out, Button button){
+       //TODO SCENE where user can set number of players
+    }
 
+    public void initializeJoinGameButton(ObjectOutputStream out, Button button, TextField textField){
+        button.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    out.writeObject("JOINGAME"+textField.getText());//wysylamy liczbe graczy tu kwesgtia czy cos chcemy jeszcze na przycisku bo jak tak to przyps ;p
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+    }
+
+    public void initializeCreateGameButton(ObjectOutputStream out, Button button, TextField textField){
+        button.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    out.writeObject("CREATGAME"+textField.getText());//wysylamy liczbe graczy
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+    }
+
+    public void initializeLoginButton(ObjectOutputStream out, Button button, TextField textField){
+        button.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    out.writeObject("LOGINXXX"+textField.getText());//lets assume that all initial wordls like loginxxx must be of length 8
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
     }
 }

@@ -65,7 +65,7 @@ public class GameState {
         if (!gameStarted) {
             gameStarted = true;
             System.out.println("Gra wystartowała!");
-            GameServer.broadcast("GAMESTART");
+//            GameServer.broadcast("GAMESTART");
         }
     }
 

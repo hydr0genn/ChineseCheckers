@@ -1,6 +1,11 @@
 package sem3tp.Client;
 
+import sem3tp.Game;
+import sem3tp.Player;
+
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
@@ -9,32 +14,34 @@ public class GameClient {
 
     private static final String SERVER_ADDRESS = "localhost"; 
     private static final int SERVER_PORT = 1989; 
-    private Scanner in;
-    private PrintWriter out;
+    private ObjectInputStream in;
+    private ObjectOutputStream out;
     private Scanner consoleInput;
+    private Player user;
+    private Game game;
 
-    public void run() throws IOException {
+    public void run() throws IOException, ClassNotFoundException {
         try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT)) {
-            in = new Scanner(socket.getInputStream());
-            out = new PrintWriter(socket.getOutputStream(), true);
-            consoleInput = new Scanner(System.in);
+            in = new ObjectInputStream(socket.getInputStream());
+            out = new ObjectOutputStream(socket.getOutputStream());
+//            consoleInput = new Scanner(System.in);
 
             System.out.println("Połączono się z serwerem");
 
-            while (in.hasNextLine()) {
-                String serverMessage = in.nextLine();
-
-                if (serverMessage.startsWith("INPUT")) {
-                    System.out.println(serverMessage.substring(6));
-                    String input = consoleInput.nextLine();
-                    out.println(input);
+            while (true) {
+                String serverMessage = (String) in.readObject();
+                if(serverMessage.startsWith("SNDPLAYR")){
+                    this.user= (Player) in.readObject();
                 }
-                else {
-                    System.out.println(serverMessage);
+                if(serverMessage.startsWith("CRTDGAME")){
+                    this.game= (Game) in.readObject();
+                }
+                if(serverMessage.startsWith("oJOINGME")){
+                    this.game= (Game) in.readObject();
                 }
             }
         } finally {
-            System.out.println("NAURAAA");
+            //TODO end
         }
     }
 
@@ -45,6 +52,8 @@ public class GameClient {
         } catch (IOException e) {
             System.err.println("Nie udało się połączyć z serwerem, upewnij się, ze działa yś");
             e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 }

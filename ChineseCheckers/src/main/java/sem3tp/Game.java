@@ -5,7 +5,9 @@ import sem3tp.Creator.Creator;
 import sem3tp.Mover.Directions;
 import sem3tp.Storage.PlayerStorage;
 
-public class Game {
+import java.io.Serializable;
+
+public class Game implements Serializable {
     Board board;
     boolean hasEnded, isOn = false;
     public int id, players_num;
@@ -36,7 +38,7 @@ public class Game {
         return currentPlayer;
     }
 
-    public void setCurrentPlayer() {
+    public void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
 

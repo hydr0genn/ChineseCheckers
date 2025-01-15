@@ -39,7 +39,9 @@ public abstract class Storage<T> implements Storagable<T> {
 
     @Override
     public void insert(T t) {
-        list.add(t);
+        if(t!=null) {
+            list.add(t);
+        }
     }
 /*
 comparable to be considered
