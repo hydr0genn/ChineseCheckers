@@ -1,6 +1,6 @@
 package sem3tp;
 
-public class User {
+public class User implements Comparable<User>{
     private String username;
     private String password;
     //BoardStorage maybeś
@@ -21,5 +21,18 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof User newUser){
+            return this.username.equals(newUser.getUsername());
+        }
+        return false;
+    }
+
+    @Override
+    public int compareTo(User o) {
+        return 0;
     }
 }

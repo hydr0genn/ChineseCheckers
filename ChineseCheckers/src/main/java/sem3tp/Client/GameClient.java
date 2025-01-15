@@ -8,6 +8,7 @@ import sem3tp.GUI.WrapperLayoutBuilder;
 import sem3tp.Game;
 import sem3tp.Mover.Mover;
 import sem3tp.Player;
+import sem3tp.User;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -25,6 +26,10 @@ public class GameClient extends Application {
     private Scanner consoleInput;
     private Player user;
     private Game game;
+
+    public Game getGame() {
+        return game;
+    }
 
     private void move(FXPole source, FXPole destination){
         Mover mover = Mover.getInstance();
@@ -73,6 +78,13 @@ public class GameClient extends Application {
                     FXPole source = (FXPole) in.readObject();
                     FXPole destination = (FXPole) in.readObject();
                     move(source,destination);
+                }
+                if(serverMessage.equals("CHNGTURN")){
+                    game.nextTurn();
+                }
+                if (serverMessage.equals("PLYRJIND")){
+                    Player newPlayer = (Player) in.readObject();
+                    game.addNewPlayer(newPlayer);
                 }
             }
         } finally {

@@ -46,12 +46,31 @@ public class GameServer {
         move((FXPole) source,(FXPole) destination, game);
     }
 
-    public static synchronized void broadcastToGame(Game game, Object source, Object destination) throws IOException {
+    public static synchronized void broadcastMoveToGame(Game game, Object source, Object destination) throws IOException {
 
         for (Player player : game.getPlayersList().getAll()) {
             ObjectOutputStream playerWriter = playerWriterMap.get(player);
             if (playerWriter != null) {
                 sendMove("SSNDMOVE", source, destination, game, playerWriter);
+            }
+        }
+    }
+
+    public static synchronized void broadcastMessageToGame(Game game, String message) throws IOException {
+        for (Player player : game.getPlayersList().getAll()) {
+            ObjectOutputStream playerWriter = playerWriterMap.get(player);
+            if (playerWriter != null) {
+                playerWriter.writeObject(message);
+            }
+        }
+    }
+
+    public static synchronized void broadcastObjecteToGame(Game game, String message, Object object) throws IOException {
+        for (Player player : game.getPlayersList().getAll()) {
+            ObjectOutputStream playerWriter = playerWriterMap.get(player);
+            if (playerWriter != null) {
+                playerWriter.writeObject(message);
+                playerWriter.writeObject(object);
             }
         }
     }
@@ -113,8 +132,8 @@ public class GameServer {
                     }
                     if (receivedMessage.startsWith("JOINGAME")) {
                         String number = receivedMessage.substring(8);
-                        int numberOfPlayers = Integer.parseInt(number);
-                        this.currentGamePlayed=joinGame(numberOfPlayers, out, player);
+                        int numberOfGame = Integer.parseInt(number);
+                        this.currentGamePlayed=joinGame(numberOfGame, out, player);
                     }
                     if(receivedMessage.startsWith("CREATGAM")) {
                         String number = receivedMessage.substring(8);
@@ -124,7 +143,11 @@ public class GameServer {
                     if(receivedMessage.equals("CSNDMOVE")) {
                         FXPole source = (FXPole) in.readObject();
                         FXPole destination = (FXPole) in.readObject();
-                        broadcastToGame(currentGamePlayed, source, destination);
+                        broadcastMoveToGame(currentGamePlayed, source, destination);
+                    }
+                    if (receivedMessage.equals("CHNGTURN")){
+                        broadcastMessageToGame(currentGamePlayed, "CHNGTURN");
+                        currentGamePlayed.nextTurn();
                     }
                 }
 
@@ -136,18 +159,7 @@ public class GameServer {
             }
         }
 
-        private void move(FXPole source, FXPole destination){
-            Mover mover = Mover.getInstance();
-            mover.move(source, destination, this.currentGamePlayed);
-        }
 
-        private void sendMove(String prefix,Object source, Object destination) throws IOException {
-            move((FXPole) source,(FXPole) destination);
-            out.writeObject(prefix);
-            out.writeObject(source);
-            out.writeObject(destination);
-            out.flush();
-        }
 //        public void run() {
 //            try {
 //                in = new ObjectInputStream(socket.getInputStream());
@@ -286,6 +298,7 @@ public class GameServer {
             out.writeObject("oJOINGME");
             out.writeObject(game);
             game.addNewPlayer(player);
+            broadcastObjecteToGame(game, "PLYRJIND", player);
             return game;
         }
 

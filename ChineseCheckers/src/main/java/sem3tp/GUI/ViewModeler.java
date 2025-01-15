@@ -69,9 +69,29 @@ public class ViewModeler {
         return neighbourList;
     }
 
-    public void resetColor(FXPole pole){
-        pole.getPole().setColor(null);
+    private boolean hasJumped(FXPole parent, FXPole current){
+        if (parent.getPole().getNeighbours().contains(current.getPole())){//if the current pole is a neighbour of our source then no jump has been made
+            return false;
+        }
+        return true;
     }
+
+    private void oneMovementSequence(FXPole fxpole, FXPoleStorage allFXPoles){
+        Creator creator = Creator.getInstance();
+        FXPoleStorage possibleMoves = findPossibleMoves(fxpole, allFXPoles);
+        FXMarkedPoleStorage allMarkedPoles = new FXMarkedPoleStorage();
+        for (FXPole pole : possibleMoves.getAll()) {
+            FXMarkedPole fxMarkedPole = creator.createMarkedPole(pole, fxpole, allMarkedPoles);
+            allMarkedPoles.insert(fxMarkedPole);
+            fxMarkedPole.draw();//TU jakas logika rosowania na panie
+        }
+    }
+
+    private void giveTurn(GameClient client) throws IOException {
+        client.sendMessageString("CHNGTURN");
+        client.getGame().nextTurn();
+    }
+
 
     public void deleteMarked(FXMarkedPoleStorage otherMoves){
         //delete from root all created marked poles
@@ -89,28 +109,26 @@ public class ViewModeler {
         fxpole.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
             @Override
             public void handle(javafx.scene.input.MouseEvent mouseEvent) {
-                Creator creator = Creator.getInstance();
                 if(game.getCurrentPlayer().equals(currentPlayer)) {
-                    FXPoleStorage possibleMoves = findPossibleMoves(fxpole, allFXPoles);
-                    FXMarkedPoleStorage allMarkedPoles = new FXMarkedPoleStorage();
-                    for (FXPole pole : possibleMoves.getAll()) {
-                        FXMarkedPole fxMarkedPole = creator.createMarkedPole(pole, fxpole, allMarkedPoles);
-                        allMarkedPoles.insert(fxMarkedPole);
-                        fxMarkedPole.draw();//TU jakas logika rosowania na panie
-                    }
+                    oneMovementSequence(fxpole,allFXPoles);
                 }
             }
         });
     }
 
-    public void initializeMarkedPoleHandler(GameClient client, FXMarkedPole fxMarkedPole){
+    public void initializeMarkedPoleHandler(GameClient client, FXMarkedPole fxMarkedPole, FXPoleStorage allFXPoles){
         fxMarkedPole.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 try {
-                    client.sendMove("CSNDMOVE", fxMarkedPole.getPoleParent(), fxMarkedPole.getPole());
+                    FXPole parent = fxMarkedPole.getPoleParent();
+                    FXPole current = fxMarkedPole.getPole();
+                    client.sendMove("CSNDMOVE", parent, current);
                     deleteMarked(fxMarkedPole.getOtherMoves());
-                    resetColor(fxMarkedPole.getPoleParent());
+                    if(hasJumped(fxMarkedPole.getPoleParent(), fxMarkedPole.getPole())){
+                        oneMovementSequence(current, allFXPoles);
+                    }
+                    giveTurn(client);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
