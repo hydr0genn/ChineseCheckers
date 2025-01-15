@@ -39,10 +39,12 @@ public class App extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
-        Scene scene = new Scene(new VBox(10),400,150);
-        stage.setScene(scene);
-        stage.show();
+    public void start(Stage primaryStage) throws Exception {
+        primaryStage.setScene(new Scene(new WrapperLayoutBuilder().build()));
+        primaryStage.setTitle("Chinese Checkers");
+//        primaryStage.setHeight(1000);
+//        primaryStage.setWidth(1000);
+        primaryStage.show();
     }
 
     public static void main(String[] args){
