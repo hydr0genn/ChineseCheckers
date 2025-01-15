@@ -5,7 +5,8 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import sem3tp.Client.GameClient;
+import sem3tp.Client.ClientHandler;
+import sem3tp.Client.ClientHandler;
 import sem3tp.Creator.Creator;
 import sem3tp.Game;
 import sem3tp.Mover.Directions;
@@ -70,10 +71,8 @@ public class ViewModeler {
     }
 
     private boolean hasJumped(FXPole parent, FXPole current){
-        if (parent.getPole().getNeighbours().contains(current.getPole())){//if the current pole is a neighbour of our source then no jump has been made
-            return false;
-        }
-        return true;
+        //if the current pole is a neighbour of our source then no jump has been made
+        return !parent.getPole().getNeighbours().contains(current.getPole());
     }
 
     private void oneMovementSequence(FXPole fxpole, FXPoleStorage allFXPoles){
@@ -87,9 +86,9 @@ public class ViewModeler {
         }
     }
 
-    private void giveTurn(GameClient client) throws IOException {
-        client.sendMessageString("CHNGTURN");
-        client.getGame().nextTurn();
+    private void giveTurn(ClientHandler clientHandler) throws IOException {
+        clientHandler.sendMessageString("CHNGTURN");
+        clientHandler.getClient().getGame().nextTurn();
     }
 
 
@@ -116,19 +115,19 @@ public class ViewModeler {
         });
     }
 
-    public void initializeMarkedPoleHandler(GameClient client, FXMarkedPole fxMarkedPole, FXPoleStorage allFXPoles){
+    public void initializeMarkedPoleHandler(ClientHandler clientHandler, FXMarkedPole fxMarkedPole, FXPoleStorage allFXPoles){
         fxMarkedPole.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 try {
                     FXPole parent = fxMarkedPole.getPoleParent();
                     FXPole current = fxMarkedPole.getPole();
-                    client.sendMove("CSNDMOVE", parent, current);
+                    clientHandler.sendMove("CSNDMOVE", parent, current);
                     deleteMarked(fxMarkedPole.getOtherMoves());
                     if(hasJumped(fxMarkedPole.getPoleParent(), fxMarkedPole.getPole())){
                         oneMovementSequence(current, allFXPoles);
                     }
-                    giveTurn(client);
+                    giveTurn(clientHandler);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -158,16 +157,16 @@ public class ViewModeler {
         //TODO SCENE WHERE usER can choose which game to join
     }
 
-    public void initializeChooseCreateGameButton(GameClient client, Button button){
+    public void initializeChooseCreateGameButton(ClientHandler clientHandler, Button button){
        //TODO SCENE where user can set number of players
     }
 
-    public void initializeJoinGameButton(GameClient client, Button button, TextField textField){
+    public void initializeJoinGameButton(ClientHandler clientHandler, Button button, TextField textField){
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    client.sendMessageString("JOINGAME"+textField.getText());//wysylamy liczbe graczy tu kwesgtia czy cos chcemy jeszcze na przycisku bo jak tak to przyps ;p
+                    clientHandler.sendMessageString("JOINGAME"+textField.getText());//wysylamy liczbe graczy tu kwesgtia czy cos chcemy jeszcze na przycisku bo jak tak to przyps ;p
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -175,12 +174,12 @@ public class ViewModeler {
         });
     }
 
-    public void initializeCreateGameButton(GameClient client, Button button, TextField textField){
+    public void initializeCreateGameButton(ClientHandler clientHandler, Button button, TextField textField){
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    client.sendMessageString("CREATGAME"+textField.getText());//wysylamy liczbe graczy
+                    clientHandler.sendMessageString("CREATGAME"+textField.getText());//wysylamy liczbe graczy
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -188,12 +187,12 @@ public class ViewModeler {
         });
     }
 
-    public void initializeLoginButton(GameClient client, Button button, TextField textField){
+    public void initializeLoginButton(ClientHandler clientHandler, Button button, TextField textField){
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    client.sendMessageString("LOGINXXX"+textField.getText());//lets assume that all initial wordls like loginxxx must be of length 8
+                    clientHandler.sendMessageString("LOGINXXX"+textField.getText());//lets assume that all initial wordls like loginxxx must be of length 8
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

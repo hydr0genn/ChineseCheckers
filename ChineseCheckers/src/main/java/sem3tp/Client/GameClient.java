@@ -19,78 +19,89 @@ import java.util.Scanner;
 
 public class GameClient extends Application {
 
-    private static final String SERVER_ADDRESS = "localhost"; 
-    private static final int SERVER_PORT = 1989; 
-    private ObjectInputStream in;
-    private ObjectOutputStream out;
-    private Scanner consoleInput;
+//    private static final String SERVER_ADDRESS = "localhost";
+//    private static final int SERVER_PORT = 1989;
+//    private ObjectInputStream in;
+//    private ObjectOutputStream out;
     private Player user;
     private Game game;
+
+    public void setUser(Player user) {
+        this.user = user;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
 
     public Game getGame() {
         return game;
     }
 
-    private void move(FXPole source, FXPole destination){
-        Mover mover = Mover.getInstance();
-        mover.move(source, destination, game);
+    public Player getUser() {
+        return user;
     }
 
-    public void sendMove(String prefix,Object source, Object destination) throws IOException {
-        out.writeObject(prefix);
-        out.writeObject(source);
-        out.writeObject(destination);
-        out.flush();
-        move((FXPole) source,(FXPole) destination);
-    }
-
-    public void sendMessageObject(String prefix,Object object) throws IOException {
-        out.writeObject(prefix);
-        out.writeObject(object);
-        out.flush();
-    }
-
-    public void sendMessageString(String message) throws IOException {
-        out.writeObject(message);
-        out.flush();
-    }
-
-    public void run() throws IOException, ClassNotFoundException {
-        try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT)) {
-            in = new ObjectInputStream(socket.getInputStream());
-            out = new ObjectOutputStream(socket.getOutputStream());
-//            consoleInput = new Scanner(System.in);
-
-            System.out.println("Połączono się z serwerem");
-
-            while (true) {
-                String serverMessage = (String) in.readObject();
-                if(serverMessage.startsWith("SNDPLAYR")){
-                    this.user= (Player) in.readObject();
-                }
-                if(serverMessage.startsWith("CRTDGAME")){
-                    this.game= (Game) in.readObject();
-                }
-                if(serverMessage.startsWith("oJOINGME")){
-                    this.game= (Game) in.readObject();
-                }
-                if(serverMessage.equals("SSNDMOVE")){
-                    FXPole source = (FXPole) in.readObject();
-                    FXPole destination = (FXPole) in.readObject();
-                    move(source,destination);
-                }
-                if(serverMessage.equals("CHNGTURN")){
-                    game.nextTurn();
-                }
-                if (serverMessage.equals("PLYRJIND")){
-                    Player newPlayer = (Player) in.readObject();
-                    game.addNewPlayer(newPlayer);
-                }
-            }
-        } finally {
-            //TODO end
-        }
-    }
+//    private void move(FXPole source, FXPole destination){
+//        Mover mover = Mover.getInstance();
+//        mover.move(source, destination, game);
+//    }
+//
+//    public void sendMove(String prefix,Object source, Object destination) throws IOException {
+//        out.writeObject(prefix);
+//        out.writeObject(source);
+//        out.writeObject(destination);
+//        out.flush();
+//        move((FXPole) source,(FXPole) destination);
+//    }
+//
+//    public void sendMessageObject(String prefix,Object object) throws IOException {
+//        out.writeObject(prefix);
+//        out.writeObject(object);
+//        out.flush();
+//    }
+//
+//    public void sendMessageString(String message) throws IOException {
+//        out.writeObject(message);
+//        out.flush();
+//    }
+//
+//    public void run() throws IOException, ClassNotFoundException {
+//        try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT)) {
+//            in = new ObjectInputStream(socket.getInputStream());
+//            out = new ObjectOutputStream(socket.getOutputStream());
+////            consoleInput = new Scanner(System.in);
+//
+//            System.out.println("Połączono się z serwerem");
+//
+//            while (true) {
+//                String serverMessage = (String) in.readObject();
+//                if(serverMessage.startsWith("SNDPLAYR")){
+//                    this.user= (Player) in.readObject();
+//                }
+//                if(serverMessage.startsWith("CRTDGAME")){
+//                    this.game= (Game) in.readObject();
+//                }
+//                if(serverMessage.startsWith("oJOINGME")){
+//                    this.game= (Game) in.readObject();
+//                }
+//                if(serverMessage.equals("SSNDMOVE")){
+//                    FXPole source = (FXPole) in.readObject();
+//                    FXPole destination = (FXPole) in.readObject();
+//                    move(source,destination);
+//                }
+//                if(serverMessage.equals("CHNGTURN")){
+//                    game.nextTurn();
+//                }
+//                if (serverMessage.equals("PLYRJIND")){
+//                    Player newPlayer = (Player) in.readObject();
+//                    game.addNewPlayer(newPlayer);
+//                }
+//            }
+//        } finally {
+//            //TODO end
+//        }
+//    }
 
 
     @Override
@@ -104,14 +115,9 @@ public class GameClient extends Application {
 
     public static void main(String[] args) {
         launch(args);
-        try {
-            GameClient client = new GameClient();
-            client.run();
-        } catch (IOException e) {
-            System.err.println("Nie udało się połączyć z serwerem, upewnij się, ze działa yś");
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        GameClient client = new GameClient();
+        ClientHandler handler = new ClientHandler();
+        handler.setClient(client);
+        handler.run();
     }
 }
