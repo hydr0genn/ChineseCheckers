@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import sem3tp.Client.GameClient;
 import sem3tp.Creator.Creator;
 import sem3tp.Game;
@@ -12,10 +13,10 @@ import sem3tp.Player;
 import sem3tp.Poles.Pole;
 import sem3tp.Poles.StandardPole;
 import sem3tp.Poles.TrianglePole;
+import sem3tp.Storage.FXMarkedPoleStorage;
 import sem3tp.Storage.FXPoleStorage;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -68,6 +69,15 @@ public class ViewModeler {
         return neighbourList;
     }
 
+    public void resetColor(FXPole pole){
+        pole.getPole().setColor(null);
+    }
+
+    public void deleteMarked(FXMarkedPoleStorage otherMoves){
+        //delete from root all created marked poles
+    }
+
+    //BUTTON INITIALIZATION BUTTON INITIALIZATION BUTTON INITIALIZATION BUTTON INITIALIZATION BUTTON INITIALIZATION
     /*
      * 4 cases of possible moves have to be considered:
      * inside the baseboard
@@ -79,11 +89,30 @@ public class ViewModeler {
         fxpole.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
             @Override
             public void handle(javafx.scene.input.MouseEvent mouseEvent) {
+                Creator creator = Creator.getInstance();
                 if(game.getCurrentPlayer().equals(currentPlayer)) {
                     FXPoleStorage possibleMoves = findPossibleMoves(fxpole, allFXPoles);
+                    FXMarkedPoleStorage allMarkedPoles = new FXMarkedPoleStorage();
                     for (FXPole pole : possibleMoves.getAll()) {
-                        //TODO jak chcemy to zrobic? czy zmieniamy jakis background czy moze robimy nowy typ obiektu
+                        FXMarkedPole fxMarkedPole = creator.createMarkedPole(pole, fxpole, allMarkedPoles);
+                        allMarkedPoles.insert(fxMarkedPole);
+                        fxMarkedPole.draw();//TU jakas logika rosowania na panie
                     }
+                }
+            }
+        });
+    }
+
+    public void initializeMarkedPoleHandler(GameClient client, FXMarkedPole fxMarkedPole){
+        fxMarkedPole.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                try {
+                    client.sendMove("CSNDMOVE", fxMarkedPole.getPoleParent(), fxMarkedPole.getPole());
+                    deleteMarked(fxMarkedPole.getOtherMoves());
+                    resetColor(fxMarkedPole.getPoleParent());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
             }
         });

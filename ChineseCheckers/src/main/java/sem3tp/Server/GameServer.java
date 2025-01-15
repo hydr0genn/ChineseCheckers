@@ -2,6 +2,7 @@ package sem3tp.Server;
 
 import sem3tp.Board.Board;
 import sem3tp.Creator.Creator;
+import sem3tp.GUI.FXPole;
 import sem3tp.Game;
 import sem3tp.GameState;
 import sem3tp.Mover.Directions;
@@ -32,16 +33,28 @@ public class GameServer {
         playerWriterMap.remove(player, writer);
     }
 
-//    public static synchronized void broadcastToGame(Game game, String message) {
-//
-//        for (Player player : game.getPlayersList().getAll()) {
-//            ObjectOutputStream playerWriter = playerWriterMap.get(player);
-//            if (playerWriter != null) {
-//                playerWriter.(message);
-//                playerWriter.flush();
-//            }
-//        }
-//    }
+    private static void move(FXPole source, FXPole destination, Game game){
+        Mover mover = Mover.getInstance();
+        mover.move(source, destination, game);
+    }
+
+    private static void sendMove(String prefix,Object source, Object destination, Game game, ObjectOutputStream out) throws IOException {
+        out.writeObject(prefix);
+        out.writeObject(source);
+        out.writeObject(destination);
+        out.flush();
+        move((FXPole) source,(FXPole) destination, game);
+    }
+
+    public static synchronized void broadcastToGame(Game game, Object source, Object destination) throws IOException {
+
+        for (Player player : game.getPlayersList().getAll()) {
+            ObjectOutputStream playerWriter = playerWriterMap.get(player);
+            if (playerWriter != null) {
+                sendMove("SSNDMOVE", source, destination, game, playerWriter);
+            }
+        }
+    }
 
 
     public GameServer(int maxGamesSimultaneously){
@@ -62,7 +75,6 @@ public class GameServer {
             }
         }
 
-//co z broadcastami????
 //    public static synchronized void broadcast(String message) {
 //        for (ObjectOutputStream writer : writers) {
 //            writer.println(message);
@@ -109,6 +121,11 @@ public class GameServer {
                         int numberOfPlayers = Integer.parseInt(number);
                         this.currentGamePlayed=createNewGame(currentGamePlayed, numberOfPlayers,player, out);
                     }
+                    if(receivedMessage.equals("CSNDMOVE")) {
+                        FXPole source = (FXPole) in.readObject();
+                        FXPole destination = (FXPole) in.readObject();
+                        broadcastToGame(currentGamePlayed, source, destination);
+                    }
                 }
 
             } catch (Exception e) {
@@ -119,6 +136,18 @@ public class GameServer {
             }
         }
 
+        private void move(FXPole source, FXPole destination){
+            Mover mover = Mover.getInstance();
+            mover.move(source, destination, this.currentGamePlayed);
+        }
+
+        private void sendMove(String prefix,Object source, Object destination) throws IOException {
+            move((FXPole) source,(FXPole) destination);
+            out.writeObject(prefix);
+            out.writeObject(source);
+            out.writeObject(destination);
+            out.flush();
+        }
 //        public void run() {
 //            try {
 //                in = new ObjectInputStream(socket.getInputStream());

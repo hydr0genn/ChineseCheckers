@@ -1,10 +1,5 @@
 package sem3tp.Client;
 
-import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import sem3tp.GUI.Layout1Builder;
-import sem3tp.GUI.WrapperLayoutBuilder;
 import sem3tp.Game;
 import sem3tp.Player;
 
@@ -15,7 +10,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class GameClient extends Application {
+public class GameClient {
 
     private static final String SERVER_ADDRESS = "localhost"; 
     private static final int SERVER_PORT = 1989; 
@@ -24,7 +19,6 @@ public class GameClient extends Application {
     private Scanner consoleInput;
     private Player user;
     private Game game;
-    private Layout1Builder layout1Builder;
 
     public void sendMessage(String prefix,Object object) throws IOException {
         out.writeObject(prefix);
@@ -35,10 +29,6 @@ public class GameClient extends Application {
     public void sendMessageString(String message) throws IOException {
         out.writeObject(message);
         out.flush();
-    }
-
-    public Layout1Builder getLayout1Builder() {
-        return layout1Builder;
     }
 
     public void run() throws IOException, ClassNotFoundException {
@@ -66,21 +56,10 @@ public class GameClient extends Application {
         }
     }
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        primaryStage.setScene(new Scene(new WrapperLayoutBuilder().build()));
-        primaryStage.setTitle("Chinese Checkers");
-//        primaryStage.setHeight(1000);
-//        primaryStage.setWidth(1000);
-        primaryStage.show();
-    }
-
     public static void main(String[] args) {
-        launch(args);
         try {
             GameClient client = new GameClient();
             client.run();
-
         } catch (IOException e) {
             System.err.println("Nie udało się połączyć z serwerem, upewnij się, ze działa yś");
             e.printStackTrace();

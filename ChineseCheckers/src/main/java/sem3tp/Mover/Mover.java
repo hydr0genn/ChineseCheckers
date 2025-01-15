@@ -1,9 +1,12 @@
 package sem3tp.Mover;
 
 import sem3tp.Board.Board;
+import sem3tp.Board.Colors;
 import sem3tp.Board.Triangle;
 import sem3tp.Creator.Creator;
 import sem3tp.Exceptions.WrongDirectionInput;
+import sem3tp.GUI.FXPole;
+import sem3tp.Game;
 import sem3tp.Poles.Pole;
 import sem3tp.Poles.StandardPole;
 import sem3tp.Poles.TrianglePole;
@@ -80,11 +83,13 @@ public class Mover {
     }
 
     /*GENERAL MOVE FUNCTION
-    * from here it is divded into two possibilities: move inside the base or from base to a triangle -*/
-    public void move(Pole currentPole, Directions direction, Board board){
-        Pole potentialPole = getNeighbour(currentPole, direction, board);
-        if(inBase(potentialPole, board)) standardMove(currentPole, direction, potentialPole);
-        else moveToTriangle(currentPole, direction);
+    * Game and to fxpoles are given - we change the color of those two poles -*/
+    public void move(FXPole FXcurrentPole, FXPole FXdestination, Game game){
+        Pole source = game.getBoard().getAllPoles().get(FXcurrentPole.getPole());
+        Pole destination = game.getBoard().getAllPoles().get(FXdestination.getPole());
+        Colors temp = source.getColor();
+        source.setColor(destination.getColor());
+        destination.setColor(temp);
     }
 
     /*Standard move without 'crossing borders'*/
