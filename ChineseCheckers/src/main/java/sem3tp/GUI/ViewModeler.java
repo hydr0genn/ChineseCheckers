@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import sem3tp.Client.GameClient;
 import sem3tp.Creator.Creator;
 import sem3tp.Game;
 import sem3tp.Mover.Directions;
@@ -110,16 +111,16 @@ public class ViewModeler {
         //TODO SCENE WHERE usER can choose which game to join
     }
 
-    public void initializeChooseCreateGameButton(ObjectOutputStream out, Button button){
+    public void initializeChooseCreateGameButton(GameClient client, Button button){
        //TODO SCENE where user can set number of players
     }
 
-    public void initializeJoinGameButton(ObjectOutputStream out, Button button, TextField textField){
+    public void initializeJoinGameButton(GameClient client, Button button, TextField textField){
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    out.writeObject("JOINGAME"+textField.getText());//wysylamy liczbe graczy tu kwesgtia czy cos chcemy jeszcze na przycisku bo jak tak to przyps ;p
+                    client.sendMessageString("JOINGAME"+textField.getText());//wysylamy liczbe graczy tu kwesgtia czy cos chcemy jeszcze na przycisku bo jak tak to przyps ;p
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -127,12 +128,12 @@ public class ViewModeler {
         });
     }
 
-    public void initializeCreateGameButton(ObjectOutputStream out, Button button, TextField textField){
+    public void initializeCreateGameButton(GameClient client, Button button, TextField textField){
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    out.writeObject("CREATGAME"+textField.getText());//wysylamy liczbe graczy
+                    client.sendMessageString("CREATGAME"+textField.getText());//wysylamy liczbe graczy
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -140,12 +141,12 @@ public class ViewModeler {
         });
     }
 
-    public void initializeLoginButton(ObjectOutputStream out, Button button, TextField textField){
+    public void initializeLoginButton(GameClient client, Button button, TextField textField){
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    out.writeObject("LOGINXXX"+textField.getText());//lets assume that all initial wordls like loginxxx must be of length 8
+                    client.sendMessageString("LOGINXXX"+textField.getText());//lets assume that all initial wordls like loginxxx must be of length 8
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

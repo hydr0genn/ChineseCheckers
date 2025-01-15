@@ -1,5 +1,8 @@
 package sem3tp.Board;
 
+import sem3tp.GUI.FXPole;
+import sem3tp.Poles.Pole;
+import sem3tp.Storage.FXPoleStorage;
 import sem3tp.Storage.PoleStorage;
 import sem3tp.Storage.TriangleStorage;
 
@@ -7,6 +10,18 @@ public class Board {
     private BoardBase base;
     private TriangleStorage triangles;
     private PoleStorage allPoles;
+    private FXPoleStorage allFXPoles;
+/*Only to be used after the allPoles storage is completed*/
+    public void initializeAllFXPoles() {
+        allFXPoles = new FXPoleStorage();
+        for (Pole pole: allPoles.getAll()){
+            allFXPoles.insert(new FXPole(pole));
+        }
+    }
+
+    public FXPoleStorage getAllFXPoles() {
+        return allFXPoles;
+    }
 
     public void setAllPoles(PoleStorage allPoles) {
         this.allPoles = allPoles;

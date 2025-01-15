@@ -1,5 +1,6 @@
 package sem3tp.Server;
 
+import sem3tp.Board.Board;
 import sem3tp.Creator.Creator;
 import sem3tp.Game;
 import sem3tp.GameState;
@@ -106,7 +107,7 @@ public class GameServer {
                     if(receivedMessage.startsWith("CREATGAM")) {
                         String number = receivedMessage.substring(8);
                         int numberOfPlayers = Integer.parseInt(number);
-                        this.currentGamePlayed=createNewGame(numberOfPlayers,player, out);
+                        this.currentGamePlayed=createNewGame(currentGamePlayed, numberOfPlayers,player, out);
                     }
                 }
 
@@ -218,12 +219,13 @@ public class GameServer {
 //            }
 //        }
 
-        private static synchronized Game createNewGame(int playNumber, Player player, ObjectOutputStream out) throws IOException {
+        private static synchronized Game createNewGame(Game currentGame,int playNumber, Player player, ObjectOutputStream out) throws IOException {
                 Creator creator = Creator.getInstance();
-                Game game = creator.createGame(next_id);
+                Board board = creator.createBoardBuilder(5, playNumber).build();
+                Game game = creator.createGame(board, next_id, playNumber);
                 gamesOn.put(next_id, game);
                 next_id++;
-                game.setPlayers_num(playNumber);
+                currentGame=game;
                 game.addNewPlayer(player);
                 out.writeObject("CRTDGAME");
                 out.writeObject(game);

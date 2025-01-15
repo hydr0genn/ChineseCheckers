@@ -1,10 +1,12 @@
 package sem3tp.Creator;
 
+import sem3tp.Board.Board;
 import sem3tp.Board.BoardBase;
 import sem3tp.Board.Colors;
 import sem3tp.Board.Triangle;
 import sem3tp.Builder.BaseBuilder;
 import sem3tp.Builder.BoardBuilder;
+import sem3tp.Builder.GameBuilder;
 import sem3tp.Builder.TriangleBuilder;
 import sem3tp.GUI.FXPole;
 import sem3tp.Game;
@@ -70,8 +72,6 @@ public class Creator implements Create{
         return new Player(username);
     }
 
-    @Override
-    public Game createGame(int id){return new Game(id);}
 
     @Override
     public StandardPole createSTDPole(int xCord, int yCord, int zCord) {
@@ -129,6 +129,10 @@ public class Creator implements Create{
         if(isWithinBoundary(newX,newY,newZ, layers)) {return createSTDPole(newX, newY, newZ);}
 
         return null;
+    }
+
+    public Game createGame(Board board, int id, int players_num){
+        return new GameBuilder(board,id,players_num).build();
     }
 
     /*Adding a neighbour logic - it is responsible for creating a triangle pole

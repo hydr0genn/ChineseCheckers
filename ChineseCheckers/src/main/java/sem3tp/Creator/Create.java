@@ -30,7 +30,6 @@ public interface Create {
     public UserStorage createUserStorage();
     public TriangleStorage createTriangleStorage();
     public User createUser(String username, String pwd);
-    public Game createGame(int id);
     public Player createPlayer(String username);
     public PlayerStorage createPlayerStorage();
 

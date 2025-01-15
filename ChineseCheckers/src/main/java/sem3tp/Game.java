@@ -14,6 +14,13 @@ public class Game implements Serializable {
     PlayerStorage playersList;
     Player currentPlayer;
 
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
+    public Board getBoard() {
+        return board;
+    }
 
     /*We start the game when all players have joined and are ready */
     public void checkReadiness(){

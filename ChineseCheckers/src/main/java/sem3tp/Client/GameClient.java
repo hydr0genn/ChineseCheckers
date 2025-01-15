@@ -20,6 +20,17 @@ public class GameClient {
     private Player user;
     private Game game;
 
+    public void sendMessage(String prefix,Object object) throws IOException {
+        out.writeObject(prefix);
+        out.writeObject(object);
+        out.flush();
+    }
+
+    public void sendMessageString(String message) throws IOException {
+        out.writeObject(message);
+        out.flush();
+    }
+
     public void run() throws IOException, ClassNotFoundException {
         try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT)) {
             in = new ObjectInputStream(socket.getInputStream());
