@@ -1,5 +1,9 @@
 package sem3tp.Client;
 
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import sem3tp.GUI.WrapperLayoutBuilder;
 import sem3tp.Game;
 import sem3tp.Player;
 
@@ -10,7 +14,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class GameClient {
+public class GameClient extends Application {
 
     private static final String SERVER_ADDRESS = "localhost"; 
     private static final int SERVER_PORT = 1989; 
@@ -56,7 +60,17 @@ public class GameClient {
         }
     }
 
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        primaryStage.setScene(new Scene(new WrapperLayoutBuilder().build()));
+        primaryStage.setTitle("Chinese Checkers");
+//        primaryStage.setHeight(1000);
+//        primaryStage.setWidth(1000);
+        primaryStage.show();
+    }
+
     public static void main(String[] args) {
+        launch(args);
         try {
             GameClient client = new GameClient();
             client.run();
