@@ -8,6 +8,7 @@ import sem3tp.Builder.BaseBuilder;
 import sem3tp.Builder.BoardBuilder;
 import sem3tp.Builder.GameBuilder;
 import sem3tp.Builder.TriangleBuilder;
+import sem3tp.GUI.FXMarkedPole;
 import sem3tp.GUI.FXPole;
 import sem3tp.Game;
 import sem3tp.Mover.Directions;
@@ -17,10 +18,7 @@ import sem3tp.Poles.InitPole;
 import sem3tp.Poles.Pole;
 import sem3tp.Poles.StandardPole;
 import sem3tp.Poles.TrianglePole;
-import sem3tp.Storage.PlayerStorage;
-import sem3tp.Storage.PoleStorage;
-import sem3tp.Storage.TriangleStorage;
-import sem3tp.Storage.UserStorage;
+import sem3tp.Storage.*;
 import sem3tp.User;
 
 import java.util.ArrayList;
@@ -133,6 +131,14 @@ public class Creator implements Create{
 
     public Game createGame(Board board, int id, int players_num){
         return new GameBuilder(board,id,players_num).build();
+    }
+
+    public FXMarkedPole createMarkedPole(FXPole fxPole, FXPole parent, FXMarkedPoleStorage otherMoves){
+        FXMarkedPole fxMarkedPole = new FXMarkedPole();
+        fxMarkedPole.setPole(fxPole);
+        fxMarkedPole.setParent(parent);
+        fxMarkedPole.setOtherMoves(otherMoves);
+        return fxMarkedPole;
     }
 
     /*Adding a neighbour logic - it is responsible for creating a triangle pole

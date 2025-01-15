@@ -1,6 +1,8 @@
 package sem3tp.Client;
 
+import sem3tp.GUI.FXPole;
 import sem3tp.Game;
+import sem3tp.Mover.Mover;
 import sem3tp.Player;
 
 import java.io.IOException;
@@ -20,7 +22,20 @@ public class GameClient {
     private Player user;
     private Game game;
 
-    public void sendMessage(String prefix,Object object) throws IOException {
+    private void move(FXPole source, FXPole destination){
+        Mover mover = Mover.getInstance();
+        mover.move(source, destination, game);
+    }
+
+    public void sendMove(String prefix,Object source, Object destination) throws IOException {
+        out.writeObject(prefix);
+        out.writeObject(source);
+        out.writeObject(destination);
+        out.flush();
+        move((FXPole) source,(FXPole) destination);
+    }
+
+    public void sendMessageObject(String prefix,Object object) throws IOException {
         out.writeObject(prefix);
         out.writeObject(object);
         out.flush();
@@ -49,6 +64,11 @@ public class GameClient {
                 }
                 if(serverMessage.startsWith("oJOINGME")){
                     this.game= (Game) in.readObject();
+                }
+                if(serverMessage.equals("SSNDMOVE")){
+                    FXPole source = (FXPole) in.readObject();
+                    FXPole destination = (FXPole) in.readObject();
+                    move(source,destination);
                 }
             }
         } finally {
