@@ -140,7 +140,6 @@ public class GameServer {
                         String number = receivedMessage.substring(8);
                         int numberOfPlayers = Integer.parseInt(number);
                         this.currentGamePlayed=createNewGame(currentGamePlayed, numberOfPlayers,player, out);
-                        System.out.println("powstala gra");
                     }
                     if(receivedMessage.equals("CSNDMOVE")) {
                         FXPole source = (FXPole) in.readObject();

@@ -10,6 +10,7 @@ public class WrapperLayoutBuilder implements Builder<Region> {
     Region customComponent2;
     Region customComponent3;
     Region customComponent4;
+    Region customComponent5;
 
     public WrapperLayoutBuilder(ClientHandler clientHandler) {
         this.clientHandler = clientHandler;
@@ -21,8 +22,9 @@ public class WrapperLayoutBuilder implements Builder<Region> {
         //results.setTop(new Label("This is The Wrapper"));
         Region customComponent1 = new LoginLayoutBuilder(() -> results.setCenter(customComponent2), clientHandler).build();
         customComponent2 = new CreateLayoutBuilder(() -> results.setCenter(customComponent3), clientHandler).build();
-        customComponent3 = new JoinLayoutBuilder(() -> results.setCenter(customComponent1), clientHandler).build();
-        customComponent4 = new LobbyLayoutBuilder(() -> results.setCenter(customComponent1), clientHandler).build();
+        customComponent3 = new JoinLayoutBuilder(() -> results.setCenter(customComponent4), clientHandler).build();
+        customComponent4 = new LobbyLayoutBuilder(() -> results.setCenter(customComponent5), clientHandler).build();
+        customComponent5 = new LobbyLayoutBuilder(() -> results.setCenter(customComponent1), clientHandler).build();
         results.setCenter(customComponent1);
         return results;
     }
