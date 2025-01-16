@@ -135,19 +135,29 @@ public class ViewModeler {
         });
     }
 
-    public void initializeReadyButton(Button button, Player player){
+    public void initializeReadyButton(ClientHandler clientHandler, Button button, Player player){
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                try {
+                    clientHandler.sendMessageObject("READYXXX", player);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 player.setReady(true);
             }
         });
     }
 
-    public void initializeNotReadyButton(Button button, Player player){
+    public void initializeNotReadyButton(ClientHandler clientHandler,Button button, Player player){
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                try {
+                    clientHandler.sendMessageObject("NOTREADY", player);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 player.setReady(false);
             }
         });
@@ -196,7 +206,7 @@ public class ViewModeler {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    clientHandler.sendMessageString("CREATGAME"+textField.getText());//wysylamy liczbe graczy
+                    clientHandler.sendMessageString("CREATGAM"+textField.getText());//wysylamy liczbe graczy
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

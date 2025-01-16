@@ -10,6 +10,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ClientHandler implements Runnable{
     private Socket socket;
@@ -19,6 +21,7 @@ public class ClientHandler implements Runnable{
     private static final String SERVER_ADDRESS = "localhost";
     private static final int SERVER_PORT = 1989;
     private GameClient client;
+    private HashSet<Integer> ids;
 
     public void setClient(GameClient client) {
         this.client = client;
@@ -96,6 +99,14 @@ public class ClientHandler implements Runnable{
                 if (serverMessage.equals("PLYRJIND")){
                     Player newPlayer = (Player) in.readObject();
                     client.getGame().addNewPlayer(newPlayer);
+                }
+                if (serverMessage.equals("SNDGAMES")){
+                    @SuppressWarnings("unchecked")
+                    HashSet<Integer> ids = (HashSet<Integer>) in.readObject();
+                    this.ids=ids;
+                }
+                if(serverMessage.equals("TURNONXX")){
+                    client.getGame().turnOn();
                 }
             }
         } catch (ClassNotFoundException | IOException e) {

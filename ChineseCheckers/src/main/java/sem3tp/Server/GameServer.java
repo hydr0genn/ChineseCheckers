@@ -151,6 +151,25 @@ public class GameServer {
                         broadcastMessageToGame(currentGamePlayed, "CHNGTURN");
                         currentGamePlayed.nextTurn();
                     }
+                    if(receivedMessage.equals("GETGAMES")){
+                        out.writeObject("SNDGAMES");
+                        HashSet<Integer> keySet = new HashSet<>(gamesOn.keySet());
+                        out.writeObject(keySet);
+                    }
+                    if (receivedMessage.equals("NOTREADY")){
+                        Player changedPlayer = (Player) in.readObject();
+                        changedPlayer = currentGamePlayed.getPlayersList().get(changedPlayer);
+                        changedPlayer.setReady(false);
+                    }
+                    if(receivedMessage.equals("READYXXX")){
+                        Player changedPlayer = (Player) in.readObject();
+                        changedPlayer = currentGamePlayed.getPlayersList().get(changedPlayer);
+                        changedPlayer.setReady(true);
+                        currentGamePlayed.checkReadiness();
+                        if(currentGamePlayed.isOn()){
+                            broadcastMessageToGame(currentGamePlayed,"TURNONXX");
+                        }
+                    }
                 }
 
             } catch (Exception e) {
