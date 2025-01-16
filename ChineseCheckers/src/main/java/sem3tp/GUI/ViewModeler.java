@@ -139,30 +139,30 @@ public class ViewModeler {
         });
     }
 
-    public void initializeReadyButton(ClientHandler clientHandler, Button button, Player player){
+    public void initializeReadyButton(ClientHandler clientHandler, Button button){
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    clientHandler.sendMessageObject("READYXXX", player);
+                    clientHandler.sendMessageObject("READYXXX", clientHandler.getClient().getUser());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                player.setReady(true);
+                clientHandler.getClient().getUser().setReady(true);
             }
         });
     }
 
-    public void initializeNotReadyButton(ClientHandler clientHandler,Button button, Player player){
+    public void initializeNotReadyButton(ClientHandler clientHandler,Button button){
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    clientHandler.sendMessageObject("NOTREADY", player);
+                    clientHandler.sendMessageObject("NOTREADY", clientHandler.getClient().getUser());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                player.setReady(false);
+                clientHandler.getClient().getUser().setReady(false);
             }
         });
     }

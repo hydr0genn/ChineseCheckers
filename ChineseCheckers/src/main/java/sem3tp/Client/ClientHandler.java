@@ -108,6 +108,7 @@ public class ClientHandler implements Runnable{
                 if(serverMessage.equals("TURNONXX")){
                     client.getGame().turnOn();
                 }
+                System.out.println(getClient().getUser().getUsername());
             }
         } catch (ClassNotFoundException | IOException e) {
             throw new RuntimeException(e);

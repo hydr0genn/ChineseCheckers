@@ -27,10 +27,9 @@ public class LobbyLayoutBuilder implements Builder<Region> {
         Label czekanie = new Label("Czekanie na start gry");
 
         ViewModeler viewModeler = new ViewModeler();
-        Player player = handler.getClient().getUser();
-        viewModeler.initializeReadyButton(handler, ready, player);
+        viewModeler.initializeReadyButton(handler, ready);
 
-        viewModeler.initializeNotReadyButton(handler, unready, player);
+        viewModeler.initializeNotReadyButton(handler, unready);
 
 
 
