@@ -79,9 +79,9 @@ public class ViewModeler {
         return !parent.getPole().getNeighbours().contains(current.getPole());
     }
 
-    private void oneMovementSequence(FXPole fxpole, FXPoleStorage allFXPoles){
+    private void oneMovementSequence(FXPole fxpole, FXPoleStorage allFXPoles, Variants variant){
         Creator creator = Creator.getInstance();
-        FXPoleStorage possibleMoves = findPossibleMoves(fxpole, allFXPoles);
+        FXPoleStorage possibleMoves = findPossibleMoves(fxpole, allFXPoles, variant);
         FXMarkedPoleStorage allMarkedPoles = new FXMarkedPoleStorage();
         for (FXPole pole : possibleMoves.getAll()) {
             FXMarkedPole fxMarkedPole = creator.createMarkedPole(pole, fxpole, allMarkedPoles);
@@ -113,7 +113,7 @@ public class ViewModeler {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 if(game.getCurrentPlayer().equals(currentPlayer)) {
-                    oneMovementSequence(fxpole,allFXPoles);
+                    oneMovementSequence(fxpole,allFXPoles, game.getVariant());
                 }
             }
         });
@@ -129,7 +129,7 @@ public class ViewModeler {
                     clientHandler.sendMove("CSNDMOVE", parent, current);
                     deleteMarked(fxMarkedPole.getOtherMoves());
                     if(hasJumped(fxMarkedPole.getPoleParent(), fxMarkedPole.getPole())){
-                        oneMovementSequence(current, allFXPoles);
+                        oneMovementSequence(current, allFXPoles, clientHandler.getClient().getGame().getVariant());
                     }
                     giveTurn(clientHandler);
                 } catch (IOException e) {
