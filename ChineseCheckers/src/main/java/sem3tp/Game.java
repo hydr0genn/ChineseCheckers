@@ -3,6 +3,7 @@ package sem3tp;
 import sem3tp.Board.Board;
 import sem3tp.Creator.Creator;
 import sem3tp.Mover.Directions;
+import sem3tp.Mover.Variants;
 import sem3tp.Storage.PlayerStorage;
 
 import java.io.Serializable;
@@ -13,6 +14,15 @@ public class Game implements Serializable {
     public int id, players_num;
     PlayerStorage playersList;
     Player currentPlayer;
+    Variants variant;
+
+    public Variants getVariant() {
+        return variant;
+    }
+
+    public void setVariant(Variants variant) {
+        this.variant = variant;
+    }
 
     public void setBoard(Board board) {
         this.board = board;

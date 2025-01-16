@@ -10,6 +10,7 @@ import sem3tp.Client.ClientHandler;
 import sem3tp.Creator.Creator;
 import sem3tp.Game;
 import sem3tp.Mover.Directions;
+import sem3tp.Mover.Variants;
 import sem3tp.Player;
 import sem3tp.Poles.Pole;
 import sem3tp.Poles.StandardPole;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 /*Class responsible for initialising polygons, buttons etc*/
 public class ViewModeler {
 
+
     private Pole jump(Pole pole, Directions direction){
         return pole.getNeighbourByDirection(direction);
     }
@@ -33,26 +35,28 @@ public class ViewModeler {
         return pole.getColor() == null;
     }
 
-    private Pole checkForJump(Pole pole, Pole source){//potential variant
+    private Pole checkForJump(Pole pole, Pole source, Variants variant ){//potential variant
         if(isAvailable(pole)){
             return pole;
         }
         Directions direction = source.getDirectionOfNeighbour(pole);
         if(isAvailable(jump(pole,direction))){
             return jump(pole, direction);
+        }else if(variant==Variants.TwoJumps){
+            checkForJump(jump(pole,direction),pole,Variants.OneJump);
         }
         return null;
     }
 
-    private FXPoleStorage findPossibleMoves(FXPole fxpole, FXPoleStorage allFXPoles){
+    private FXPoleStorage findPossibleMoves(FXPole fxpole, FXPoleStorage allFXPoles, Variants variant){
         FXPoleStorage neighbourList = new FXPoleStorage();
         if (fxpole.getPole() instanceof TrianglePole currentPole){
             for (Pole neighbour : currentPole.getNeighbours().getAll()){
                 if(neighbour instanceof TrianglePole){ //inside a triangle
-                    neighbourList.insert(allFXPoles.get(new FXPole(checkForJump(neighbour,currentPole))));
+                    neighbourList.insert(allFXPoles.get(new FXPole(checkForJump(neighbour,currentPole, variant))));
                 }else if(neighbour instanceof StandardPole){//from triangle to baseboard
                     if(currentPole.getColor().equals(currentPole.getParent().getColor())){
-                        neighbourList.insert(allFXPoles.get(new FXPole(checkForJump(neighbour,currentPole))));
+                        neighbourList.insert(allFXPoles.get(new FXPole(checkForJump(neighbour,currentPole, variant))));
                     }
                 }
             }
@@ -60,10 +64,10 @@ public class ViewModeler {
             for(Pole neighbour : currentPole.getNeighbours().getAll()){
                 if(neighbour instanceof TrianglePole triangleNeighbour){
                     if(triangleNeighbour.getParent().getColor()==currentPole.getColor().getOppositeColor()){
-                        neighbourList.insert(allFXPoles.get(new FXPole(checkForJump(neighbour,currentPole))));
+                        neighbourList.insert(allFXPoles.get(new FXPole(checkForJump(neighbour,currentPole, variant))));
                     }
                 }else{
-                    neighbourList.insert(allFXPoles.get(new FXPole(checkForJump(neighbour,currentPole))));
+                    neighbourList.insert(allFXPoles.get(new FXPole(checkForJump(neighbour,currentPole, variant))));
                 }
             }
         }
