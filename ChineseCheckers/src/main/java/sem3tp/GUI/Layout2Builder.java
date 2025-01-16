@@ -18,6 +18,10 @@ public class Layout2Builder implements Builder<Region> {
 
     @Override
     public Region build() {
+        Button joinGameButton = new Button("Dołącz do gry");
+        Button createGameButton = new Button("Stwórz gre");
+
+
         Button button = new Button("Change to Scene 1");
         button.setOnAction(evt -> sceneSwapper.run());
         VBox results = new VBox(20, new Label("Welcome to Scene 2"), button);

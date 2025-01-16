@@ -103,21 +103,43 @@ public class GameClient extends Application {
 //        }
 //    }
 
+//    private ObjectInputStream in;
+//    private ObjectOutputStream out;
+//    private static final String SERVER_ADDRESS = "localhost";
+//    private static final int SERVER_PORT = 1989;
+//
+//    public GameClient() throws IOException {
+//        Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT
+//        this.in = new ObjectInputStream(socket.getInputStream());
+//        this.out = new ObjectOutputStream(socket.getOutputStream());
+//
+//        ClientHandler listener = new ClientHandler();
+//
+//        listener.start();
+//    }
+
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        primaryStage.setScene(new Scene(new WrapperLayoutBuilder().build()));
+        System.out.println("chuj0");
+        ClientHandler handler = new ClientHandler(this);
+        new Thread(handler).start();
+        System.out.println("chuj1");
+        //handler.setClient(this);
+        System.out.println("chuj2");
+       // handler.run();
+        System.out.println("chuj3");
+        System.out.println("chuj4");
         primaryStage.setTitle("Chinese Checkers");
 //        primaryStage.setHeight(1000);
 //        primaryStage.setWidth(1000);
         primaryStage.show();
+        System.out.println("chuj5");
+        primaryStage.setScene(new Scene(new WrapperLayoutBuilder(handler).build()));
     }
 
     public static void main(String[] args) {
         launch(args);
-        GameClient client = new GameClient();
-        ClientHandler handler = new ClientHandler();
-        handler.setClient(client);
-        handler.run();
+
     }
 }

@@ -12,6 +12,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class ClientHandler implements Runnable{
+    private Socket socket;
     private ObjectInputStream in;
     private ObjectOutputStream out;
     private boolean running = true;
@@ -51,12 +52,26 @@ public class ClientHandler implements Runnable{
         out.flush();
     }
 
+    public ClientHandler(GameClient client) {
+        try {
+            socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
+            System.out.println("chuj");
+            in = new ObjectInputStream(socket.getInputStream());
+            System.out.println("chuj1");
+            out = new ObjectOutputStream(socket.getOutputStream());
+            this.client = client;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void run() {
-        try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT)) {
-            in = new ObjectInputStream(socket.getInputStream());
-            out = new ObjectOutputStream(socket.getOutputStream());
-
+        try {
+//        Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT)) {
+//            this.in = new ObjectInputStream(socket.getInputStream());
+//            this.out = new ObjectOutputStream(socket.getOutputStream());
+//
             System.out.println("Połączono się z serwerem");
 
             while (running) {
