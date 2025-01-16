@@ -55,10 +55,10 @@ public class ClientHandler implements Runnable{
     public ClientHandler(GameClient client) {
         try {
             socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
-            System.out.println("chuj");
-            in = new ObjectInputStream(socket.getInputStream());
             System.out.println("chuj1");
             out = new ObjectOutputStream(socket.getOutputStream());
+            System.out.println("chuj");
+            in = new ObjectInputStream(socket.getInputStream());
             this.client = client;
         } catch (Exception e) {
             e.printStackTrace();

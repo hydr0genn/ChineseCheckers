@@ -8,13 +8,10 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.Builder;
 import sem3tp.Client.ClientHandler;
-import sem3tp.Client.GameClient;
-
-import java.io.IOException;
 
 //login
 
-public class Layout1Builder implements Builder<Region> {
+public class LoginLayoutBuilder implements Builder<Region> {
     private final Runnable sceneSwapper;
     public ClientHandler handler;
 
@@ -22,7 +19,7 @@ public class Layout1Builder implements Builder<Region> {
         this.handler = handler;
     }
 
-    public Layout1Builder(Runnable sceneSwapper, ClientHandler handler) {
+    public LoginLayoutBuilder(Runnable sceneSwapper, ClientHandler handler) {
         this.sceneSwapper = sceneSwapper;
         this.handler = handler;
     }
@@ -36,22 +33,10 @@ public class Layout1Builder implements Builder<Region> {
 
         ViewModeler viewModeler = new ViewModeler();
 
-        //GameClient gameClient = new GameClient();
+        //button.setOnAction(evt -> sceneSwapper.run());
+        viewModeler.initializeLoginButton(handler, button, textField, sceneSwapper);
 
-        viewModeler.initializeLoginButton(handler, button, textField);
-//        button.setOnAction(evt -> {
-//            String input = textField.getText();
-//                    try {
-//                        gameClient.sendMessageString(input);
-//                        // evt -> sceneSwapper.run()
-//                    }
-//                    catch (IOException e){
-//
-//
-//                }
-//
-//
-//        );
+
         VBox results = new VBox(20, label, textField, button);
         results.setPadding(new Insets(50));
         return results;

@@ -105,9 +105,9 @@ public class ViewModeler {
      * inside a triangle
      * */
     public void initializePoleHandler(FXPole fxpole, FXPoleStorage allFXPoles, Game game, Player currentPlayer){
-        fxpole.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
+        fxpole.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
-            public void handle(javafx.scene.input.MouseEvent mouseEvent) {
+            public void handle(MouseEvent mouseEvent) {
                 if(game.getCurrentPlayer().equals(currentPlayer)) {
                     oneMovementSequence(fxpole,allFXPoles);
                 }
@@ -153,20 +153,37 @@ public class ViewModeler {
         });
     }
 
-    public void initializeChooseJoinGameButton(Button button){
-        //TODO SCENE WHERE usER can choose which game to join
+    public void initializeChooseJoinGameButton(Button button, Runnable sceneSwapper){
+        button.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                    sceneSwapper.run();
+            }
+        });
     }
 
+    //do wyjebania
     public void initializeChooseCreateGameButton(ClientHandler clientHandler, Button button){
-       //TODO SCENE where user can set number of players
+        button.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    clientHandler.sendMessageString("CRTDGAME");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
     }
 
-    public void initializeJoinGameButton(ClientHandler clientHandler, Button button, TextField textField){
+    //texfield to id gry
+    public void initializeJoinGameButton(ClientHandler clientHandler, Button button, TextField textField, Runnable sceneSwapper){
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
                     clientHandler.sendMessageString("JOINGAME"+textField.getText());//wysylamy liczbe graczy tu kwesgtia czy cos chcemy jeszcze na przycisku bo jak tak to przyps ;p
+                    sceneSwapper.run();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -187,12 +204,13 @@ public class ViewModeler {
         });
     }
 
-    public void initializeLoginButton(ClientHandler clientHandler, Button button, TextField textField){
+    public void initializeLoginButton(ClientHandler clientHandler, Button button, TextField textField, Runnable sceneSwapper){
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
                     clientHandler.sendMessageString("LOGINXXX"+textField.getText());//lets assume that all initial wordls like loginxxx must be of length 8
+                    sceneSwapper.run();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

@@ -129,6 +129,7 @@ public class GameServer {
                     if(receivedMessage.startsWith("LOGINXXX")){
                         String username = receivedMessage.substring(8);
                         loginAsUser(username);
+                        System.out.println("witamy" + receivedMessage.substring(8));
                     }
                     if (receivedMessage.startsWith("JOINGAME")) {
                         String number = receivedMessage.substring(8);
@@ -139,6 +140,7 @@ public class GameServer {
                         String number = receivedMessage.substring(8);
                         int numberOfPlayers = Integer.parseInt(number);
                         this.currentGamePlayed=createNewGame(currentGamePlayed, numberOfPlayers,player, out);
+                        System.out.println("powstala gra");
                     }
                     if(receivedMessage.equals("CSNDMOVE")) {
                         FXPole source = (FXPole) in.readObject();
