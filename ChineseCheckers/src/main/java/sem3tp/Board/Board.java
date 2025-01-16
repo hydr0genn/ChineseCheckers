@@ -6,7 +6,9 @@ import sem3tp.Storage.FXPoleStorage;
 import sem3tp.Storage.PoleStorage;
 import sem3tp.Storage.TriangleStorage;
 
-public class Board {
+import java.io.Serializable;
+
+public class Board implements Serializable {
     private BoardBase base;
     private TriangleStorage triangles;
     private PoleStorage allPoles;

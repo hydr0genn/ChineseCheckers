@@ -4,7 +4,9 @@ import sem3tp.Poles.Pole;
 import sem3tp.Storage.PoleStorage;
 import sem3tp.Storage.Storage;
 
-public abstract class Components implements ComponentInterface{
+import java.io.Serializable;
+
+public abstract class Components implements ComponentInterface, Serializable {
     PoleStorage poleList;
 
     public void setStorage(PoleStorage poleList){

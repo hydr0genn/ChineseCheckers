@@ -5,9 +5,10 @@ import sem3tp.Creator.Creator;
 import sem3tp.Mover.Directions;
 import sem3tp.Storage.PoleStorage;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public abstract class Pole implements Comparable<Pole>{
+public abstract class Pole implements Comparable<Pole>, Serializable {
     private int xCord, yCord, zCord;
     private Colors color = null;
 //    private int warstwa;
