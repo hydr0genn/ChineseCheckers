@@ -20,7 +20,11 @@ public abstract class Storage<T> implements Storagable<T>, Serializable {
 
     @Override
     public T get(T t) {
-        return list.get(list.indexOf(t));
+        int index = list.indexOf(t);
+        if(index>-1){
+            return getByIndex(index);
+        }
+        return null;
     }
 
     @Override
