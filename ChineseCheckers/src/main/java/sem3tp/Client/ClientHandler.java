@@ -1,7 +1,10 @@
 package sem3tp.Client;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
@@ -125,7 +128,21 @@ public class ClientHandler implements Runnable {
                     System.out.println("dotarlem");
                     getGame().turnOn();
                     System.out.println(getGame().isOn());
-                    Pane pane = createGameScene();
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            Pane pane = createGameScene();
+                            BorderPane borderPane = new BorderPane();
+                            borderPane.setCenter(pane);
+                            Button button = new Button("skip");
+                            borderPane.setBottom(button);
+
+                            Scene scene = new Scene(borderPane);
+                            stage.setScene(scene);
+                        }
+                    });
+
+
                 }
             }
         } catch (ClassNotFoundException | IOException e) {
