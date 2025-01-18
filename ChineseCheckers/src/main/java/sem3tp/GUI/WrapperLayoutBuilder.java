@@ -10,7 +10,7 @@ public class WrapperLayoutBuilder implements Builder<Region> {
     Region customComponent2;
     Region customComponent3;
     Region customComponent4;
-    Region customComponent5;
+    public Region customComponent5;
 
     public WrapperLayoutBuilder(ClientHandler clientHandler) {
         this.clientHandler = clientHandler;

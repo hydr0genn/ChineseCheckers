@@ -1,6 +1,11 @@
 package sem3tp.Client;
 
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.layout.Region;
+import javafx.stage.Stage;
 import sem3tp.GUI.FXPole;
+import sem3tp.GUI.WrapperLayoutBuilder;
 import sem3tp.Game;
 import sem3tp.Mover.Mover;
 import sem3tp.Player;
@@ -13,7 +18,7 @@ import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ClientHandler implements Runnable{
+public class ClientHandler extends Application implements Runnable {
     private Socket socket;
     private ObjectInputStream in;
     private ObjectOutputStream out;
@@ -23,11 +28,7 @@ public class ClientHandler implements Runnable{
     private HashSet<Integer> ids;
     private Player user;
     private Game game;
-    private Runnable sceneswapper;
-
-    public void setSceneswapper(Runnable sceneswapper) {
-        this.sceneswapper = sceneswapper;
-    }
+    private Region gameLayout;
 
     public void setUser(Player user) {
         this.user = user;
@@ -45,6 +46,23 @@ public class ClientHandler implements Runnable{
         return user;
     }
 
+    public static void main(String[] args){
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        Stage stage = new Stage();
+        new Thread(this).start();
+        stage.setTitle("Chinese Checkers");
+        stage.setHeight(500);
+        stage.setWidth(500);
+        stage.setResizable(false);
+        stage.show();
+        WrapperLayoutBuilder wrapperLayoutBuilder = new WrapperLayoutBuilder(this);
+        this.gameLayout=wrapperLayoutBuilder.customComponent5;
+        stage.setScene(new Scene(wrapperLayoutBuilder.build()));
+    }
 
     private void move(FXPole source, FXPole destination){
         Mover mover = Mover.getInstance();
@@ -83,10 +101,6 @@ public class ClientHandler implements Runnable{
     @Override
     public void run() {
         try {
-//        Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT)) {
-//            this.in = new ObjectInputStream(socket.getInputStream());
-//            this.out = new ObjectOutputStream(socket.getOutputStream());
-//
             System.out.println("Połączono się z serwerem");
 
             while (running) {
