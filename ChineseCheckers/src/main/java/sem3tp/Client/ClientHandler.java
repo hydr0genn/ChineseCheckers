@@ -9,6 +9,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import sem3tp.GUI.FXPole;
+import sem3tp.GUI.ViewModeler;
 import sem3tp.LayoutBuilder.WrapperLayoutBuilder;
 import sem3tp.Game;
 import sem3tp.Mover.Mover;
@@ -85,7 +86,11 @@ public class ClientHandler implements Runnable {
 
     public Pane createGameScene(){
         Pane pane = new Pane();
-        for (FXPole fxPole :game.getBoard().getAllFXPoles().getAll()){
+        System.out.println(game.getBoard().getAllFXPoles().getSize());
+        System.out.println(game.getBoard().getAllFXPoles().getByIndex(3).getPole().getxCord());
+        for (FXPole fxPole:game.getBoard().getAllFXPoles().getAll()){
+            ViewModeler viewModeler = new ViewModeler();
+            viewModeler.initializePoleHandler(fxPole,getGame().getBoard().getAllFXPoles(),getGame(),getUser());
             pane.getChildren().add(fxPole.draw());
         }
         return pane;
@@ -132,6 +137,7 @@ public class ClientHandler implements Runnable {
                         @Override
                         public void run() {
                             Pane pane = createGameScene();
+
                             BorderPane borderPane = new BorderPane();
                             borderPane.setCenter(pane);
                             Button button = new Button("skip");

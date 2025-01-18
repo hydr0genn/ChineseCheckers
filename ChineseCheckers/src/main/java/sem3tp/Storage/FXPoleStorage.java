@@ -8,4 +8,6 @@ public class FXPoleStorage extends Storage<FXPole>{
     public FXPoleStorage(){
         this.list=new ArrayList<FXPole>();
     }
+
+
 }

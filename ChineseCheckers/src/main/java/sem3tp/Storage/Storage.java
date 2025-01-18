@@ -25,7 +25,7 @@ public abstract class Storage<T> implements Storagable<T>, Serializable {
 
     @Override
     public ArrayList<T> getAll() {
-        return new ArrayList<T>();
+        return this.list;
     }
 
     @Override
