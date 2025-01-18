@@ -111,6 +111,7 @@ public class ClientHandler implements Runnable {
             ViewModeler viewModeler = new ViewModeler();
             viewModeler.initializePoleHandler(fxPole,getGame().getBoard().getAllFXPoles(),getGame(),getUser());
             pane.getChildren().add(fxPole.draw());
+
         }
         return pane;
     }
