@@ -2,6 +2,7 @@ package sem3tp.Client;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import sem3tp.GUI.FXPole;
@@ -16,7 +17,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.HashSet;
 
-public class ClientHandler extends Application implements Runnable {
+public class ClientHandler implements Runnable {
     private Socket socket;
     private ObjectInputStream in;
     private ObjectOutputStream out;
@@ -26,7 +27,7 @@ public class ClientHandler extends Application implements Runnable {
     private HashSet<Integer> ids;
     private Player user;
     private Game game;
-    private Region gameLayout;
+    private Stage stage;
 
     public void setUser(Player user) {
         this.user = user;
@@ -42,24 +43,6 @@ public class ClientHandler extends Application implements Runnable {
 
     public Player getUser() {
         return user;
-    }
-
-    public static void main(String[] args){
-        launch(args);
-    }
-
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        Stage stage = new Stage();
-        new Thread(this).start();
-        stage.setTitle("Chinese Checkers");
-        stage.setHeight(500);
-        stage.setWidth(500);
-        stage.setResizable(false);
-        stage.show();
-        WrapperLayoutBuilder wrapperLayoutBuilder = new WrapperLayoutBuilder(this);
-        this.gameLayout=wrapperLayoutBuilder.customComponent5;
-        stage.setScene(new Scene(wrapperLayoutBuilder.build()));
     }
 
     private void move(FXPole source, FXPole destination){
@@ -86,7 +69,8 @@ public class ClientHandler extends Application implements Runnable {
         out.flush();
     }
 
-    public ClientHandler() {
+    public ClientHandler(Stage stage) {
+        this.stage=stage;
         try {
             socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
             out = new ObjectOutputStream(socket.getOutputStream());
@@ -94,6 +78,14 @@ public class ClientHandler extends Application implements Runnable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public Pane createGameScene(){
+        Pane pane = new Pane();
+        for (FXPole fxPole :game.getBoard().getAllFXPoles().getAll()){
+            pane.getChildren().add(fxPole.draw());
+        }
+        return pane;
     }
 
     @Override
@@ -133,6 +125,7 @@ public class ClientHandler extends Application implements Runnable {
                     System.out.println("dotarlem");
                     getGame().turnOn();
                     System.out.println(getGame().isOn());
+                    Pane pane = createGameScene();
                 }
             }
         } catch (ClassNotFoundException | IOException e) {

@@ -22,8 +22,13 @@ public class FXPole extends Circle implements Comparable<FXPole>, Serializable {
         this.pole=pole;
     }
 
-    public void draw(){
-        //TODO implement drawing the pole on the stage using cords of Pole class
+    public Circle draw(){
+        double x = 250 + 5 * (getPole().getxCord() + 0.5 * getPole().getyCord());
+        double y = 250 + 5 * 1.5 * getPole().getyCord();
+        setCenterX(x);
+        setCenterY(y);
+        setRadius(10);
+        return this;
     }
 
     @Override
