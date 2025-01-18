@@ -8,7 +8,8 @@ public enum Colors {
     Yellow,
     Green,
     Red,
-    Blue;
+    Blue,
+    Grey;
 
     static {
         Black.setOppositeColor(White);

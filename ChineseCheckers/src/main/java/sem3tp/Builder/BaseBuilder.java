@@ -1,6 +1,7 @@
 package sem3tp.Builder;
 
 import sem3tp.Board.BoardBase;
+import sem3tp.Board.Colors;
 import sem3tp.Creator.Creator;
 import sem3tp.Mover.Directions;
 import sem3tp.Mover.Mover;
@@ -33,8 +34,9 @@ public class BaseBuilder implements Builder{
         BoardBase boardBase = new BoardBase();
         PoleStorage poleList = new PoleStorage();
         findMaxPoles(this.layers);
-        Pole current;
-        poleList.insert(creator.createInitPole());
+        Pole current= creator.createInitPole();
+        current.setColor(Colors.Grey);
+        poleList.insert(current);
         for(int i=0;i< maxPoles;i++){
             current=poleList.getByIndex(i);
             addNeighbours(current, poleList);//kwestia iteratora potencjalnego

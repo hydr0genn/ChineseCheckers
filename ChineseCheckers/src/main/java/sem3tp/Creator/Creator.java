@@ -22,6 +22,7 @@ import sem3tp.Storage.*;
 import sem3tp.User;
 
 import java.util.ArrayList;
+import java.util.concurrent.TransferQueue;
 
 public class Creator implements Create{
 
@@ -73,7 +74,9 @@ public class Creator implements Create{
 
     @Override
     public StandardPole createSTDPole(int xCord, int yCord, int zCord) {
-        return new StandardPole(xCord, yCord, zCord);
+        StandardPole stdPole = new StandardPole(xCord,yCord,zCord);
+        stdPole.setColor(Colors.Grey);
+        return stdPole;
     }
 
     @Override

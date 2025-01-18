@@ -51,6 +51,7 @@ public class TriangleBuilder implements Builder{
         int maxw = layers-1;
         int maxh = maxw;
         TrianglePole current = (TrianglePole) source;
+        current.setColor(color);
         current.i=1;
         current.j=1;
         int limit = (layers-1)*layers/2;
@@ -62,13 +63,20 @@ public class TriangleBuilder implements Builder{
             potential.i=current.i;
             potential.j=current.j+1;
             if(potential.j<=maxw){
-                if(!temp.contains(potential))temp.insert(potential);
+                if(!temp.contains(potential)){
+                    potential.setColor(color);
+                    temp.insert(potential);
+                }
             }
             potential = creator.createNeighbour(current, color.getDirectionCreate());
             potential.i= current.i+1;
             potential.j=current.j;
             if(potential.i<=maxh){
-                if(!temp.contains(potential))temp.insert(potential);
+                if(!temp.contains(potential))
+                {
+                    potential.setColor(color);
+                    temp.insert(potential);
+                }
             }
             current = (TrianglePole) temp.getByIndex(temp.indexOf(current)+1);
         }
