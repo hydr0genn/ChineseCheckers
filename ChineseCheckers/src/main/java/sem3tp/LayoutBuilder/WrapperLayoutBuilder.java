@@ -1,4 +1,4 @@
-package sem3tp.GUI;
+package sem3tp.LayoutBuilder;
 
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;

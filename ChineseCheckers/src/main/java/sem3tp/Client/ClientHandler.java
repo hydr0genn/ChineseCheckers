@@ -5,7 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import sem3tp.GUI.FXPole;
-import sem3tp.GUI.WrapperLayoutBuilder;
+import sem3tp.LayoutBuilder.WrapperLayoutBuilder;
 import sem3tp.Game;
 import sem3tp.Mover.Mover;
 import sem3tp.Player;
@@ -14,9 +14,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.HashSet;
-import java.util.Set;
 
 public class ClientHandler extends Application implements Runnable {
     private Socket socket;

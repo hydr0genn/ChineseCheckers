@@ -1,4 +1,4 @@
-package sem3tp.GUI;
+package sem3tp.LayoutBuilder;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -8,6 +8,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.Builder;
 import sem3tp.Client.ClientHandler;
+import sem3tp.GUI.ViewModeler;
 
 public class JoinLayoutBuilder implements Builder<Region> {
     private final Runnable sceneSwapper;

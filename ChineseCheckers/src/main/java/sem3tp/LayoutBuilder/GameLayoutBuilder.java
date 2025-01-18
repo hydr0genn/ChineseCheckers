@@ -1,14 +1,9 @@
-package sem3tp.GUI;
+package sem3tp.LayoutBuilder;
 
-import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Circle;
 import javafx.util.Builder;
 import sem3tp.Client.ClientHandler;
-import sem3tp.Player;
-import sem3tp.Storage.FXPoleStorage;
+import sem3tp.GUI.ViewModeler;
 
 public class GameLayoutBuilder implements Builder<Region> {
     private final Runnable sceneSwapper;

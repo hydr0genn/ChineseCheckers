@@ -1,22 +1,5 @@
 package sem3tp.Client;
 
-import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import sem3tp.GUI.FXPole;
-import sem3tp.GUI.WrapperLayoutBuilder;
-import sem3tp.Game;
-import sem3tp.Mover.Mover;
-import sem3tp.Player;
-import sem3tp.User;
-
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.util.Scanner;
-
 public class GameClient  {
 
 //    private static final String SERVER_ADDRESS = "localhost";
