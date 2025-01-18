@@ -23,11 +23,11 @@ public class FXPole extends Circle implements Comparable<FXPole>, Serializable {
     }
 
     public Circle draw(){
-        double x = 250 + 5 * (getPole().getxCord() + 0.5 * getPole().getyCord());
-        double y = 250 + 5 * 1.5 * getPole().getyCord();
+        double x = 250 + 25 * (getPole().getxCord() + 0.5 * getPole().getyCord());
+        double y = 250 + 25 * (-1) * Math.sqrt(3)/2 * getPole().getyCord();
         setCenterX(x);
         setCenterY(y);
-        setRadius(10);
+        setRadius(5);
         return this;
     }
 
