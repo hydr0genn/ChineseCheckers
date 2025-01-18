@@ -41,10 +41,14 @@ public class Game implements Serializable {
             }
         }
         if(playersList.getSize()==players_num){
-            currentPlayer=playersList.getByIndex(0);
+            setFirstPlayer();
             return true;
         }
         return false;
+    }
+
+    public void setFirstPlayer(){
+        currentPlayer=playersList.getByIndex(0);
     }
 
     public void nextTurn(){

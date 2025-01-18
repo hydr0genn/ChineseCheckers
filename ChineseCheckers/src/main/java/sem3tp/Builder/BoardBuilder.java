@@ -31,7 +31,7 @@ public class BoardBuilder {
         crucialPoints.put(Colors.White,this.base.getStorage().get(new StandardPole(0,(layers-1),-(layers-1))));
         if(number>=4){
             crucialPoints.put(Colors.Yellow,this.base.getStorage().get(new StandardPole((layers-1),-(layers-1),0)));
-            crucialPoints.put(Colors.Yellow.getOppositeColor(),this.base.getStorage().get(new StandardPole(0,(layers-1),-(layers-1))));
+            crucialPoints.put(Colors.Yellow.getOppositeColor(),this.base.getStorage().get(new StandardPole(-(layers-1),(layers-1),0)));
         }
         if(number==6){
             crucialPoints.put(Colors.Blue,this.base.getStorage().get(new StandardPole((layers-1),0,-(layers-1))));

@@ -84,8 +84,27 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    public Pane createGameScene(){
+    public void setGameScene(){
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Pane pane = createGamePane();
+
+                BorderPane borderPane = new BorderPane();
+                borderPane.setCenter(pane);
+                Button button = new Button("skip");
+                borderPane.setBottom(button);
+
+                Scene scene = new Scene(borderPane);
+                stage.setScene(scene);
+            }
+        });
+    }
+
+    public Pane createGamePane(){
         Pane pane = new Pane();
+        HashSet<FXPole> hashSet = new HashSet<>(game.getBoard().getAllFXPoles().getAll());
+        System.out.println(hashSet.size());
         System.out.println(game.getBoard().getAllFXPoles().getSize());
         System.out.println(game.getBoard().getAllFXPoles().getByIndex(3).getPole().getxCord());
         for (FXPole fxPole:game.getBoard().getAllFXPoles().getAll()){
@@ -130,25 +149,9 @@ public class ClientHandler implements Runnable {
                     this.ids=ids;
                 }
                 if(serverMessage.equals("TURNONXX")){
-                    System.out.println("dotarlem");
                     getGame().turnOn();
-                    System.out.println(getGame().isOn());
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            Pane pane = createGameScene();
-
-                            BorderPane borderPane = new BorderPane();
-                            borderPane.setCenter(pane);
-                            Button button = new Button("skip");
-                            borderPane.setBottom(button);
-
-                            Scene scene = new Scene(borderPane);
-                            stage.setScene(scene);
-                        }
-                    });
-
-
+                    setGameScene();
+                    getGame().setFirstPlayer();
                 }
             }
         } catch (ClassNotFoundException | IOException e) {

@@ -35,8 +35,6 @@ public class FXPole extends Circle implements Comparable<FXPole>, Serializable {
     public boolean equals(Object obj) {
         if(obj instanceof FXPole fxpole){
             return pole.equals(fxpole.pole);
-        } else if (obj instanceof Pole newpole) {
-            return pole.equals(newpole);
         }
         return false;
     }
