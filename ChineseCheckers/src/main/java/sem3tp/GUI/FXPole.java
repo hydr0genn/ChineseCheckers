@@ -42,7 +42,7 @@ public class FXPole extends Circle implements Comparable<FXPole>, Serializable {
         double y = 250 + 25 * (-1) * Math.sqrt(3)/2 * getPole().getyCord();
         setCenterX(x);
         setCenterY(y);
-        setRadius(5);
+        setRadius(9);
         setFill(getPole().getColor().getVisualColor());
         setStroke(getPole().getColor().getBorderColor());
         setStrokeWidth(2);

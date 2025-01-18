@@ -222,12 +222,25 @@ public class ViewModeler {
         });
     }
 
-    public void initializeCreateGameButton(ClientHandler clientHandler, Button button, TextField textField){
+    public void initializeCreateGameButtonVariant1(ClientHandler clientHandler, Button button, TextField textField){
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    clientHandler.sendMessageString("CREATGAM"+textField.getText());//wysylamy liczbe graczy
+                    clientHandler.sendMessageString("CRTGAMV1"+textField.getText());//wysylamy liczbe graczy
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+    }
+
+    public void initializeCreateGameButtonVariant2(ClientHandler clientHandler, Button button, TextField textField){
+        button.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    clientHandler.sendMessageString("CRTGAMV2"+textField.getText());//wysylamy liczbe graczy
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
