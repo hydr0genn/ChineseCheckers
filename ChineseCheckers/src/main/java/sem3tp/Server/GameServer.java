@@ -169,13 +169,9 @@ public class GameServer {
                     if(receivedMessage.equals("READYXXX")){
                         Player changedPlayer = (Player) in.readObject();
                         changedPlayer = currentGamePlayed.getPlayersList().get(changedPlayer);
-                        System.out.println(changedPlayer);
                         changedPlayer.setReady(true);
-                        System.out.println(currentGamePlayed.getPlayersNumber()+" "+currentGamePlayed.getPlayersList().getSize());
                         if(currentGamePlayed.checkReadiness()){
-                            System.out.println(currentGamePlayed.checkReadiness());
                             currentGamePlayed.turnOn();
-                            System.out.println("ALLAREREADy");
                             broadcastMessageToGame(currentGamePlayed,"TURNONXX");
                         }
                     }

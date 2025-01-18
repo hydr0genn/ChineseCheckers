@@ -51,7 +51,6 @@ public class ClientHandler implements Runnable {
     }
 
     private void move(FXPole source, FXPole destination){
-        System.out.println("Move done client");
         Mover mover = Mover.getInstance();
         mover.move(source, destination, getGame());
     }
@@ -61,7 +60,6 @@ public class ClientHandler implements Runnable {
         out.writeObject(source);
         out.writeObject(destination);
         out.flush();
-        move((FXPole) source,(FXPole) destination);
     }
 
     public void sendMessageObject(String prefix,Object object) throws IOException {
@@ -131,8 +129,11 @@ public class ClientHandler implements Runnable {
                      setGame((Game) in.readObject());
                 }
                 if(serverMessage.equals("SSNDMOVE")){
+                    System.out.println("Recieved move - client");
                     FXPole source = (FXPole) in.readObject();
+                    source=game.getBoard().getAllFXPoles().get(source);
                     FXPole destination = (FXPole) in.readObject();
+                    destination=game.getBoard().getAllFXPoles().get(destination);
                     move(source,destination);
                 }
                 if(serverMessage.equals("CHNGTURN")){
