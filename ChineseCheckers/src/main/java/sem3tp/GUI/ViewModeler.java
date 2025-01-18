@@ -111,8 +111,10 @@ public class ViewModeler {
     }
 
 
-    public void deleteMarked(FXMarkedPoleStorage otherMoves){
-        //delete from root all created marked poles
+    public void deleteMarked(FXMarkedPoleStorage otherMoves, Pane pane){
+        for (FXMarkedPole fxMarkedPole : otherMoves.getAll()){
+            pane.getChildren().remove(fxMarkedPole);
+        }
     }
 
     //BUTTON INITIALIZATION BUTTON INITIALIZATION BUTTON INITIALIZATION BUTTON INITIALIZATION BUTTON INITIALIZATION
@@ -142,7 +144,7 @@ public class ViewModeler {
                     FXPole parent = fxMarkedPole.getPoleParent();
                     FXPole current = fxMarkedPole.getPole();
                     clientHandler.sendMove("CSNDMOVE", parent, current);
-                    deleteMarked(fxMarkedPole.getOtherMoves());
+                    deleteMarked(fxMarkedPole.getOtherMoves(), clientHandler.pane);
                     if(hasJumped(fxMarkedPole.getPoleParent(), fxMarkedPole.getPole())){
                         oneMovementSequence(current, allFXPoles, clientHandler.getGame().getVariant(), clientHandler);
                     }

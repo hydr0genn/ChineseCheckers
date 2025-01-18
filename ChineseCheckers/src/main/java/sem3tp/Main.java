@@ -14,8 +14,8 @@ import sem3tp.Poles.TrianglePole;
 public class Main {
     public static void main(String[] args) {
         Creator creator = Creator.getInstance();
-//        BoardBuilder builder = creator.createBoardBuilder(3, 2);
-//        Board base = builder.build();
+       BoardBuilder builder = creator.createBoardBuilder(3, 2);
+       Board base = builder.build();
 
         Pole pole1 = creator.createSTDPole(0,1,2);
         Pole pole2 = creator.createSTDPole(0,1,2);

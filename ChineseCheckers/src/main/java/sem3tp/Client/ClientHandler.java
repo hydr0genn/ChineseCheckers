@@ -136,6 +136,8 @@ public class ClientHandler implements Runnable {
                     move(source,destination);
                 }
                 if(serverMessage.equals("CHNGTURN")){
+                    System.out.println("TYLE SLONCA W CALYM MIESCIE");
+                    System.out.println(getGame().getPlayersList().getSize());
                     getGame().nextTurn();
                 }
                 if (serverMessage.equals("PLYRJIND")){

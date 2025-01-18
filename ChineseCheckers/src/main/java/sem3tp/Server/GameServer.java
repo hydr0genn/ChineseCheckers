@@ -142,6 +142,7 @@ public class GameServer {
                         this.currentGamePlayed=createNewGame(currentGamePlayed, numberOfPlayers,player, out);
                     }
                     if(receivedMessage.equals("CSNDMOVE")) {
+                        System.out.println("Move on the server");
                         FXPole source = (FXPole) in.readObject();
                         FXPole destination = (FXPole) in.readObject();
                         broadcastMoveToGame(currentGamePlayed, source, destination);
