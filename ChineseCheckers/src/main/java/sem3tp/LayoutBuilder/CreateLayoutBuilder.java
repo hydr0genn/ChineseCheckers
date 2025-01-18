@@ -10,6 +10,8 @@ import javafx.util.Builder;
 import sem3tp.Client.ClientHandler;
 import sem3tp.GUI.ViewModeler;
 
+import java.util.Set;
+
 //select, create game
 
 public class CreateLayoutBuilder implements Builder<Region> {
@@ -25,8 +27,8 @@ public class CreateLayoutBuilder implements Builder<Region> {
     @Override
     public Region build() {
         Button joinGameButton = new Button("Dołącz do gry");
-        Button createGameButton = new Button("Stwórz gre");
 
+        Set<String> dozwoloneLiczby = Set.of("2", "3", "4", "6");
         ViewModeler viewModeler = new ViewModeler();
 
         //viewModeler.initializeChooseCreateGameButton(handler, createGameButton);
@@ -34,15 +36,27 @@ public class CreateLayoutBuilder implements Builder<Region> {
         viewModeler.initializeChooseJoinGameButton(joinGameButton, sceneSwapper);
 
 
-        Button gameCreatorButton = new Button("stwórz gre");
+        Button CreateVariant1Button = new Button("stwórz gre 1 wariantu");
+        Button CreateVariant2Button = new Button("stwórz gre 2 wariantu");
         Label iloscGraczyLabel = new Label("podaj ilosc graczy");
         TextField iloscGraczy = new TextField();
+        Label errorLabel = new Label();
+        errorLabel.setStyle("-fx-text-fill: red;");
+        iloscGraczy.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (dozwoloneLiczby.contains(newValue)) {
+                errorLabel.setText("");
+            } else {
+                errorLabel.setText("Zła liczba");
+            }
+        });
 
 
-        viewModeler.initializeCreateGameButton(handler, gameCreatorButton, iloscGraczy);
+
+        viewModeler.initializeCreateGameButtonVariant1(handler, CreateVariant1Button, iloscGraczy);
+        viewModeler.initializeCreateGameButtonVariant2(handler, CreateVariant2Button, iloscGraczy);
 
 
-        VBox results = new VBox(20, new Label("Tworzenie gry"), joinGameButton, gameCreatorButton, iloscGraczyLabel, iloscGraczy);
+        VBox results = new VBox(20, new Label("Tworzenie gry"), joinGameButton, CreateVariant1Button, CreateVariant2Button, iloscGraczyLabel, iloscGraczy, errorLabel);
         results.setPadding(new Insets(50));
         return results;
     }

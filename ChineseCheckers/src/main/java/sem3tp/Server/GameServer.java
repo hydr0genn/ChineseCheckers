@@ -136,7 +136,12 @@ public class GameServer {
                         int numberOfGame = Integer.parseInt(number);
                         this.currentGamePlayed=joinGame(numberOfGame, out, player);
                     }
-                    if(receivedMessage.startsWith("CREATGAM")) {
+                    if(receivedMessage.startsWith("CRTGAMV1")) {
+                        String number = receivedMessage.substring(8);
+                        int numberOfPlayers = Integer.parseInt(number);
+                        this.currentGamePlayed=createNewGame(currentGamePlayed, numberOfPlayers,player, out);
+                    }
+                    if(receivedMessage.startsWith("CRTGAMV2")) {
                         String number = receivedMessage.substring(8);
                         int numberOfPlayers = Integer.parseInt(number);
                         this.currentGamePlayed=createNewGame(currentGamePlayed, numberOfPlayers,player, out);
