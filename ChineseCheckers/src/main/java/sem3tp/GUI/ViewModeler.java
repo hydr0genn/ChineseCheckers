@@ -55,30 +55,34 @@ public class ViewModeler {
         if (fxpole.getPole() instanceof TrianglePole currentPole){
             for (Pole neighbour : currentPole.getNeighbours().getAll()){
                 if(neighbour instanceof TrianglePole){ //inside a triangle
-                    FXPole actualPole = allFXPoles.get(new FXPole(checkForJump(neighbour,currentPole, variant)));
+                    Pole potentialPole = checkForJump(neighbour,currentPole, variant);
+                    if(potentialPole==null)continue;
+                    FXPole actualPole = allFXPoles.get(new FXPole(potentialPole));
                     if(actualPole!=null){
                         neighbourList.insert(actualPole);
                     }
                 }else if(neighbour instanceof StandardPole){//from triangle to baseboard
-                    if(currentPole.getColor().equals(currentPole.getParent().getColor())){
-                        FXPole actualPole = allFXPoles.get(new FXPole(checkForJump(neighbour,currentPole, variant)));
-                        if(actualPole!=null){
-                            neighbourList.insert(actualPole);
-                        }
+                    Pole potentialPole = checkForJump(neighbour,currentPole, variant);
+                    if(potentialPole==null)continue;
+                    FXPole actualPole = allFXPoles.get(new FXPole(potentialPole));
+                    if(actualPole!=null){
+                        neighbourList.insert(actualPole);
                     }
                 }
             }
         }else if(fxpole.getPole() instanceof StandardPole currentPole){
             for(Pole neighbour : currentPole.getNeighbours().getAll()){
                 if(neighbour instanceof TrianglePole triangleNeighbour){
-                    if(triangleNeighbour.getParent().getColor()==currentPole.getColor().getOppositeColor()){
-                        FXPole actualPole = allFXPoles.get(new FXPole(checkForJump(neighbour,currentPole, variant)));
-                        if(actualPole!=null){
-                            neighbourList.insert(actualPole);
-                        }
+                    Pole potentialPole = checkForJump(neighbour,currentPole, variant);
+                    if(potentialPole==null)continue;
+                    FXPole actualPole = allFXPoles.get(new FXPole(potentialPole));
+                    if(actualPole!=null){
+                        neighbourList.insert(actualPole);
                     }
                 }else{
-                    FXPole actualPole = allFXPoles.get(new FXPole(checkForJump(neighbour,currentPole, variant)));
+                    Pole potentialPole = checkForJump(neighbour,currentPole, variant);
+                    if(potentialPole==null)continue;
+                    FXPole actualPole = allFXPoles.get(new FXPole(potentialPole));
                     if(actualPole!=null){
                         neighbourList.insert(actualPole);
                     }
