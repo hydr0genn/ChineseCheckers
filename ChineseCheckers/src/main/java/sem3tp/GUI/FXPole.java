@@ -11,6 +11,7 @@ import java.io.Serializable;
 public class FXPole extends Circle implements Comparable<FXPole>, Serializable {
     private Pole pole;
     public Colors BorderColor;
+    public Colors FXColor;
 
     public void setPole(Pole pole) {
         this.pole = pole;
@@ -20,8 +21,20 @@ public class FXPole extends Circle implements Comparable<FXPole>, Serializable {
         return pole;
     }
 
+    public Colors getFXColor() {
+        return FXColor;
+    }
+
+    public void setColor(Colors color){
+        this.pole.setColor(color);
+        this.FXColor=color;
+        setFill(color.getVisualColor());
+    }
+
     public FXPole(Pole pole){
         this.pole=pole;
+        this.BorderColor=pole.getColor();
+        this.FXColor=pole.getColor();
     }
 
     public Circle draw(){

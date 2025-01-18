@@ -31,6 +31,7 @@ public class ClientHandler implements Runnable {
     private HashSet<Integer> ids;
     private Player user;
     private Game game;
+    public Pane pane;
     private Stage stage;
 
     public void setUser(Player user) {
@@ -50,6 +51,7 @@ public class ClientHandler implements Runnable {
     }
 
     private void move(FXPole source, FXPole destination){
+        System.out.println("Move done client");
         Mover mover = Mover.getInstance();
         mover.move(source, destination, getGame());
     }
@@ -103,15 +105,11 @@ public class ClientHandler implements Runnable {
 
     public Pane createGamePane(){
         Pane pane = new Pane();
-        HashSet<FXPole> hashSet = new HashSet<>(game.getBoard().getAllFXPoles().getAll());
-        System.out.println(hashSet.size());
-        System.out.println(game.getBoard().getAllFXPoles().getSize());
-        System.out.println(game.getBoard().getAllFXPoles().getByIndex(3).getPole().getxCord());
+        this.pane=pane;
         for (FXPole fxPole:game.getBoard().getAllFXPoles().getAll()){
             ViewModeler viewModeler = new ViewModeler();
-            viewModeler.initializePoleHandler(fxPole,getGame().getBoard().getAllFXPoles(),getGame(),getUser());
+            viewModeler.initializePoleHandler(fxPole,getGame().getBoard().getAllFXPoles(),getGame(),getUser(),this);
             pane.getChildren().add(fxPole.draw());
-
         }
         return pane;
     }

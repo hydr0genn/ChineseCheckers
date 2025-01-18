@@ -5,6 +5,8 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
+import sem3tp.Board.Colors;
 import sem3tp.Client.ClientHandler;
 import sem3tp.Client.ClientHandler;
 import sem3tp.Creator.Creator;
@@ -32,7 +34,7 @@ public class ViewModeler {
     }
 
     private boolean isAvailable(Pole pole){
-        return pole.getColor() == null;
+        return pole.getColor() == Colors.Grey;
     }
 
     private Pole checkForJump(Pole pole, Pole source, Variants variant ){//potential variant
@@ -91,14 +93,15 @@ public class ViewModeler {
         return !parent.getPole().getNeighbours().contains(current.getPole());
     }
 
-    private void oneMovementSequence(FXPole fxpole, FXPoleStorage allFXPoles, Variants variant){
+    private void oneMovementSequence(FXPole fxpole, FXPoleStorage allFXPoles, Variants variant, ClientHandler handler){
         Creator creator = Creator.getInstance();
         FXPoleStorage possibleMoves = findPossibleMoves(fxpole, allFXPoles, variant);
         FXMarkedPoleStorage allMarkedPoles = new FXMarkedPoleStorage();
         for (FXPole pole : possibleMoves.getAll()) {
             FXMarkedPole fxMarkedPole = creator.createMarkedPole(pole, fxpole, allMarkedPoles);
             allMarkedPoles.insert(fxMarkedPole);
-            fxMarkedPole.draw();//TU jakas logika rosowania na panie
+            handler.pane.getChildren().add(fxMarkedPole.draw());
+            initializeMarkedPoleHandler(handler,fxMarkedPole,allFXPoles);
         }
     }
 
@@ -120,12 +123,12 @@ public class ViewModeler {
      * from a triangle to the baseboard
      * inside a triangle
      * */
-    public void initializePoleHandler(FXPole fxpole, FXPoleStorage allFXPoles, Game game, Player currentPlayer){
+    public void initializePoleHandler(FXPole fxpole, FXPoleStorage allFXPoles, Game game, Player currentPlayer, ClientHandler handler){
         fxpole.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 if(game.getCurrentPlayer().equals(currentPlayer)) {
-                    oneMovementSequence(fxpole,allFXPoles, game.getVariant());
+                    oneMovementSequence(fxpole,allFXPoles, game.getVariant(), handler);
                 }
             }
         });
@@ -141,7 +144,7 @@ public class ViewModeler {
                     clientHandler.sendMove("CSNDMOVE", parent, current);
                     deleteMarked(fxMarkedPole.getOtherMoves());
                     if(hasJumped(fxMarkedPole.getPoleParent(), fxMarkedPole.getPole())){
-                        oneMovementSequence(current, allFXPoles, clientHandler.getGame().getVariant());
+                        oneMovementSequence(current, allFXPoles, clientHandler.getGame().getVariant(), clientHandler);
                     }
                     giveTurn(clientHandler);
                 } catch (IOException e) {

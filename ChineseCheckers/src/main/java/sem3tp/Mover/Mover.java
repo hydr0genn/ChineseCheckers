@@ -85,11 +85,11 @@ public class Mover {
     /*GENERAL MOVE FUNCTION
     * Game and to fxpoles are given - we change the color of those two poles -*/
     public void move(FXPole FXcurrentPole, FXPole FXdestination, Game game){
-        Pole source = game.getBoard().getAllPoles().get(FXcurrentPole.getPole());
-        Pole destination = game.getBoard().getAllPoles().get(FXdestination.getPole());
-        Colors temp = source.getColor();
-        source.setColor(destination.getColor());
-        destination.setColor(temp);
+//        Pole source = game.getBoard().getAllPoles().get(FXcurrentPole.getPole());
+//        Pole destination = game.getBoard().getAllPoles().get(FXdestination.getPole());
+        Colors temp = FXcurrentPole.getFXColor();
+        FXcurrentPole.setColor(FXdestination.getFXColor());
+        FXdestination.setColor(temp);
     }
 
     /*Standard move without 'crossing borders'*/

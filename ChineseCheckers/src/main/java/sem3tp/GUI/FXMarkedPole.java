@@ -1,5 +1,6 @@
 package sem3tp.GUI;
 
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import sem3tp.Poles.Pole;
 import sem3tp.Storage.FXMarkedPoleStorage;
@@ -36,16 +37,22 @@ public class FXMarkedPole extends Circle implements Comparable<FXMarkedPole> {
     }
 
 
-    public void draw(){
-        //TODO implement drawing the pole on the stage using cords of Pole class
+    public Circle draw(){
+        double x = 250 + 25 * (getPole().getPole().getxCord() + 0.5 * getPole().getPole().getyCord());
+        double y = 250 + 25 * (-1) * Math.sqrt(3)/2 * getPole().getPole().getyCord();
+        setCenterX(x);
+        setCenterY(y);
+        setRadius(5);
+        setFill(Color.web("#FFD700"));
+
+
+        return this;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof FXMarkedPole fxpole){
+        if(obj instanceof FXMarkedPole fxpole) {
             return fxPole.equals(fxpole.fxPole);
-        } else if (obj instanceof Pole newpole) {
-            return fxPole.equals(newpole);
         }
         return false;
     }
