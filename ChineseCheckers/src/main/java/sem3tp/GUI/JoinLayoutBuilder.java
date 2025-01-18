@@ -23,14 +23,15 @@ public class JoinLayoutBuilder implements Builder<Region> {
 //        Button button = new Button("Change to Scene 1");
 //        button.setOnAction(evt -> sceneSwapper.run());
         Button joinButton = new Button("Dołącz do gry o id:");
-        TextField iloscGraczy = new TextField("podaj id");
+        Label iloscGraczyLabel = new Label("podaj id");
+        TextField iloscGraczy = new TextField();
 
         ViewModeler viewModeler = new ViewModeler();
 
         viewModeler.initializeJoinGameButton(handler, joinButton, iloscGraczy, sceneSwapper);
 
 
-        VBox results = new VBox(20, new Label("Dołączanie"), joinButton, iloscGraczy);
+        VBox results = new VBox(20, new Label("Dołączanie"), joinButton, iloscGraczyLabel, iloscGraczy);
         results.setPadding(new Insets(50));
         return results;
     }

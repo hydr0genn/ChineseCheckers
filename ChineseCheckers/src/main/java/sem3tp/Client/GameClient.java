@@ -17,30 +17,14 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class GameClient extends Application {
+public class GameClient  {
 
 //    private static final String SERVER_ADDRESS = "localhost";
 //    private static final int SERVER_PORT = 1989;
 //    private ObjectInputStream in;
 //    private ObjectOutputStream out;
-    private Player user;
-    private Game game;
 
-    public void setUser(Player user) {
-        this.user = user;
-    }
 
-    public void setGame(Game game) {
-        this.game = game;
-    }
-
-    public Game getGame() {
-        return game;
-    }
-
-    public Player getUser() {
-        return user;
-    }
 
 //    private void move(FXPole source, FXPole destination){
 //        Mover mover = Mover.getInstance();
@@ -119,27 +103,30 @@ public class GameClient extends Application {
 //    }
 
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        System.out.println("chuj0");
-        ClientHandler handler = new ClientHandler(this);
-        new Thread(handler).start();
-        System.out.println("chuj1");
-        //handler.setClient(this);
-        System.out.println("chuj2");
-       // handler.run();
-        System.out.println("chuj3");
-        System.out.println("chuj4");
-        primaryStage.setTitle("Chinese Checkers");
-//        primaryStage.setHeight(1000);
-//        primaryStage.setWidth(1000);
-        primaryStage.show();
-        System.out.println("chuj5");
-        primaryStage.setScene(new Scene(new WrapperLayoutBuilder(handler).build()));
-    }
 
-    public static void main(String[] args) {
-        launch(args);
 
-    }
+//
+//    @Override
+//    public void start(Stage primaryStage) throws Exception {
+//        System.out.println("chuj0");
+//        ClientHandler handler = new ClientHandler(this);
+//        new Thread(handler).start();
+//        System.out.println("chuj1");
+//        //handler.setClient(this);
+//        System.out.println("chuj2");
+//       // handler.run();
+//        System.out.println("chuj3");
+//        System.out.println("chuj4");
+//        primaryStage.setTitle("Chinese Checkers");
+////        primaryStage.setHeight(1000);
+////        primaryStage.setWidth(1000);
+//        primaryStage.show();
+//        System.out.println("chuj5");
+//        primaryStage.setScene(new Scene(new WrapperLayoutBuilder(handler).build()));
+//    }
+//
+//    public static void main(String[] args) {
+//        launch(args);
+//
+//    }
 }

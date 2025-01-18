@@ -20,20 +20,35 @@ public class ClientHandler implements Runnable{
     private boolean running = true;
     private static final String SERVER_ADDRESS = "localhost";
     private static final int SERVER_PORT = 1989;
-    private GameClient client;
     private HashSet<Integer> ids;
+    private Player user;
+    private Game game;
+    private Runnable sceneswapper;
 
-    public void setClient(GameClient client) {
-        this.client = client;
+    public void setSceneswapper(Runnable sceneswapper) {
+        this.sceneswapper = sceneswapper;
     }
 
-    public GameClient getClient() {
-        return client;
+    public void setUser(Player user) {
+        this.user = user;
     }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public Player getUser() {
+        return user;
+    }
+
 
     private void move(FXPole source, FXPole destination){
         Mover mover = Mover.getInstance();
-        mover.move(source, destination, client.getGame());
+        mover.move(source, destination, getGame());
     }
 
     public void sendMove(String prefix,Object source, Object destination) throws IOException {
@@ -55,14 +70,11 @@ public class ClientHandler implements Runnable{
         out.flush();
     }
 
-    public ClientHandler(GameClient client) {
+    public ClientHandler() {
         try {
             socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
-            System.out.println("chuj1");
             out = new ObjectOutputStream(socket.getOutputStream());
-            System.out.println("chuj");
             in = new ObjectInputStream(socket.getInputStream());
-            this.client = client;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -80,13 +92,13 @@ public class ClientHandler implements Runnable{
             while (running) {
                 String serverMessage = (String) in.readObject();
                 if(serverMessage.startsWith("SNDPLAYR")){
-                    this.client.setUser((Player) in.readObject());
+                    setUser((Player) in.readObject());
                 }
                 if(serverMessage.startsWith("CRTDGAME")){
-                    this.client.setGame((Game) in.readObject());
+                   setGame((Game) in.readObject());
                 }
                 if(serverMessage.startsWith("oJOINGME")){
-                     this.client.setGame((Game) in.readObject());
+                     setGame((Game) in.readObject());
                 }
                 if(serverMessage.equals("SSNDMOVE")){
                     FXPole source = (FXPole) in.readObject();
@@ -94,11 +106,11 @@ public class ClientHandler implements Runnable{
                     move(source,destination);
                 }
                 if(serverMessage.equals("CHNGTURN")){
-                    client.getGame().nextTurn();
+                    getGame().nextTurn();
                 }
                 if (serverMessage.equals("PLYRJIND")){
                     Player newPlayer = (Player) in.readObject();
-                    client.getGame().addNewPlayer(newPlayer);
+                    getGame().addNewPlayer(newPlayer);
                 }
                 if (serverMessage.equals("SNDGAMES")){
                     @SuppressWarnings("unchecked")
@@ -106,9 +118,10 @@ public class ClientHandler implements Runnable{
                     this.ids=ids;
                 }
                 if(serverMessage.equals("TURNONXX")){
-                    client.getGame().turnOn();
+                    System.out.println("dotarlem");
+                    getGame().turnOn();
+                    System.out.println(getGame().isOn());
                 }
-                System.out.println(getClient().getUser().getUsername());
             }
         } catch (ClassNotFoundException | IOException e) {
             throw new RuntimeException(e);

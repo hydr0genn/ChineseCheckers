@@ -92,7 +92,7 @@ public class ViewModeler {
 
     private void giveTurn(ClientHandler clientHandler) throws IOException {
         clientHandler.sendMessageString("CHNGTURN");
-        clientHandler.getClient().getGame().nextTurn();
+        clientHandler.getGame().nextTurn();
     }
 
 
@@ -129,7 +129,7 @@ public class ViewModeler {
                     clientHandler.sendMove("CSNDMOVE", parent, current);
                     deleteMarked(fxMarkedPole.getOtherMoves());
                     if(hasJumped(fxMarkedPole.getPoleParent(), fxMarkedPole.getPole())){
-                        oneMovementSequence(current, allFXPoles, clientHandler.getClient().getGame().getVariant());
+                        oneMovementSequence(current, allFXPoles, clientHandler.getGame().getVariant());
                     }
                     giveTurn(clientHandler);
                 } catch (IOException e) {
@@ -144,11 +144,11 @@ public class ViewModeler {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    clientHandler.sendMessageObject("READYXXX", clientHandler.getClient().getUser());
+                    clientHandler.sendMessageObject("READYXXX", clientHandler.getUser());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                clientHandler.getClient().getUser().setReady(true);
+                clientHandler.getUser().setReady(true);
             }
         });
     }
@@ -158,11 +158,11 @@ public class ViewModeler {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    clientHandler.sendMessageObject("NOTREADY", clientHandler.getClient().getUser());
+                    clientHandler.sendMessageObject("NOTREADY", clientHandler.getUser());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                clientHandler.getClient().getUser().setReady(false);
+                clientHandler.getUser().setReady(false);
             }
         });
     }

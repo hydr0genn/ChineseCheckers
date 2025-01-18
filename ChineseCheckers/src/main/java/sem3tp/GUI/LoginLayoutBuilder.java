@@ -27,9 +27,9 @@ public class LoginLayoutBuilder implements Builder<Region> {
     @Override
     public Region build() {
 
-        Label label = new Label("Witaj, podaj nazwe yś:");
+        Label label = new Label("Witaj, podaj nazwe:");
         TextField textField = new TextField();
-        Button button = new Button("Submit");
+        Button button = new Button("Podaj");
 
         ViewModeler viewModeler = new ViewModeler();
 

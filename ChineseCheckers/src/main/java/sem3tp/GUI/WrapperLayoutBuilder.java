@@ -24,7 +24,7 @@ public class WrapperLayoutBuilder implements Builder<Region> {
         customComponent2 = new CreateLayoutBuilder(() -> results.setCenter(customComponent3), clientHandler).build();
         customComponent3 = new JoinLayoutBuilder(() -> results.setCenter(customComponent4), clientHandler).build();
         customComponent4 = new LobbyLayoutBuilder(() -> results.setCenter(customComponent5), clientHandler).build();
-        customComponent5 = new LobbyLayoutBuilder(() -> results.setCenter(customComponent1), clientHandler).build();
+        customComponent5 = new GameLayoutBuilder(() -> results.setCenter(customComponent1), clientHandler).build();
         results.setCenter(customComponent1);
         return results;
     }

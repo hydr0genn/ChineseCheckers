@@ -33,17 +33,18 @@ public class Game implements Serializable {
     }
 
     /*We start the game when all players have joined and are ready */
-    public void checkReadiness(){
+    public boolean checkReadiness(){
         for(int i = 0 ;i <playersList.getSize();i++){
             Player temp = playersList.getByIndex(i);
             if(!temp.isReady()){
-                return;
+                return false;
             }
         }
         if(playersList.getSize()==players_num){
             currentPlayer=playersList.getByIndex(0);
-            turnOn();
+            return true;
         }
+        return false;
     }
 
     public void nextTurn(){

@@ -163,9 +163,13 @@ public class GameServer {
                     if(receivedMessage.equals("READYXXX")){
                         Player changedPlayer = (Player) in.readObject();
                         changedPlayer = currentGamePlayed.getPlayersList().get(changedPlayer);
+                        System.out.println(changedPlayer);
                         changedPlayer.setReady(true);
-                        currentGamePlayed.checkReadiness();
-                        if(currentGamePlayed.isOn()){
+                        System.out.println(currentGamePlayed.getPlayersNumber()+" "+currentGamePlayed.getPlayersList().getSize());
+                        if(currentGamePlayed.checkReadiness()){
+                            System.out.println(currentGamePlayed.checkReadiness());
+                            currentGamePlayed.turnOn();
+                            System.out.println("ALLAREREADy");
                             broadcastMessageToGame(currentGamePlayed,"TURNONXX");
                         }
                     }
@@ -287,7 +291,6 @@ public class GameServer {
                 gamesOn.put(next_id, game);
                 next_id++;
                 currentGame=game;
-                game.addNewPlayer(player);
                 out.writeObject("CRTDGAME");
                 out.writeObject(game);
                 return game;
@@ -318,6 +321,8 @@ public class GameServer {
             out.writeObject("oJOINGME");
             out.writeObject(game);
             game.addNewPlayer(player);
+            registerPlayerWriter(player, out);
+            System.out.println(game.getPlayersList().getByIndex(game.getPlayersList().getSize()-1));
             broadcastObjecteToGame(game, "PLYRJIND", player);
             return game;
         }

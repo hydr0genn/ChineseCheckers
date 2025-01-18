@@ -23,20 +23,23 @@ public class LobbyLayoutBuilder implements Builder<Region> {
     public Region build() {
         Button ready = new Button("Ready");
         Button unready = new Button("Unready");
-        //button.setOnAction(evt -> sceneSwapper.run());
+
         Label czekanie = new Label("Czekanie na start gry");
 
         ViewModeler viewModeler = new ViewModeler();
         viewModeler.initializeReadyButton(handler, ready);
 
         viewModeler.initializeNotReadyButton(handler, unready);
+        handler.setSceneswapper(sceneSwapper);
+
+
+        Button button = new Button("k");
+        button.setOnAction(evt -> {if(handler.getGame().isOn())sceneSwapper.run();});
 
 
 
 
-
-
-        VBox results = new VBox(20, czekanie, ready, unready);
+        VBox results = new VBox(20, czekanie, ready, unready, button);
         results.setPadding(new Insets(50));
         return results;
     }

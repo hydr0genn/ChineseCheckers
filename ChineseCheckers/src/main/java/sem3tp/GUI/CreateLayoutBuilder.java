@@ -34,15 +34,14 @@ public class CreateLayoutBuilder implements Builder<Region> {
 
 
         Button gameCreatorButton = new Button("stwórz gre");
-        TextField iloscGraczy = new TextField("podaj ilosc graczy");
+        Label iloscGraczyLabel = new Label("podaj ilosc graczy");
+        TextField iloscGraczy = new TextField();
 
 
         viewModeler.initializeCreateGameButton(handler, gameCreatorButton, iloscGraczy);
 
 
-        Button button = new Button("Change to Scene 1");
-        button.setOnAction(evt -> sceneSwapper.run());
-        VBox results = new VBox(20, new Label("Tworzenie gry"), button, joinGameButton, gameCreatorButton, iloscGraczy);
+        VBox results = new VBox(20, new Label("Tworzenie gry"), joinGameButton, gameCreatorButton, iloscGraczyLabel, iloscGraczy);
         results.setPadding(new Insets(50));
         return results;
     }

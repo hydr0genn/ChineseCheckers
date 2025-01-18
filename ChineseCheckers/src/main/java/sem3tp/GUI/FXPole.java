@@ -1,12 +1,13 @@
 package sem3tp.GUI;
 
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import sem3tp.Poles.Pole;
 
 import java.awt.*;
 import java.io.Serializable;
 
-public class FXPole extends Polygon  implements Comparable<FXPole>, Serializable {
+public class FXPole extends Circle implements Comparable<FXPole>, Serializable {
     private Pole pole;
 
     public void setPole(Pole pole) {
