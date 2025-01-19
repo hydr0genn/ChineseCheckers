@@ -34,6 +34,9 @@ public class ViewModeler {
     }
 
     private boolean isAvailable(Pole pole){
+        if(pole==null){
+            return false;
+        }
         return pole.getColor() == Colors.Grey;
     }
 
@@ -42,10 +45,11 @@ public class ViewModeler {
             return pole;
         }
         Directions direction = source.getDirectionOfNeighbour(pole);
-        if(isAvailable(jump(pole,direction))){
-            return jump(pole, direction);
+        Pole potential = jump(pole,direction);
+        if(isAvailable(potential)){
+            return potential;
         }else if(variant==Variants.TwoJumps){
-            checkForJump(jump(pole,direction),pole,Variants.OneJump);
+            checkForJump(potential,pole,Variants.OneJump);
         }
         return null;
     }
@@ -100,10 +104,10 @@ public class ViewModeler {
     private void oneMovementSequence(FXPole fxpole, FXPoleStorage allFXPoles, Variants variant, ClientHandler handler){
         Creator creator = Creator.getInstance();
         FXPoleStorage possibleMoves = findPossibleMoves(fxpole, allFXPoles, variant);
-        FXMarkedPoleStorage allMarkedPoles = new FXMarkedPoleStorage();
+//        FXMarkedPoleStorage allMarkedPoles = new FXMarkedPoleStorage();
         for (FXPole pole : possibleMoves.getAll()) {
-            FXMarkedPole fxMarkedPole = creator.createMarkedPole(pole, fxpole, allMarkedPoles);
-            allMarkedPoles.insert(fxMarkedPole);
+            FXMarkedPole fxMarkedPole = creator.createMarkedPole(pole, fxpole);
+            handler.getGame().getBoard().markedPoleStorage.insert(fxMarkedPole);
             handler.pane.getChildren().add(fxMarkedPole.draw());
             initializeMarkedPoleHandler(handler,fxMarkedPole,allFXPoles);
         }
@@ -111,13 +115,13 @@ public class ViewModeler {
 
     private void giveTurn(ClientHandler clientHandler) throws IOException {
         clientHandler.sendMessageString("CHNGTURN");
-        clientHandler.getGame().nextTurn();
     }
 
 
-    public void deleteMarked(FXMarkedPoleStorage otherMoves, Pane pane){
-        for (FXMarkedPole fxMarkedPole : otherMoves.getAll()){
-            pane.getChildren().remove(fxMarkedPole);
+    public void deleteMarked(ClientHandler handler){
+        for (FXMarkedPole fxMarkedPole : handler.getGame().getBoard().markedPoleStorage.getAll()){
+            handler.pane.getChildren().remove(fxMarkedPole);
+            handler.getGame().getBoard().markedPoleStorage.get(fxMarkedPole);
         }
     }
 
@@ -134,6 +138,7 @@ public class ViewModeler {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 if(game.getCurrentPlayer().equals(currentPlayer)) {
+                    deleteMarked(handler);
                     oneMovementSequence(fxpole,allFXPoles, game.getVariant(), handler);
                 }
             }
@@ -148,8 +153,8 @@ public class ViewModeler {
                     FXPole parent = fxMarkedPole.getPoleParent();
                     FXPole current = fxMarkedPole.getPole();
                     clientHandler.sendMove("CSNDMOVE", parent, current);
-                    deleteMarked(fxMarkedPole.getOtherMoves(), clientHandler.pane);
-                    if(hasJumped(fxMarkedPole.getPoleParent(), fxMarkedPole.getPole())){
+                    deleteMarked(clientHandler);
+                    if(hasJumped(parent, current)){
                         oneMovementSequence(current, allFXPoles, clientHandler.getGame().getVariant(), clientHandler);
                     }
                     giveTurn(clientHandler);

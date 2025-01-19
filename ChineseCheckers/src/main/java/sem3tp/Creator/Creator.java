@@ -136,11 +136,10 @@ public class Creator implements Create{
         return new GameBuilder(board,id,players_num).build();
     }
 
-    public FXMarkedPole createMarkedPole(FXPole fxPole, FXPole parent, FXMarkedPoleStorage otherMoves){
+    public FXMarkedPole createMarkedPole(FXPole fxPole, FXPole parent){
         FXMarkedPole fxMarkedPole = new FXMarkedPole();
         fxMarkedPole.setPole(fxPole);
         fxMarkedPole.setParent(parent);
-        fxMarkedPole.setOtherMoves(otherMoves);
         return fxMarkedPole;
     }
 

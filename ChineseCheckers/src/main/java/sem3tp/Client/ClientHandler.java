@@ -8,6 +8,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
+import sem3tp.Board.Colors;
 import sem3tp.GUI.FXPole;
 import sem3tp.GUI.ViewModeler;
 import sem3tp.LayoutBuilder.WrapperLayoutBuilder;
@@ -33,6 +34,7 @@ public class ClientHandler implements Runnable {
     private Game game;
     public Pane pane;
     private Stage stage;
+    public Colors playerColor;
 
     public void setUser(Player user) {
         this.user = user;

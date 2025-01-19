@@ -123,7 +123,6 @@ public class GameServer {
                 synchronized (writers) {
                     writers.add(out);
                 }
-//TODO add movement logic + sending currentplayer to client
                 while(true){
                     String receivedMessage = (String)in.readObject();
                     if(receivedMessage.startsWith("LOGINXXX")){
@@ -172,6 +171,7 @@ public class GameServer {
                         changedPlayer.setReady(true);
                         if(currentGamePlayed.checkReadiness()){
                             currentGamePlayed.turnOn();
+                            currentGamePlayed.setFirstPlayer();
                             broadcastMessageToGame(currentGamePlayed,"TURNONXX");
                         }
                     }

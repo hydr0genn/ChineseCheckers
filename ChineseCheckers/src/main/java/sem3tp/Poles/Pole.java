@@ -49,7 +49,8 @@ public abstract class Pole implements Comparable<Pole>, Serializable {
 
     public Pole getNeighbourByDirection(Directions direction){
         Creator creator = Creator.getInstance();
-        return creator.createNeighbour(this,direction);
+        Pole potential = creator.createNeighbour(this,direction);
+        return neighbours.get(potential);
     }
 
     public Directions getDirectionOfNeighbour(Pole pole){
