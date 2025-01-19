@@ -93,7 +93,9 @@ public class TriangleBuilder implements Builder{
                     current.addNeighbour(polesInTriangle.get(potential));
                 }
                 else if(j>1 && polesInBase.contains(potential)){
-                    current.addNeighbour(polesInBase.get(potential));
+                    Pole stdpole = polesInBase.get(potential);
+                    current.addNeighbour(stdpole);
+                    stdpole.addNeighbour(current);
                 }
                 currentDirection = currentDirection.nextDirection;
             }
