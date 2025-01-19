@@ -1,9 +1,12 @@
 package sem3tp;
 
+import sem3tp.Board.Colors;
+
 import java.io.Serializable;
 
 public class Player implements Comparable<Player>, Serializable {
     private String username;
+    public Colors playerColor;
     boolean isReady = false;
     public Player(String username){
         this.username=username;

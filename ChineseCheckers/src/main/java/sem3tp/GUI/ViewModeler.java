@@ -137,7 +137,8 @@ public class ViewModeler {
         fxpole.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                if(game.getCurrentPlayer().equals(currentPlayer)) {
+                System.out.println(handler.getUser().playerColor + " "+fxpole.FXColor);
+                if(game.getCurrentPlayer().equals(currentPlayer)&&(handler.getUser().playerColor==fxpole.FXColor)) {
                     deleteMarked(handler);
                     oneMovementSequence(fxpole,allFXPoles, game.getVariant(), handler);
                 }
@@ -156,8 +157,8 @@ public class ViewModeler {
                     deleteMarked(clientHandler);
                     if(hasJumped(parent, current)){
                         oneMovementSequence(current, allFXPoles, clientHandler.getGame().getVariant(), clientHandler);
-                    }
-                    giveTurn(clientHandler);
+                    }else{
+                    giveTurn(clientHandler);}
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

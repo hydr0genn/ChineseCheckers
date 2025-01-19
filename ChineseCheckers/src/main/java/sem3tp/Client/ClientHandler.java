@@ -34,7 +34,6 @@ public class ClientHandler implements Runnable {
     private Game game;
     public Pane pane;
     private Stage stage;
-    public Colors playerColor;
 
     public void setUser(Player user) {
         this.user = user;

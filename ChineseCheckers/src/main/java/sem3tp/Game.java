@@ -1,17 +1,24 @@
 package sem3tp;
 
 import sem3tp.Board.Board;
+import sem3tp.Board.Colors;
 import sem3tp.Creator.Creator;
 import sem3tp.Mover.Directions;
 import sem3tp.Mover.Variants;
 import sem3tp.Storage.PlayerStorage;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Game implements Serializable {
     Board board;
     boolean hasEnded, isOn = false;
+    int i=0;
     public int id, players_num;
+    Map<Colors, Player> colorsPlayerMap = new HashMap<>();
+    ArrayList<Colors> colorsArrayList;
     PlayerStorage playersList;
     Player currentPlayer;
     Variants variant;
@@ -56,6 +63,25 @@ public class Game implements Serializable {
         currentPlayer = playersList.getByIndex((currentindex+1)%players_num);
     }
 
+    private void initialiseColorArray(){
+        this.colorsArrayList.add(Colors.Black);
+        if(players_num%2==0){
+            this.colorsArrayList.add(Colors.White);
+        }
+        if(players_num%3==0){
+            this.colorsArrayList.add(Colors.Green);
+            this.colorsArrayList.add(Colors.Yellow);
+        }
+        if(players_num==4){
+            this.colorsArrayList.add(Colors.Red);
+            this.colorsArrayList.add(Colors.Green);
+        }
+        if(players_num==6){
+            this.colorsArrayList.add(Colors.Blue);
+            this.colorsArrayList.add(Colors.Red);
+        }
+    }
+
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
@@ -75,6 +101,7 @@ public class Game implements Serializable {
     public Game(int id){
         this.id=id;
         this.playersList= Creator.getInstance().createPlayerStorage();
+        this.colorsArrayList=new ArrayList<>();
     }
 
     public void turnOn(){
@@ -87,17 +114,13 @@ public class Game implements Serializable {
 
     public void addNewPlayer(Player newplayer){
         playersList.insert(newplayer);
+        newplayer.playerColor=colorsArrayList.get(i);
+        i++;
     }
 
     public void setPlayers_num(int x){
         this.players_num=x;
-        createBoard();
-    }
-
-    public void createBoard(){
-        if (this.players_num==2){
-            //tworzy odpowedni rodzaj boarda
-        }
+        initialiseColorArray();
     }
 
     public PlayerStorage getPlayersList() {
