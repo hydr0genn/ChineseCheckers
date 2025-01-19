@@ -21,6 +21,7 @@ public class BaseBuilder implements Builder{
     this.layers=layers;
     }
 
+    /*Returns the expected number of poles in the base of the board*/
     public void findMaxPoles(int layers_num){
         int suma=1;
         for(int i=2;i<=layers_num;i++){
@@ -39,7 +40,7 @@ public class BaseBuilder implements Builder{
         poleList.insert(current);
         for(int i=0;i< maxPoles;i++){
             current=poleList.getByIndex(i);
-            addNeighbours(current, poleList);//kwestia iteratora potencjalnego
+            addNeighbours(current, poleList);
         }
         boardBase.setStorage(poleList);
         return boardBase;

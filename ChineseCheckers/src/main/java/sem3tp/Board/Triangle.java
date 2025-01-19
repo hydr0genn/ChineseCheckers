@@ -1,6 +1,5 @@
 package sem3tp.Board;
 
-import sem3tp.Storage.PoleStorage;
 
 public class Triangle extends Components {
     private Colors color;

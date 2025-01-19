@@ -1,17 +1,13 @@
 package sem3tp.Client;
 
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
 import javafx.stage.Stage;
-import sem3tp.Board.Colors;
 import sem3tp.GUI.FXPole;
 import sem3tp.GUI.ViewModeler;
-import sem3tp.LayoutBuilder.WrapperLayoutBuilder;
 import sem3tp.Game;
 import sem3tp.Mover.Mover;
 import sem3tp.Player;

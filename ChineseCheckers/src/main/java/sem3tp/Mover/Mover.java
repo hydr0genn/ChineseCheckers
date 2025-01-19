@@ -2,19 +2,12 @@ package sem3tp.Mover;
 
 import sem3tp.Board.Board;
 import sem3tp.Board.Colors;
-import sem3tp.Board.Triangle;
 import sem3tp.Creator.Creator;
 import sem3tp.Exceptions.WrongDirectionInput;
 import sem3tp.GUI.FXPole;
 import sem3tp.Game;
 import sem3tp.Poles.Pole;
-import sem3tp.Poles.StandardPole;
-import sem3tp.Poles.TrianglePole;
 import sem3tp.Storage.PoleStorage;
-import sem3tp.Storage.Storage;
-import sem3tp.Storage.TriangleStorage;
-
-import java.util.ArrayList;
 
 public class Mover {
     Creator creator = Creator.getInstance();
@@ -30,20 +23,6 @@ public class Mover {
             }
         }
         return instance;
-    }
-
-    public boolean inTriangle(Pole pole, Board board){
-        return board.getBase().getStorage().contains(pole);
-    }
-
-    public boolean inBase(Pole pole, Board board){
-        TriangleStorage triangleStorage = board.getTriangles();
-        for(Triangle triangle: triangleStorage.getAll()){
-            if(triangle.getStorage().contains(pole)){
-                return true;
-            }
-        }
-        return false;
     }
 
     /*CHECKS WHETHER THERE IS ENENMY AROUND and returns the list of poles with enemies
@@ -85,20 +64,9 @@ public class Mover {
     /*GENERAL MOVE FUNCTION
     * Game and to fxpoles are given - we change the color of those two poles -*/
     public void move(FXPole FXcurrentPole, FXPole FXdestination, Game game){
-//        Pole source = game.getBoard().getAllPoles().get(FXcurrentPole.getPole());
-//        Pole destination = game.getBoard().getAllPoles().get(FXdestination.getPole());
         Colors temp = FXcurrentPole.getFXColor();
         FXcurrentPole.setColor(FXdestination.getFXColor());
         FXdestination.setColor(temp);
     }
 
-    /*Standard move without 'crossing borders'*/
-    private void standardMove(Pole currentPole, Directions direction, Pole potentialPole){
-            //TODO logika plus co my robimy z biciem pionkow? czy bedziemy to tu rozwazac czy bardziej serwer ma od razu to pokazywac
-    }
-
-    /*Move from base to triangle MOZE BYC TAK ZE TO JEST USELESS XD*/
-    private  void moveToTriangle(Pole currentPole,Directions direction){
-        //TODO Zastanowic sie nad sensem tej funkcji (czy musimy wogole to rozdzielac) i ewentualna logika
-    }
 }

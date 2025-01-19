@@ -1,7 +1,6 @@
 package sem3tp.Storage;
 
 import sem3tp.GUI.FXMarkedPole;
-import sem3tp.GUI.FXPole;
 
 import java.util.ArrayList;
 

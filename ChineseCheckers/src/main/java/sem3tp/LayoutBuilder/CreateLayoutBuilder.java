@@ -31,7 +31,6 @@ public class CreateLayoutBuilder implements Builder<Region> {
         Set<String> dozwoloneLiczby = Set.of("2", "3", "4", "6");
         ViewModeler viewModeler = new ViewModeler();
 
-        //viewModeler.initializeChooseCreateGameButton(handler, createGameButton);
 
         viewModeler.initializeChooseJoinGameButton(joinGameButton, sceneSwapper);
 

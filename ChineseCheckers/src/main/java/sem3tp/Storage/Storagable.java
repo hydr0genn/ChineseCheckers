@@ -1,9 +1,7 @@
 package sem3tp.Storage;
 
-import sem3tp.Poles.Pole;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /*
 Interface for storages like UserStorage

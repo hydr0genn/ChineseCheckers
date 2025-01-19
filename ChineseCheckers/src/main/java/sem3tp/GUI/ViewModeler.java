@@ -155,7 +155,6 @@ public class ViewModeler {
     private void oneMovementSequence(FXPole fxpole, FXPoleStorage allFXPoles, Variants variant, ClientHandler handler){
         Creator creator = Creator.getInstance();
         FXPoleStorage possibleMoves = findPossibleMoves(fxpole, allFXPoles, variant);
-//        FXMarkedPoleStorage allMarkedPoles = new FXMarkedPoleStorage();
         for (FXPole pole : possibleMoves.getAll()) {
             FXMarkedPole fxMarkedPole = creator.createMarkedPole(pole, fxpole);
             handler.getGame().getBoard().markedPoleStorage.insert(fxMarkedPole);
@@ -167,7 +166,6 @@ public class ViewModeler {
     private void JumpMovementSequence(FXPole fxpole, FXPoleStorage allFXPoles, Variants variant, ClientHandler handler){
         Creator creator = Creator.getInstance();
         FXPoleStorage possibleMoves = findPossibleJumps(fxpole, allFXPoles, variant);
-//        FXMarkedPoleStorage allMarkedPoles = new FXMarkedPoleStorage();
         for (FXPole pole : possibleMoves.getAll()) {
             FXMarkedPole fxMarkedPole = creator.createMarkedPole(pole, fxpole);
             handler.getGame().getBoard().markedPoleStorage.insert(fxMarkedPole);

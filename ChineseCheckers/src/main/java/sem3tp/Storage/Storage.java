@@ -1,10 +1,8 @@
 package sem3tp.Storage;
 
-import sem3tp.User;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 public abstract class Storage<T> implements Storagable<T>, Serializable {
     ArrayList<T> list;

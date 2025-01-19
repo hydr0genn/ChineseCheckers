@@ -9,10 +9,6 @@ import sem3tp.Mover.Mover;
 import sem3tp.Poles.Pole;
 import sem3tp.Poles.TrianglePole;
 import sem3tp.Storage.PoleStorage;
-import sem3tp.Storage.TriangleStorage;
-
-import java.text.StringCharacterIterator;
-import java.util.ArrayList;
 
 public class TriangleBuilder implements Builder{
 
@@ -43,40 +39,27 @@ public class TriangleBuilder implements Builder{
     /*Loop responsible for creating poles inside the triangle, return a storage of triangle poles
     it receives a source and for each pole it
     Color's got property direction - existing solely for the purpose of creating a board -
-    for example for Black in order to create a traingle of such color - githublink tu bedzie xd mozna potestowac bez ifow bo sie wydaje dojebany
+    for example for Black in order to create a traingle of such color
      */
     public PoleStorage createTrianglePoleStorage(Pole source, int layers){
         PoleStorage temp = new PoleStorage();
         temp.insert(source);
-        int maxw = layers-1;
-        int maxh = maxw;
         TrianglePole current = (TrianglePole) source;
         current.setColor(color);
-        current.i=1;
-        current.j=1;
         int limit = (layers-1)*layers/2;
 
         while(temp.getSize()<limit){
-            maxw=layers-current.i;
             TrianglePole potential;
             potential =creator.createNeighbour(current,color.getDirectionCreate().nextDirection);
-            potential.i=current.i;
-            potential.j=current.j+1;
-            if(potential.j<=maxw){
-                if(!temp.contains(potential)){
-                    potential.setColor(color);
-                    temp.insert(potential);
-                }
+            if(!temp.contains(potential)){
+                potential.setColor(color);
+                temp.insert(potential);
             }
             potential = creator.createNeighbour(current, color.getDirectionCreate());
-            potential.i= current.i+1;
-            potential.j=current.j;
-            if(potential.i<=maxh){
-                if(!temp.contains(potential))
-                {
-                    potential.setColor(color);
-                    temp.insert(potential);
-                }
+            if(!temp.contains(potential))
+            {
+                potential.setColor(color);
+                temp.insert(potential);
             }
             current = (TrianglePole) temp.getByIndex(temp.indexOf(current)+1);
         }

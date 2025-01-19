@@ -2,9 +2,7 @@ package sem3tp.GUI;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import sem3tp.Poles.Pole;
 import sem3tp.Storage.FXMarkedPoleStorage;
-import sem3tp.Storage.FXPoleStorage;
 
 public class FXMarkedPole extends Circle implements Comparable<FXMarkedPole> {
     private FXPole fxPole;
@@ -18,14 +16,6 @@ public class FXMarkedPole extends Circle implements Comparable<FXMarkedPole> {
 
     public void setParent(FXPole parent) {
         this.parent = parent;
-    }
-
-    public void setOtherMoves(FXMarkedPoleStorage otherMoves) {
-        this.otherMoves = otherMoves;
-    }
-
-    public FXMarkedPoleStorage getOtherMoves() {
-        return otherMoves;
     }
 
     public void setPole(FXPole pole) {

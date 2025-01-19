@@ -5,14 +5,12 @@ import sem3tp.Creator.Creator;
 import sem3tp.GUI.FXPole;
 import sem3tp.Game;
 import sem3tp.GameState;
-import sem3tp.Mover.Directions;
 import sem3tp.Mover.Mover;
 import sem3tp.Player;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;
@@ -82,7 +80,6 @@ public class GameServer {
 
 
     public static void main(String[] args) throws Exception {
-        Scanner userInput = new Scanner(System.in);
 
         System.out.println("Server is working\n");
         var pool = Executors.newFixedThreadPool(500);
@@ -94,22 +91,12 @@ public class GameServer {
             }
         }
 
-//    public static synchronized void broadcast(String message) {
-//        for (ObjectOutputStream writer : writers) {
-//            writer.println(message);
-//            writer.flush();
-//        }
-//    }
-
     private static class Handler implements Runnable {
-        private String username;
         private Socket socket;
         private ObjectInputStream in;
         private ObjectOutputStream out;
         private Player player;
         private Game currentGamePlayed;
-//        private int next_id;
-        Creator creator = Creator.getInstance();
 
         public Handler(Socket socket, int id) {
             this.socket = socket;
@@ -185,81 +172,9 @@ public class GameServer {
             }
         }
 
-
-//        public void run() {
-//            try {
-//                in = new ObjectInputStream(socket.getInputStream());
-//                out = new ObjectOutputStream(socket.getOutputStream());
-//
-//                synchronized (writers) {
-//                    writers.add(out);
-//                }
-//                loginAsUser();
-//
-//                registerPlayerWriter(player, out);
-//
-//                out.println("Nazwa zaakceptowana " + username);
-//                broadcast(username + " dołączył");
-//
-//                currentGamePlayed=gameCreateOptions();
-//                waitForGameToStart();
-//                gameLogic();
-//
-//            } catch (Exception e) {
-//                System.out.println(e);
-//            } finally {
-//                unregisterPlayerWriter(player, out);
-//                quit();
-//            }
-//        }
-
-//        private void gameLogic(){
-//            while(!currentGamePlayed.hasEnded()){
-//                if(player!=currentGamePlayed.getCurrentPlayer()){
-//                    out.println("To nie jest twoja tura");
-//                    try{
-//                        Thread.sleep(1000);
-//                    } catch (Exception e) {
-//                        Thread.currentThread().interrupt();
-//                    }
-//                    continue;
-//                }
-//
-//                out.println("Twoja tura");
-//                out.println("INPUT Mozesz ruszyc sie w nastepujacych kierunkach: 1. E 2. W 3. NE 4. NW 5. SE 6. SW");
-//                String input = in.nextLine();
-//                Mover mover = Creator.getInstance().createMover();
-//                Directions direction;
-//                try {
-//                    direction = mover.setDirection(input);
-//                    currentGamePlayed.processMoves(direction);
-//                    broadcastToGame(currentGamePlayed,"Gracz o kolorze x wykonal ruch:" +input);//tutaj bedzie tez kolor
-//                } catch (Exception e) {
-//                    throw new RuntimeException(e);
-//                }
-//            }
-//        }
-//        private void waitForGameToStart() throws InterruptedException {
-//            while (!currentGamePlayed.isOn()){
-//                out.println("Twoj status to: "+player.getReady());
-//                out.println("INPUT Czy jestes gotowy? odpowiedz: Tak lub Nie");
-//                String input = in.nextLine();
-//                if(input.equals("Tak")){
-//                    this.player.setReady(true);
-//                    currentGamePlayed.checkReadiness();
-//                    while(!currentGamePlayed.isOn()){
-//                        Thread.sleep(10);
-//                    }
-//                } else if (input.equals("Nie")) {
-//                    this.player.setReady(false);
-//                }
-//            }
-//            out.println("Gra sie zaczyna");
-//        }
-
         private void loginAsUser(String username) throws IOException {
                 synchronized (GameState.getInstance()) {
-                    if (!username.isBlank()) { //nie moze byc takie samo
+                    if (!username.isBlank()) {
                         player = new Player(username);
                         out.writeObject("SNDPLAYR");
                         out.writeObject(player);
@@ -269,22 +184,6 @@ public class GameServer {
                 }
             }
         }
-
-
-//        private synchronized Game gameCreateOptions(){
-//            while(true){
-//                out.println("INPUT Wybierz co chcesz zrobic: 1. Utworz nowa gre 2. Wczytaj gre 3. Dolacz do gry");
-//                String input = in.nextLine();
-//                if(input.equals("1")){
-//                    return createNewGame();
-//                } else if (input.equals("2")) {
-//                    return loadGame();
-//                } else if (input.equals("3")) {
-//                    return joinGame();
-//                }
-//                out.println("Podaj liczbe w zakresie 1-3");//albo throw excpetion
-//            }
-//        }
 
         private static synchronized Game createNewGame(Game currentGame,int playNumber, Player player, ObjectOutputStream out) throws IOException {
                 Creator creator = Creator.getInstance();
@@ -298,26 +197,6 @@ public class GameServer {
                 return game;
         }
 
-//        private synchronized void setNumberOfPlayers(Game game){
-//            while(game.getPlayersNumber() < 2){
-//                out.println("INPUT Podaj liczbe graczy w grze - 2, 3, 4 , 6");
-//                String input = in.nextLine();
-//                int number = Integer.parseInt(input);
-//                if(Arrays.asList(2,3,4,6).contains(number)) {
-//                    game.setPlayers_num(number);
-//                }else {
-//                    out.println("Liczba ma byc w zakresie 2, 3, 4, 6");//albo throw
-//                }
-//            }
-//        }
-//
-//        private void printAvailableGames(){
-//            out.println("Oto lista dostepnych rozgrywek");
-//            gamesOn.forEach((key,value)->{
-//                out.println("Gra o id: "+key);
-//            });
-//        }
-
         private static synchronized Game joinGame(int id, ObjectOutputStream out, Player player) throws IOException {//wypisac wszystkie ktore sa w hashmapie
             Game game = gamesOn.get(id);
             out.writeObject("oJOINGME");
@@ -329,15 +208,6 @@ public class GameServer {
             return game;
         }
 
-        private synchronized Game loadGame(){
-//pobieramy boarda z bazy danych i tworzymy z nim nowa gre
-            return new Game(next_id);
-        }
-
-        private void sendReadyRequest(){//logika wysylania ready
-
-        }
-
         private static void quit(String username, ObjectOutputStream out, Socket socket) {
             if (username != null) {
                 System.out.println(username + " NAURAAAA");
@@ -345,7 +215,6 @@ public class GameServer {
                 synchronized (writers) {
                     writers.remove(out);
                 }
-//                broadcast(username + " wyszedł");
             }
             try {
                 socket.close();

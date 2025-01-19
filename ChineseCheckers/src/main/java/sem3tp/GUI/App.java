@@ -6,29 +6,9 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import sem3tp.Client.ClientHandler;
-import sem3tp.Client.GameClient;
-import sem3tp.Game;
 import sem3tp.LayoutBuilder.WrapperLayoutBuilder;
 
 public class App extends Application {
-    private Game game;
-    GameClient client;
-
-    public GameClient getClient() {
-        return client;
-    }
-
-    public void setClient(GameClient client) {
-        this.client = client;
-    }
-
-    public Game getGame() {
-        return game;
-    }
-
-    public void setGame(Game game) {
-        this.game = game;
-    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {

@@ -1,8 +1,6 @@
 package sem3tp.Builder;
 
 import sem3tp.Board.Board;
-import sem3tp.Board.Components;
-import sem3tp.Creator.Creator;
 import sem3tp.Game;
 
 public class GameBuilder {

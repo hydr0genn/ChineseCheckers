@@ -12,17 +12,12 @@ import sem3tp.GUI.FXMarkedPole;
 import sem3tp.GUI.FXPole;
 import sem3tp.Game;
 import sem3tp.Mover.Directions;
-import sem3tp.Mover.Mover;
 import sem3tp.Player;
 import sem3tp.Poles.InitPole;
 import sem3tp.Poles.Pole;
 import sem3tp.Poles.StandardPole;
 import sem3tp.Poles.TrianglePole;
 import sem3tp.Storage.*;
-import sem3tp.User;
-
-import java.util.ArrayList;
-import java.util.concurrent.TransferQueue;
 
 public class Creator implements Create{
 
@@ -94,29 +89,16 @@ public class Creator implements Create{
         return new BaseBuilder(x);
     }
 
-    @Override
-    public Mover createMover() {
-        return Mover.getInstance();
-    }
 
     @Override
     public PoleStorage createPoleStorage() {
         return new PoleStorage();
     }
 
-    @Override
-    public UserStorage createUserStorage() {
-        return new UserStorage();
-    }
 
     @Override
     public TriangleStorage createTriangleStorage() {
         return new TriangleStorage();
-    }
-
-    @Override
-    public User createUser(String username, String pwd) {
-        return new User(username,pwd);
     }
 
     private boolean isWithinBoundary(int x, int y, int z, int layers){
@@ -150,10 +132,5 @@ public class Creator implements Create{
         int newY = current.getyCord()+direction.addYCord();
         int newZ = current.getzCord()+direction.addZCord();
         return createTrianglePole(newX,newY,newZ);
-    }
-
-    /*GUI LOGIC GUI LOGIC GUI LOGIC GUI LOGIC GUI LOGIC GUI LOGIC GUI LOGIC GUI LOGIC*/
-    public FXPole createFXPole(Pole pole){
-        return new FXPole(pole);
     }
 }

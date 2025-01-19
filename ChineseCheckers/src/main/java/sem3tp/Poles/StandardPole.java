@@ -6,9 +6,4 @@ public class StandardPole extends Pole {
         this.setyCord(yCord);
         this.setzCord(zCord);
     }
-
-//    public void addNeighbour(Pole pole){
-//        this.neighbours.insert(pole);
-////        pole.neighbours.add(this);
-//    }
 }

@@ -1,6 +1,5 @@
 package sem3tp.Board;
 
-import sem3tp.GUI.FXMarkedPole;
 import sem3tp.GUI.FXPole;
 import sem3tp.Poles.Pole;
 import sem3tp.Storage.FXMarkedPoleStorage;
@@ -16,7 +15,8 @@ public class Board implements Serializable {
     private TriangleStorage triangles;
     private PoleStorage allPoles;
     private FXPoleStorage allFXPoles;
-/*Only to be used after the allPoles storage is completed*/
+
+    /*Only to be used after the allPoles storage is completed*/
     public void initializeAllFXPoles() {
         allFXPoles = new FXPoleStorage();
         for (Pole pole: allPoles.getAll()){

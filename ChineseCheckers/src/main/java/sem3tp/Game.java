@@ -17,7 +17,6 @@ public class Game implements Serializable {
     boolean hasEnded, isOn = false;
     int i=0;
     public int id, players_num;
-    Map<Colors, Player> colorsPlayerMap = new HashMap<>();
     ArrayList<Colors> colorsArrayList;
     PlayerStorage playersList;
     Player currentPlayer;
@@ -86,9 +85,6 @@ public class Game implements Serializable {
         return currentPlayer;
     }
 
-    public void setCurrentPlayer(Player currentPlayer) {
-        this.currentPlayer = currentPlayer;
-    }
 
     public boolean isOn() {
         return isOn;
@@ -131,16 +127,4 @@ public class Game implements Serializable {
         return this.players_num;
     }
 
-    /*In the furture proper move logic will be added here containing Pole that is to be affected*/
-    public void processMoves(Directions direction){
-        nextTurn();
-    }
-
-//    @Override
-//    public void run() {
-//        while(!hasEnded){
-//            processMoves();
-//        }
-//        System.out.println("Gra " + id + " zakonczona\n");
-//    }
 }
