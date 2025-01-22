@@ -6,6 +6,7 @@ import sem3tp.GUI.FXPole;
 import sem3tp.Game;
 import sem3tp.GameState;
 import sem3tp.Mover.Mover;
+import sem3tp.Mover.Variants;
 import sem3tp.Player;
 
 import java.io.IOException;
@@ -125,12 +126,12 @@ public class GameServer {
                     if(receivedMessage.startsWith("CRTGAMV1")) {
                         String number = receivedMessage.substring(8);
                         int numberOfPlayers = Integer.parseInt(number);
-                        this.currentGamePlayed=createNewGame(currentGamePlayed, numberOfPlayers,player, out);
+                        this.currentGamePlayed=createNewGame(currentGamePlayed, numberOfPlayers, out, Variants.OneJump);
                     }
                     if(receivedMessage.startsWith("CRTGAMV2")) {
                         String number = receivedMessage.substring(8);
                         int numberOfPlayers = Integer.parseInt(number);
-                        this.currentGamePlayed=createNewGame(currentGamePlayed, numberOfPlayers,player, out);
+                        this.currentGamePlayed=createNewGame(currentGamePlayed, numberOfPlayers, out, Variants.TwoJumps);
                     }
                     if(receivedMessage.equals("CSNDMOVE")) {
                         System.out.println("Move on the server");
@@ -185,10 +186,11 @@ public class GameServer {
             }
         }
 
-        private static synchronized Game createNewGame(Game currentGame,int playNumber, Player player, ObjectOutputStream out) throws IOException {
+        private static synchronized Game createNewGame(Game currentGame,int playNumber, ObjectOutputStream out, Variants variant) throws IOException {
                 Creator creator = Creator.getInstance();
                 Board board = creator.createBoardBuilder(5, playNumber).build();
                 Game game = creator.createGame(board, next_id, playNumber);
+                game.setVariant(variant);
                 gamesOn.put(next_id, game);
                 next_id++;
                 currentGame=game;

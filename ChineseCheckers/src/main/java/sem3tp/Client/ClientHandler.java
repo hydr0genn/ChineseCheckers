@@ -47,6 +47,7 @@ public class ClientHandler implements Runnable {
         return user;
     }
 
+
     private void move(FXPole source, FXPole destination){
         Mover mover = Mover.getInstance();
         mover.move(source, destination, getGame());

@@ -54,8 +54,6 @@ public abstract class Pole implements Comparable<Pole>, Serializable {
     public Directions getDirectionOfNeighbour(Pole pole){
         Directions tempDirection = Directions.West;
         for (int i=0;i<6;i++){
-            System.out.println(tempDirection);
-            Pole temp = getNeighbourByDirection(tempDirection);
             if(pole.equals(getNeighbourByDirection(tempDirection))){
                 return tempDirection;
             }

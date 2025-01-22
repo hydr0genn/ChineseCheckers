@@ -70,7 +70,7 @@ public class TriangleBuilder implements Builder{
         for (int i=0; i<polesInTriangle.getSize();i++){
             Pole current = polesInTriangle.getByIndex(i);
             Directions currentDirection = color.getDirectionCreate();
-            for(int j=0;j<4;j++){
+            for(int j=0;j<6;j++){
                 TrianglePole potential = creator.createNeighbour(current,currentDirection);
                 if(polesInTriangle.contains(potential)){
                     current.addNeighbour(polesInTriangle.get(potential));

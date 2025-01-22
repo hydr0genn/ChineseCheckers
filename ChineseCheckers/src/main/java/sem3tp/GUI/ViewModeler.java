@@ -34,15 +34,6 @@ public class ViewModeler {
         return pole.getNeighbourByDirection(direction);
     }
 
-    private boolean canJump(FXPole fxPole){
-        for(Pole pole:fxPole.getPole().getNeighbours().getAll()){
-            if(!(isAvailable(pole))){
-                return true;
-            }
-        }
-        return false;
-    }
-
     private boolean isAvailable(Pole pole){
         if(pole==null){
             return false;
@@ -50,7 +41,7 @@ public class ViewModeler {
         return pole.getColor() == Colors.Grey;
     }
 
-    private FXPoleStorage findPossibleJumps(FXPole fxpole, FXPoleStorage allFXPoles, Variants variant){
+    private FXPoleStorage findPossibleJumps(FXPole fxpole, FXPoleStorage allFXPoles, Variants variant, FXPoleStorage parents){
         FXPoleStorage neighbourList = new FXPoleStorage();
         if (fxpole.getPole() instanceof TrianglePole currentPole){
             for (Pole neighbour : currentPole.getNeighbours().getAll()){
@@ -89,6 +80,9 @@ public class ViewModeler {
                 }
             }
         }
+        for(FXPole fxPole : parents.getAll()){
+            neighbourList.delete(fxPole);
+        }
         return neighbourList;
     }
 
@@ -100,13 +94,13 @@ public class ViewModeler {
         Pole potential = jump(pole,direction);
         if(isAvailable(potential)){
             return potential;
-        }else if(variant==Variants.TwoJumps){
-            checkForJump(potential,pole,Variants.OneJump);
+        }else if(variant==Variants.TwoJumps && potential!=null){
+            return checkForJump(potential,pole,Variants.OneJump);
         }
         return null;
     }
 
-    
+
 
     private FXPoleStorage findPossibleMoves(FXPole fxpole, FXPoleStorage allFXPoles, Variants variant){
         FXPoleStorage neighbourList = new FXPoleStorage();
@@ -176,22 +170,22 @@ public class ViewModeler {
     private void oneMovementSequence(FXPole fxpole, FXPoleStorage allFXPoles, Variants variant, ClientHandler handler){
         Creator creator = Creator.getInstance();
         FXPoleStorage possibleMoves = findPossibleMoves(fxpole, allFXPoles, variant);
+        FXPoleStorage parents = new FXPoleStorage();
         for (FXPole pole : possibleMoves.getAll()) {
             FXMarkedPole fxMarkedPole = creator.createMarkedPole(pole, fxpole);
             handler.getGame().getBoard().markedPoleStorage.insert(fxMarkedPole);
             handler.pane.getChildren().add(fxMarkedPole.draw());
-            initializeMarkedPoleHandler(handler,fxMarkedPole,allFXPoles);
+            initializeMarkedPoleHandler(handler,fxMarkedPole,allFXPoles, parents);
         }
     }
 
-    private void JumpMovementSequence(FXPole fxpole, FXPoleStorage allFXPoles, Variants variant, ClientHandler handler){
+    private void JumpMovementSequence(FXPole fxpole, FXPoleStorage possibleMoves, FXPoleStorage allFXPoles, ClientHandler handler, FXPoleStorage parents){
         Creator creator = Creator.getInstance();
-        FXPoleStorage possibleMoves = findPossibleJumps(fxpole, allFXPoles, variant);
         for (FXPole pole : possibleMoves.getAll()) {
             FXMarkedPole fxMarkedPole = creator.createMarkedPole(pole, fxpole);
             handler.getGame().getBoard().markedPoleStorage.insert(fxMarkedPole);
             handler.pane.getChildren().add(fxMarkedPole.draw());
-            initializeMarkedPoleHandler(handler,fxMarkedPole,allFXPoles);
+            initializeMarkedPoleHandler(handler,fxMarkedPole,allFXPoles, parents);
         }
     }
 
@@ -199,12 +193,11 @@ public class ViewModeler {
         clientHandler.sendMessageString("CHNGTURN");
     }
 
-
     public void deleteMarked(ClientHandler handler){
         for (FXMarkedPole fxMarkedPole : handler.getGame().getBoard().markedPoleStorage.getAll()){
             handler.pane.getChildren().remove(fxMarkedPole);
-            handler.getGame().getBoard().markedPoleStorage.get(fxMarkedPole);
         }
+        handler.getGame().getBoard().markedPoleStorage.getAll().clear();
     }
 
     //BUTTON INITIALIZATION BUTTON INITIALIZATION BUTTON INITIALIZATION BUTTON INITIALIZATION BUTTON INITIALIZATION
@@ -230,19 +223,25 @@ public class ViewModeler {
         });
     }
 
-    public void initializeMarkedPoleHandler(ClientHandler clientHandler, FXMarkedPole fxMarkedPole, FXPoleStorage allFXPoles){
+    public void initializeMarkedPoleHandler(ClientHandler clientHandler, FXMarkedPole fxMarkedPole, FXPoleStorage allFXPoles, FXPoleStorage parents){
         fxMarkedPole.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 try {
                     FXPole parent = fxMarkedPole.getPoleParent();
+                    parents.insert(parent);
                     FXPole current = fxMarkedPole.getPole();
                     clientHandler.sendMove("CSNDMOVE", parent, current);
                     deleteMarked(clientHandler);
-                    if(hasJumped(parent, current)&&canJump(current)){
-                        JumpMovementSequence(current, allFXPoles, clientHandler.getGame().getVariant(), clientHandler);
+                    System.out.println(hasJumped(parent,current)+"HASJUMPED");
+                    System.out.println(findPossibleJumps(current, allFXPoles, clientHandler.getGame().getVariant(), parents).getSize());
+                    FXPoleStorage possibleMoves = findPossibleJumps(current, allFXPoles, clientHandler.getGame().getVariant(), parents);
+                    if(hasJumped(parent, current)&&possibleMoves.getSize()>0){
+                        JumpMovementSequence(current, possibleMoves ,allFXPoles, clientHandler, parents);
+                    }else{
+                        System.out.println("oddaje ture");
+                        giveTurn(clientHandler);
                     }
-                    giveTurn(clientHandler);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

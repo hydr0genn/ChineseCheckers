@@ -18,7 +18,7 @@ import sem3tp.Poles.TrianglePole;
 public class Main {
     public static void main(String[] args) {
         Creator creator = Creator.getInstance();
-       BoardBuilder builder = creator.createBoardBuilder(3, 2);
+       BoardBuilder builder = creator.createBoardBuilder(5, 2);
        Board base = builder.build();
         ViewModeler viewModeler = new ViewModeler();
         FXPole test = new FXPole(new InitPole());
