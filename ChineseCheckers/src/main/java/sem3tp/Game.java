@@ -73,7 +73,7 @@ public class Game implements Serializable {
         }
         if(players_num==4){
             this.colorsArrayList.add(Colors.Red);
-            this.colorsArrayList.add(Colors.Green);
+            this.colorsArrayList.add(Colors.Red.getOppositeColor());
         }
         if(players_num==6){
             this.colorsArrayList.add(Colors.Blue);

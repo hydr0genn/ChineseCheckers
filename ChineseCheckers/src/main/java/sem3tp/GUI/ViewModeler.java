@@ -14,6 +14,7 @@ import sem3tp.Game;
 import sem3tp.Mover.Directions;
 import sem3tp.Mover.Variants;
 import sem3tp.Player;
+import sem3tp.Poles.InitPole;
 import sem3tp.Poles.Pole;
 import sem3tp.Poles.StandardPole;
 import sem3tp.Poles.TrianglePole;
@@ -105,6 +106,8 @@ public class ViewModeler {
         return null;
     }
 
+    
+
     private FXPoleStorage findPossibleMoves(FXPole fxpole, FXPoleStorage allFXPoles, Variants variant){
         FXPoleStorage neighbourList = new FXPoleStorage();
         if (fxpole.getPole() instanceof TrianglePole currentPole){
@@ -126,6 +129,24 @@ public class ViewModeler {
                 }
             }
         }else if(fxpole.getPole() instanceof StandardPole currentPole){
+            for(Pole neighbour : currentPole.getNeighbours().getAll()){
+                if(neighbour instanceof TrianglePole triangleNeighbour){
+                    Pole potentialPole = checkForJump(triangleNeighbour,currentPole, variant);
+                    if(potentialPole==null)continue;
+                    FXPole actualPole = allFXPoles.get(new FXPole(potentialPole));
+                    if(actualPole!=null&&(actualPole.BorderColor.getOppositeColor()==currentPole.getColor())){
+                        neighbourList.insert(actualPole);
+                    }
+                }else{
+                    Pole potentialPole = checkForJump(neighbour,currentPole, variant);
+                    if(potentialPole==null)continue;
+                    FXPole actualPole = allFXPoles.get(new FXPole(potentialPole));
+                    if(actualPole!=null){
+                        neighbourList.insert(actualPole);
+                    }
+                }
+            }
+        }else if(fxpole.getPole() instanceof InitPole currentPole){
             for(Pole neighbour : currentPole.getNeighbours().getAll()){
                 if(neighbour instanceof TrianglePole triangleNeighbour){
                     Pole potentialPole = checkForJump(triangleNeighbour,currentPole, variant);
@@ -198,6 +219,9 @@ public class ViewModeler {
         fxpole.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
+                if(fxpole.equals(new FXPole(new InitPole()))){
+                    System.out.println("handler dla inita");
+                }
                 deleteMarked(handler);
                 if(game.getCurrentPlayer().equals(currentPlayer)&&(handler.getUser().playerColor==fxpole.FXColor)) {
                     oneMovementSequence(fxpole,allFXPoles, game.getVariant(), handler);
