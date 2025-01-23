@@ -223,6 +223,7 @@ public class ViewModeler {
         });
     }
 
+
     public void initializeMarkedPoleHandler(ClientHandler clientHandler, FXMarkedPole fxMarkedPole, FXPoleStorage allFXPoles, FXPoleStorage parents){
         fxMarkedPole.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -241,6 +242,21 @@ public class ViewModeler {
                     }else{
                         System.out.println("oddaje ture");
                         giveTurn(clientHandler);
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+    }
+
+    public void handleSkipButton(ClientHandler clientHandler, Button button){
+        button.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    if(clientHandler.getGame().getCurrentPlayer() == clientHandler.getUser()){
+                        clientHandler.sendMessageString("CHNGTURN");
                     }
                 } catch (IOException e) {
                     throw new RuntimeException(e);

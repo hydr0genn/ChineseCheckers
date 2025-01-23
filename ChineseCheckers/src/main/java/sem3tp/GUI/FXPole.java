@@ -23,6 +23,10 @@ public class FXPole extends Circle implements Comparable<FXPole>, Serializable {
         return FXColor;
     }
 
+    public Colors getBorderColor(){
+        return BorderColor;
+    }
+
     public void setColor(Colors color){
         this.pole.setColor(color);
         this.FXColor=color;

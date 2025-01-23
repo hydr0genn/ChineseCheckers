@@ -32,8 +32,8 @@ public class FXMarkedPole extends Circle implements Comparable<FXMarkedPole> {
         double y = 250 + 25 * (-1) * Math.sqrt(3)/2 * getPole().getPole().getyCord();
         setCenterX(x);
         setCenterY(y);
-        setRadius(5);
-        setFill(Color.web("#FFD700"));
+        setRadius(9);
+        setFill(Color.web("#FFFF32"));
 
 
         return this;

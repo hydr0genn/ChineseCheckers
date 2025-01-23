@@ -2,9 +2,13 @@ package sem3tp;
 
 import sem3tp.Board.Board;
 import sem3tp.Board.Colors;
+import sem3tp.Board.Triangle;
 import sem3tp.Creator.Creator;
+import sem3tp.GUI.FXPole;
+import sem3tp.GUI.ViewModeler;
 import sem3tp.Mover.Directions;
 import sem3tp.Mover.Variants;
+import sem3tp.Poles.Pole;
 import sem3tp.Storage.PlayerStorage;
 
 import java.io.Serializable;
@@ -18,6 +22,7 @@ public class Game implements Serializable {
     int i=0;
     public int id, players_num;
     ArrayList<Colors> colorsArrayList;
+    ArrayList<Pole> polesArrayList;
     PlayerStorage playersList;
     Player currentPlayer;
     Variants variant;
@@ -58,8 +63,12 @@ public class Game implements Serializable {
     }
 
     public void nextTurn(){
-        int currentindex = playersList.indexOf(currentPlayer);
-        currentPlayer = playersList.getByIndex((currentindex+1)%players_num);
+        checkIfPlayerWon();
+        do{
+            int currentindex = playersList.indexOf(currentPlayer);
+            currentPlayer = playersList.getByIndex((currentindex+1)%players_num);
+        }
+        while(currentPlayer.getHasWon());
     }
 
     private void initialiseColorArray(){
@@ -79,6 +88,22 @@ public class Game implements Serializable {
             this.colorsArrayList.add(Colors.Blue);
             this.colorsArrayList.add(Colors.Red);
         }
+    }
+
+    public void checkIfPlayerWon(){
+        int count = 0;
+        for(FXPole fxPole: getBoard().getAllFXPoles().getAll()){
+            if(fxPole.getPole().getColor() == currentPlayer.playerColor){
+                if(fxPole.getBorderColor() == fxPole.getFXColor().getOppositeColor()){
+                    count ++;
+                    if(count == 10){
+                        System.out.println("wygrales");
+                        currentPlayer.setHasWon();
+                    }
+                }
+            }
+        }
+
     }
 
     public Player getCurrentPlayer() {

@@ -1,9 +1,12 @@
 package sem3tp.Client;
 
 import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import sem3tp.GUI.FXPole;
@@ -91,7 +94,15 @@ public class ClientHandler implements Runnable {
                 BorderPane borderPane = new BorderPane();
                 borderPane.setCenter(pane);
                 Button button = new Button("skip");
-                borderPane.setBottom(button);
+                Label playerColor = new Label(getUser().playerColor.toString());
+
+                ViewModeler viewModeler = new ViewModeler();
+
+                viewModeler.handleSkipButton(ClientHandler.this, button);
+
+                HBox hbox = new HBox(button, playerColor);
+
+                borderPane.setBottom(hbox);
 
                 Scene scene = new Scene(borderPane);
                 stage.setScene(scene);
@@ -135,8 +146,7 @@ public class ClientHandler implements Runnable {
                     move(source,destination);
                 }
                 if(serverMessage.equals("CHNGTURN")){
-                    System.out.println("TYLE SLONCA W CALYM MIESCIE");
-                    System.out.println(getGame().getPlayersList().getSize());
+                    //System.out.println(getGame().getPlayersList().getSize());
                     getGame().nextTurn();
                 }
                 if (serverMessage.equals("PLYRJIND")){

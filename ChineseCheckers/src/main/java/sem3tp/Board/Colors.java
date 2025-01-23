@@ -27,20 +27,20 @@ public enum Colors {
         White.setDirectionCreate(Directions.SouthWest);
         Green.setDirectionCreate(Directions.West);
 
-        Black.setVisualColor(Color.web("#000000", 1));
-        White.setVisualColor(Color.web("#ffffff", 1));
-        Yellow.setVisualColor(Color.web("#FFFF00", 1));
-        Green.setVisualColor(Color.web("#008000", 1));
-        Red.setVisualColor(Color.web("#ff0000", 1));
-        Blue.setVisualColor(Color.web("#00FFFF", 1));
+        Black.setVisualColor(Color.web("#252525", 1));
+        White.setVisualColor(Color.web("#fdfaf9", 1));
+        Yellow.setVisualColor(Color.web("#FFB932", 1));
+        Green.setVisualColor(Color.web("#35DD2C", 1));
+        Red.setVisualColor(Color.web("#FD3237", 1));
+        Blue.setVisualColor(Color.web("#3860C4", 1));
         Grey.setVisualColor(Color.web("#808080", 1));
 
-        Black.setBorderColor(Color.web("#FFFF00", 1));
+        Black.setBorderColor(Color.web("#000000", 1));
         White.setBorderColor(Color.web("#ffffff", 1));
-        Yellow.setBorderColor(Color.web("#FFFF00", 1));
-        Green.setBorderColor(Color.web("#008000", 1));
-        Red.setBorderColor(Color.web("#ff0000", 1));
-        Blue.setBorderColor(Color.web("#00FFFF", 1));
+        Yellow.setBorderColor(Color.web("#CE8800", 1));
+        Green.setBorderColor(Color.web("#08A700", 1));
+        Red.setBorderColor(Color.web("#CC0005", 1));
+        Blue.setBorderColor(Color.web("#0D318A", 1));
         Grey.setBorderColor(Color.web("#808080", 1));
     }
 

@@ -11,6 +11,7 @@ public class Player implements Comparable<Player>, Serializable {
     public Player(String username){
         this.username=username;
     }
+    public boolean hasWon = false;
     
     public String getReady(){
         if(isReady){
@@ -22,6 +23,14 @@ public class Player implements Comparable<Player>, Serializable {
 
     public boolean isReady() {
         return isReady;
+    }
+
+    public void setHasWon(){
+        hasWon = true;
+    }
+
+    public boolean getHasWon(){
+        return hasWon;
     }
 
     public void setReady(boolean ready) {
