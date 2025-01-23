@@ -74,8 +74,16 @@ public class ViewModeler {
                     Pole potentialPole = checkForJump(neighbour,currentPole, variant);
                     if(potentialPole==null)continue;
                     FXPole actualPole = allFXPoles.get(new FXPole(potentialPole));
-                    if(actualPole!=null&&hasJumped(fxpole,actualPole)){
-                        neighbourList.insert(actualPole);
+                    if(actualPole!=null) {
+                        if (actualPole.getPole() instanceof TrianglePole) {
+                            if ((actualPole.BorderColor.getOppositeColor() == currentPole.getColor()) && hasJumped(fxpole, actualPole)) {
+                                neighbourList.insert(actualPole);
+                            }
+                        } else {
+                            if (hasJumped(fxpole, actualPole)){
+                                neighbourList.insert(actualPole);
+                            }
+                        }
                     }
                 }
             }
@@ -135,8 +143,14 @@ public class ViewModeler {
                     Pole potentialPole = checkForJump(neighbour,currentPole, variant);
                     if(potentialPole==null)continue;
                     FXPole actualPole = allFXPoles.get(new FXPole(potentialPole));
-                    if(actualPole!=null){
-                        neighbourList.insert(actualPole);
+                    if(actualPole!=null) {
+                        if (actualPole.getPole() instanceof TrianglePole) {
+                            if ((actualPole.BorderColor.getOppositeColor() == currentPole.getColor())) {
+                                neighbourList.insert(actualPole);
+                            }
+                        } else {
+                            neighbourList.insert(actualPole);
+                        }
                     }
                 }
             }
