@@ -16,12 +16,18 @@ public class Board implements Serializable {
     private PoleStorage allPoles;
     private FXPoleStorage allFXPoles;
 
-    /*Only to be used after the allPoles storage is completed*/
-    public void initializeAllFXPoles() {
-        allFXPoles = new FXPoleStorage();
-        for (Pole pole: allPoles.getAll()){
-            allFXPoles.insert(new FXPole(pole));
+    public FXPoleStorage getAllFXPolesOfColor(Colors color){
+        FXPoleStorage fxPoles = new FXPoleStorage();
+        for(FXPole fxpole : allFXPoles.getAll()){
+            if(fxpole.FXColor==color) {
+                fxPoles.insert(fxpole);
+            }
         }
+        return fxPoles;
+    }
+
+    public void setAllFXPoles(FXPoleStorage allFXPoles) {
+        this.allFXPoles = allFXPoles;
     }
 
     public FXPoleStorage getAllFXPoles() {

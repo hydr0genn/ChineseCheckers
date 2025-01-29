@@ -6,6 +6,7 @@ import sem3tp.Creator.Creator;
 import sem3tp.Mover.Directions;
 import sem3tp.Mover.Variants;
 import sem3tp.Storage.PlayerStorage;
+import sem3tp.Storage.UserStorage;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -18,8 +19,8 @@ public class Game implements Serializable {
     int i=0;
     public int id, players_num;
     ArrayList<Colors> colorsArrayList;
-    PlayerStorage playersList;
-    Player currentPlayer;
+    UserStorage playersList;
+    User currentPlayer;
     Variants variant;
 
     public Variants getVariant() {
@@ -41,7 +42,7 @@ public class Game implements Serializable {
     /*We start the game when all players have joined and are ready */
     public boolean checkReadiness(){
         for(int i = 0 ;i <playersList.getSize();i++){
-            Player temp = playersList.getByIndex(i);
+            User temp = playersList.getByIndex(i);
             if(!temp.isReady()){
                 return false;
             }
@@ -81,7 +82,7 @@ public class Game implements Serializable {
         }
     }
 
-    public Player getCurrentPlayer() {
+    public User getCurrentPlayer() {
         return currentPlayer;
     }
 
@@ -96,7 +97,7 @@ public class Game implements Serializable {
 
     public Game(int id){
         this.id=id;
-        this.playersList= Creator.getInstance().createPlayerStorage();
+        this.playersList= new UserStorage();
         this.colorsArrayList=new ArrayList<>();
     }
 
@@ -108,7 +109,8 @@ public class Game implements Serializable {
         this.isOn=false;
     }
 
-    public void addNewPlayer(Player newplayer){
+    public void addNewPlayer(User newplayer){
+        System.out.println("Player added"+newplayer);
         playersList.insert(newplayer);
         newplayer.playerColor=colorsArrayList.get(i);
         i++;
@@ -119,7 +121,7 @@ public class Game implements Serializable {
         initialiseColorArray();
     }
 
-    public PlayerStorage getPlayersList() {
+    public UserStorage getPlayersList() {
         return playersList;
     }
 

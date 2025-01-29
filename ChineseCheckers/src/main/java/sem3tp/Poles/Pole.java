@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public abstract class Pole implements Comparable<Pole>, Serializable {
     private int xCord, yCord, zCord;
-    private Colors color = null;
+    private Colors color;
     PoleStorage neighbours = new PoleStorage();
 
 

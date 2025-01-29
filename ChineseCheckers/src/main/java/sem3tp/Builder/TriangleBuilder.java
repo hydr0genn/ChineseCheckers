@@ -17,7 +17,6 @@ public class TriangleBuilder implements Builder{
     private int layers;
     private Pole pole;
     private BoardBase base;
-    Mover mover = new Mover();
 
     public TriangleBuilder(int layers, Colors color, Pole pole, BoardBase base){
         creator= Creator.getInstance();

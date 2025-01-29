@@ -64,7 +64,7 @@ public class BoardBuilder {
                 board.getAllPoles().insert(pole);
             }
         }
-        board.initializeAllFXPoles();
+        board.setAllFXPoles(board.getAllPoles().initializeAllFXPoles());
 
         return board;
     }

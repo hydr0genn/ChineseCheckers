@@ -1,6 +1,7 @@
 package sem3tp.Server;
 
 import sem3tp.Board.Board;
+import sem3tp.Bot.Bot;
 import sem3tp.Creator.Creator;
 import sem3tp.GUI.FXPole;
 import sem3tp.Game;
@@ -8,6 +9,7 @@ import sem3tp.GameState;
 import sem3tp.Mover.Mover;
 import sem3tp.Mover.Variants;
 import sem3tp.Player;
+import sem3tp.User;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -41,35 +43,43 @@ public class GameServer {
         out.writeObject(prefix);
         out.writeObject(source);
         out.writeObject(destination);
+        FXPole fxSource = game.getBoard().getAllFXPoles().get((FXPole) source);
+        FXPole fxDestination = game.getBoard().getAllFXPoles().get((FXPole) destination);
         out.flush();
-        move((FXPole) source,(FXPole) destination, game);
+        move(fxSource,fxDestination, game);
     }
 
     public static synchronized void broadcastMoveToGame(Game game, Object source, Object destination) throws IOException {
 
-        for (Player player : game.getPlayersList().getAll()) {
-            ObjectOutputStream playerWriter = playerWriterMap.get(player);
-            if (playerWriter != null) {
-                sendMove("SSNDMOVE", source, destination, game, playerWriter);
+        for (User user : game.getPlayersList().getAll()) {
+            if(user instanceof Player player) {
+                ObjectOutputStream playerWriter = playerWriterMap.get(player);
+                if (playerWriter != null) {
+                    sendMove("SSNDMOVE", source, destination, game, playerWriter);
+                }
             }
         }
     }
 
     public static synchronized void broadcastMessageToGame(Game game, String message) throws IOException {
-        for (Player player : game.getPlayersList().getAll()) {
-            ObjectOutputStream playerWriter = playerWriterMap.get(player);
-            if (playerWriter != null) {
-                playerWriter.writeObject(message);
+        for (User user : game.getPlayersList().getAll()) {
+            if(user instanceof Player player) {
+                ObjectOutputStream playerWriter = playerWriterMap.get(player);
+                if (playerWriter != null) {
+                    playerWriter.writeObject(message);
+                }
             }
         }
     }
 
     public static synchronized void broadcastObjecteToGame(Game game, String message, Object object) throws IOException {
-        for (Player player : game.getPlayersList().getAll()) {
-            ObjectOutputStream playerWriter = playerWriterMap.get(player);
-            if (playerWriter != null) {
-                playerWriter.writeObject(message);
-                playerWriter.writeObject(object);
+        for (User user : game.getPlayersList().getAll()) {
+            if (user instanceof Player player) {
+                ObjectOutputStream playerWriter = playerWriterMap.get(player);
+                if (playerWriter != null) {
+                    playerWriter.writeObject(message);
+                    playerWriter.writeObject(object);
+                }
             }
         }
     }
@@ -142,6 +152,9 @@ public class GameServer {
                     if (receivedMessage.equals("CHNGTURN")){
                         broadcastMessageToGame(currentGamePlayed, "CHNGTURN");
                         currentGamePlayed.nextTurn();
+                        while(currentGamePlayed.getCurrentPlayer() instanceof Bot bot){
+                            BotMove(bot);
+                        }
                     }
                     if(receivedMessage.equals("GETGAMES")){
                         out.writeObject("SNDGAMES");
@@ -150,18 +163,21 @@ public class GameServer {
                     }
                     if (receivedMessage.equals("NOTREADY")){
                         Player changedPlayer = (Player) in.readObject();
-                        changedPlayer = currentGamePlayed.getPlayersList().get(changedPlayer);
+                        changedPlayer = (Player)currentGamePlayed.getPlayersList().get(changedPlayer);
                         changedPlayer.setReady(false);
                     }
                     if(receivedMessage.equals("READYXXX")){
                         Player changedPlayer = (Player) in.readObject();
-                        changedPlayer = currentGamePlayed.getPlayersList().get(changedPlayer);
+                        changedPlayer =(Player) currentGamePlayed.getPlayersList().get(changedPlayer);
                         changedPlayer.setReady(true);
                         if(currentGamePlayed.checkReadiness()){
                             currentGamePlayed.turnOn();
                             currentGamePlayed.setFirstPlayer();
                             broadcastMessageToGame(currentGamePlayed,"TURNONXX");
                         }
+                    }
+                    if(receivedMessage.equals("ADDBOTXX")){
+                        addBot(currentGamePlayed);
                     }
                 }
 
@@ -171,6 +187,17 @@ public class GameServer {
                 unregisterPlayerWriter(player, out);
                 quit(this.player.getUsername(), out, socket);
             }
+        }
+
+        private void BotMove(Bot bot) throws IOException {
+            System.out.println("inside botmove");
+            AbstractMap.SimpleEntry<FXPole,FXPole> entry = bot.makeOptimalMove();
+            FXPole source = entry.getKey();
+            FXPole destination = entry.getValue();
+            System.out.println("Move from: "+source+" to :"+destination);
+            sendMove("SSNDMOVE",source,destination,currentGamePlayed,out);
+            broadcastMessageToGame(currentGamePlayed, "CHNGTURN");
+            currentGamePlayed.nextTurn();
         }
 
         private void loginAsUser(String username) throws IOException {
@@ -199,13 +226,23 @@ public class GameServer {
                 return game;
         }
 
+        private static synchronized void addBot(Game game) throws IOException {
+            Bot bot = new Bot();
+            bot.setUsername("Bot"+game.getPlayersList().getSize());
+            bot.setGame(game);
+            game.addNewPlayer(bot);
+            bot.updatePoles();
+            System.out.println("SEVRVER ADDED BOT" + bot + bot.playerColor + bot.getPoles());
+            broadcastObjecteToGame(game,"BOTADDED", bot);
+
+        }
+
         private static synchronized Game joinGame(int id, ObjectOutputStream out, Player player) throws IOException {//wypisac wszystkie ktore sa w hashmapie
             Game game = gamesOn.get(id);
             out.writeObject("oJOINGME");
             out.writeObject(game);
             game.addNewPlayer(player);
             registerPlayerWriter(player, out);
-            System.out.println(game.getPlayersList().getByIndex(game.getPlayersList().getSize()-1));
             broadcastObjecteToGame(game, "PLYRJIND", player);
             return game;
         }

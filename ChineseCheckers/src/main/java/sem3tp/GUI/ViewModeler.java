@@ -7,6 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import sem3tp.Board.Colors;
+import sem3tp.Bot.Validator;
 import sem3tp.Client.ClientHandler;
 import sem3tp.Client.ClientHandler;
 import sem3tp.Creator.Creator;
@@ -29,161 +30,15 @@ import java.util.ArrayList;
 /*Class responsible for initialising polygons, buttons etc*/
 public class ViewModeler {
 
-
-    private Pole jump(Pole pole, Directions direction){
-        return pole.getNeighbourByDirection(direction);
-    }
-
-    private boolean isAvailable(Pole pole){
-        if(pole==null){
-            return false;
-        }
-        return pole.getColor() == Colors.Grey;
-    }
-
-    private FXPoleStorage findPossibleJumps(FXPole fxpole, FXPoleStorage allFXPoles, Variants variant, FXPoleStorage parents){
-        FXPoleStorage neighbourList = new FXPoleStorage();
-        if (fxpole.getPole() instanceof TrianglePole currentPole){
-            for (Pole neighbour : currentPole.getNeighbours().getAll()){
-                if(neighbour instanceof TrianglePole){ //inside a triangle
-                    Pole potentialPole = checkForJump(neighbour,currentPole, variant);
-                    if(potentialPole==null)continue;
-                    FXPole actualPole = allFXPoles.get(new FXPole(potentialPole));
-                    if(actualPole!=null&&hasJumped(fxpole,actualPole)){
-                        neighbourList.insert(actualPole);
-                    }
-                }else if(neighbour instanceof StandardPole){//from triangle to baseboard
-                    Pole potentialPole = checkForJump(neighbour,currentPole, variant);
-                    if(potentialPole==null)continue;
-                    FXPole actualPole = allFXPoles.get(new FXPole(potentialPole));
-                    if(actualPole!=null&&hasJumped(fxpole,actualPole)){
-                        neighbourList.insert(actualPole);
-                    }
-                }
-            }
-        }else if(fxpole.getPole() instanceof StandardPole currentPole){
-            for(Pole neighbour : currentPole.getNeighbours().getAll()){
-                if(neighbour instanceof TrianglePole triangleNeighbour){
-                    Pole potentialPole = checkForJump(triangleNeighbour,currentPole, variant);
-                    if(potentialPole==null)continue;
-                    FXPole actualPole = allFXPoles.get(new FXPole(potentialPole));
-                    if(actualPole!=null&&(actualPole.BorderColor.getOppositeColor()==currentPole.getColor())&&hasJumped(fxpole,actualPole)){
-                        neighbourList.insert(actualPole);
-                    }
-                }else{
-                    Pole potentialPole = checkForJump(neighbour,currentPole, variant);
-                    if(potentialPole==null)continue;
-                    FXPole actualPole = allFXPoles.get(new FXPole(potentialPole));
-                    if(actualPole!=null) {
-                        if (actualPole.getPole() instanceof TrianglePole) {
-                            if ((actualPole.BorderColor.getOppositeColor() == currentPole.getColor()) && hasJumped(fxpole, actualPole)) {
-                                neighbourList.insert(actualPole);
-                            }
-                        } else {
-                            if (hasJumped(fxpole, actualPole)){
-                                neighbourList.insert(actualPole);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        for(FXPole fxPole : parents.getAll()){
-            neighbourList.delete(fxPole);
-        }
-        return neighbourList;
-    }
-
-    private Pole checkForJump(Pole pole, Pole source, Variants variant ){//potential variant
-        if(isAvailable(pole)){
-            return pole;
-        }
-        Directions direction = source.getDirectionOfNeighbour(pole);
-        Pole potential = jump(pole,direction);
-        if(isAvailable(potential)){
-            return potential;
-        }else if(variant==Variants.TwoJumps && potential!=null){
-            return checkForJump(potential,pole,Variants.OneJump);
-        }
-        return null;
-    }
-
-
-
-    private FXPoleStorage findPossibleMoves(FXPole fxpole, FXPoleStorage allFXPoles, Variants variant){
-        FXPoleStorage neighbourList = new FXPoleStorage();
-        if (fxpole.getPole() instanceof TrianglePole currentPole){
-            for (Pole neighbour : currentPole.getNeighbours().getAll()){
-                if(neighbour instanceof TrianglePole){ //inside a triangle
-                    Pole potentialPole = checkForJump(neighbour,currentPole, variant);
-                    if(potentialPole==null)continue;
-                    FXPole actualPole = allFXPoles.get(new FXPole(potentialPole));
-                    if(actualPole!=null){
-                        neighbourList.insert(actualPole);
-                    }
-                }else if(neighbour instanceof StandardPole){//from triangle to baseboard
-                    Pole potentialPole = checkForJump(neighbour,currentPole, variant);
-                    if(potentialPole==null)continue;
-                    FXPole actualPole = allFXPoles.get(new FXPole(potentialPole));
-                    if(actualPole!=null){
-                        neighbourList.insert(actualPole);
-                    }
-                }
-            }
-        }else if(fxpole.getPole() instanceof StandardPole currentPole){
-            for(Pole neighbour : currentPole.getNeighbours().getAll()){
-                if(neighbour instanceof TrianglePole triangleNeighbour){
-                    Pole potentialPole = checkForJump(triangleNeighbour,currentPole, variant);
-                    if(potentialPole==null)continue;
-                    FXPole actualPole = allFXPoles.get(new FXPole(potentialPole));
-                    if(actualPole!=null&&(actualPole.BorderColor.getOppositeColor()==currentPole.getColor())){
-                        neighbourList.insert(actualPole);
-                    }
-                }else{
-                    Pole potentialPole = checkForJump(neighbour,currentPole, variant);
-                    if(potentialPole==null)continue;
-                    FXPole actualPole = allFXPoles.get(new FXPole(potentialPole));
-                    if(actualPole!=null) {
-                        if (actualPole.getPole() instanceof TrianglePole) {
-                            if ((actualPole.BorderColor.getOppositeColor() == currentPole.getColor())) {
-                                neighbourList.insert(actualPole);
-                            }
-                        } else {
-                            neighbourList.insert(actualPole);
-                        }
-                    }
-                }
-            }
-        }else if(fxpole.getPole() instanceof InitPole currentPole){
-            for(Pole neighbour : currentPole.getNeighbours().getAll()){
-                if(neighbour instanceof TrianglePole triangleNeighbour){
-                    Pole potentialPole = checkForJump(triangleNeighbour,currentPole, variant);
-                    if(potentialPole==null)continue;
-                    FXPole actualPole = allFXPoles.get(new FXPole(potentialPole));
-                    if(actualPole!=null&&(actualPole.BorderColor.getOppositeColor()==currentPole.getColor())){
-                        neighbourList.insert(actualPole);
-                    }
-                }else{
-                    Pole potentialPole = checkForJump(neighbour,currentPole, variant);
-                    if(potentialPole==null)continue;
-                    FXPole actualPole = allFXPoles.get(new FXPole(potentialPole));
-                    if(actualPole!=null){
-                        neighbourList.insert(actualPole);
-                    }
-                }
-            }
-        }
-        return neighbourList;
-    }
-
-    private boolean hasJumped(FXPole parent, FXPole current){
+    public boolean hasJumped(FXPole parent, FXPole current){
         //if the current pole is a neighbour of our source then no jump has been made
         return !parent.getPole().getNeighbours().contains(current.getPole());
     }
 
     private void oneMovementSequence(FXPole fxpole, FXPoleStorage allFXPoles, Variants variant, ClientHandler handler){
         Creator creator = Creator.getInstance();
-        FXPoleStorage possibleMoves = findPossibleMoves(fxpole, allFXPoles, variant);
+        Validator validator = Validator.getInstance();
+        FXPoleStorage possibleMoves = validator.findPossibleMoves(fxpole, allFXPoles, variant);
         FXPoleStorage parents = new FXPoleStorage();
         for (FXPole pole : possibleMoves.getAll()) {
             FXMarkedPole fxMarkedPole = creator.createMarkedPole(pole, fxpole);
@@ -247,13 +102,10 @@ public class ViewModeler {
                     FXPole current = fxMarkedPole.getPole();
                     clientHandler.sendMove("CSNDMOVE", parent, current);
                     deleteMarked(clientHandler);
-                    System.out.println(hasJumped(parent,current)+"HASJUMPED");
-                    System.out.println(findPossibleJumps(current, allFXPoles, clientHandler.getGame().getVariant(), parents).getSize());
-                    FXPoleStorage possibleMoves = findPossibleJumps(current, allFXPoles, clientHandler.getGame().getVariant(), parents);
+                    FXPoleStorage possibleMoves = Validator.getInstance().findPossibleJumps(current, allFXPoles, clientHandler.getGame().getVariant(), parents);
                     if(hasJumped(parent, current)&&possibleMoves.getSize()>0){
                         JumpMovementSequence(current, possibleMoves ,allFXPoles, clientHandler, parents);
                     }else{
-                        System.out.println("oddaje ture");
                         giveTurn(clientHandler);
                     }
                 } catch (IOException e) {

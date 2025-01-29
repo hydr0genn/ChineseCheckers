@@ -18,6 +18,7 @@ import sem3tp.Poles.Pole;
 import sem3tp.Poles.StandardPole;
 import sem3tp.Poles.TrianglePole;
 import sem3tp.Storage.*;
+import sem3tp.User;
 
 public class Creator implements Create{
 

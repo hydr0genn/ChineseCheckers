@@ -1,7 +1,10 @@
 package sem3tp.Board;
 
 import javafx.scene.paint.Color;
+import sem3tp.GUI.FXPole;
 import sem3tp.Mover.Directions;
+import sem3tp.Poles.StandardPole;
+import sem3tp.Poles.TrianglePole;
 
 public enum Colors {
     Black,
@@ -42,6 +45,13 @@ public enum Colors {
         Red.setBorderColor(Color.web("#ff0000", 1));
         Blue.setBorderColor(Color.web("#00FFFF", 1));
         Grey.setBorderColor(Color.web("#808080", 1));
+
+        Black.setAim(new FXPole(new TrianglePole(-4,8,-4)));
+        White.setAim(new FXPole(new TrianglePole(4,-8,4)));
+        Yellow.setAim(new FXPole(new TrianglePole(-8, 4, 4)));
+        Green.setAim(new FXPole(new TrianglePole(8,-4,-4)));
+        Red.setAim(new FXPole(new TrianglePole(4,4,-8)));
+        Blue.setAim(new FXPole(new TrianglePole(-4,-4,8)));
     }
 
 
@@ -49,7 +59,16 @@ public enum Colors {
     private Directions directionCreate;
     private Color visualColor;
     private Color BorderColor;
+    private FXPole aim;
 
+
+    public FXPole getAim() {
+        return aim;
+    }
+
+    public void setAim(FXPole aim) {
+        this.aim = aim;
+    }
 
     public void setVisualColor(Color visualColor){
         this.visualColor = visualColor;

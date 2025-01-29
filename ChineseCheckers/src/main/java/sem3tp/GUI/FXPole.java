@@ -35,9 +35,18 @@ public class FXPole extends Circle implements Comparable<FXPole>, Serializable {
         this.FXColor=pole.getColor();
     }
 
+
+    public double calculateCartesianValueX(){
+        return 250 + 25 * (getPole().getxCord() + 0.5 * getPole().getyCord());
+    }
+
+    public double calculateCartesianValueY(){
+        return 250 + 25 * (-1) * Math.sqrt(3)/2 * getPole().getyCord();
+    }
+
     public Circle draw(){
-        double x = 250 + 25 * (getPole().getxCord() + 0.5 * getPole().getyCord());
-        double y = 250 + 25 * (-1) * Math.sqrt(3)/2 * getPole().getyCord();
+        double x = calculateCartesianValueX();
+        double y = calculateCartesianValueY();
         setCenterX(x);
         setCenterY(y);
         setRadius(9);

@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import sem3tp.Bot.Bot;
 import sem3tp.GUI.FXPole;
 import sem3tp.GUI.ViewModeler;
 import sem3tp.Game;
@@ -135,8 +136,6 @@ public class ClientHandler implements Runnable {
                     move(source,destination);
                 }
                 if(serverMessage.equals("CHNGTURN")){
-                    System.out.println("TYLE SLONCA W CALYM MIESCIE");
-                    System.out.println(getGame().getPlayersList().getSize());
                     getGame().nextTurn();
                 }
                 if (serverMessage.equals("PLYRJIND")){
@@ -152,6 +151,11 @@ public class ClientHandler implements Runnable {
                     getGame().turnOn();
                     setGameScene();
                     getGame().setFirstPlayer();
+                }
+                if(serverMessage.equals("BOTADDED")){
+                    System.out.println("adding bot process - client");
+                    Bot bot = (Bot) in.readObject();
+                    game.addNewPlayer(bot);
                 }
             }
         } catch (ClassNotFoundException | IOException e) {
