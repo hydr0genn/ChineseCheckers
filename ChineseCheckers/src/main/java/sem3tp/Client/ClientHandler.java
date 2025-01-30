@@ -9,6 +9,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import sem3tp.GUI.FXPole;
 import sem3tp.GUI.ViewModeler;
 import sem3tp.Game;
@@ -94,13 +95,16 @@ public class ClientHandler implements Runnable {
                 BorderPane borderPane = new BorderPane();
                 borderPane.setCenter(pane);
                 Button button = new Button("skip");
-                Label playerColor = new Label(getUser().playerColor.toString());
+                Label playerColor = new Label("  "+getUser().playerColor.toString());
 
                 ViewModeler viewModeler = new ViewModeler();
 
+                int id = getGame().id;
+                Label gameID = new Label("  id gry: "+id);
+
                 viewModeler.handleSkipButton(ClientHandler.this, button);
 
-                HBox hbox = new HBox(button, playerColor);
+                HBox hbox = new HBox(button, playerColor, gameID);
 
                 borderPane.setBottom(hbox);
 

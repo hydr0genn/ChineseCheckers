@@ -51,6 +51,16 @@ public abstract class Pole implements Comparable<Pole>, Serializable {
         return neighbours.get(potential);
     }
 
+    public Pole getPoleByCoordinates(int xCord, int yCord, int zCord){
+        for(Pole pole : neighbours.getAll()){
+            if(pole.getxCord() == xCord && pole.getyCord() == yCord && pole.getzCord() == zCord){
+                return pole;
+            }
+        }
+
+        return null;
+    }
+
     public Directions getDirectionOfNeighbour(Pole pole){
         Directions tempDirection = Directions.West;
         for (int i=0;i<6;i++){

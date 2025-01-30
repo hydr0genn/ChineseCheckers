@@ -358,6 +358,19 @@ public class ViewModeler {
         });
     }
 
+    public void initializeJoinGameButton(ClientHandler clientHandler, Button button, TextField textField){
+        button.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    clientHandler.sendMessageString("LOADGAME"+textField.getText());//wysylamy liczbe graczy
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+    }
+
     public void initializeLoginButton(ClientHandler clientHandler, Button button, TextField textField, Runnable sceneSwapper){
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override

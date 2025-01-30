@@ -1,6 +1,7 @@
 package sem3tp;
 
 import javafx.stage.Stage;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import sem3tp.Board.Board;
 import sem3tp.Board.BoardBase;
 import sem3tp.Board.Colors;
