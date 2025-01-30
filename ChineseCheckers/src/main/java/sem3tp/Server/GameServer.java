@@ -47,6 +47,7 @@ public class GameServer {
         FXPole fxDestination = game.getBoard().getAllFXPoles().get((FXPole) destination);
         out.flush();
         move(fxSource,fxDestination, game);
+
     }
 
     public static synchronized void broadcastMoveToGame(Game game, Object source, Object destination) throws IOException {
